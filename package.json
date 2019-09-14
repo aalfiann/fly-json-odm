@@ -1,0 +1,33 @@
+{
+  "name": "fly-json-orm",
+  "version": "1.0.0",
+  "description": "ORM for handle json on the fly",
+  "main": "src/flyjson.js",
+  "scripts": {
+    "test": "nyc --reporter=html --reporter=text mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aalfiann/fly-json-orm.git"
+  },
+  "keywords": [
+    "json",
+    "json-orm",
+    "json-fly",
+    "json-memory",
+    "json-nosql"
+  ],
+  "author": "M ABD AZIZ ALFIAN",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aalfiann/fly-json-orm/issues"
+  },
+  "homepage": "https://github.com/aalfiann/fly-json-orm#readme",
+  "devDependencies": {
+    "coveralls": "^3.0.6",
+    "mocha": "^6.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^14.1.1"
+  }
+}
