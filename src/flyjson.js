@@ -1,10 +1,16 @@
+const Helper = require('./helper.js');
+
 /**
  * FlyJson class
  */
 'use strict';
-class FlyJson {
+class FlyJson extends Helper {
 
+    /**
+     * Constructor
+     */
     constructor() {
+        super();
         this.data1 = [];
         this.data2 = [];
         this.query = [];
@@ -12,14 +18,12 @@ class FlyJson {
     }
 
     /**
-     * Determine value is object
-     * @param {*} value 
-     * @return {bool}
+     * Sort by
+     * @param {string} field    this is the key name
+     * @param {bool} reverse    reverse means sort descending
+     * @param {fn} primer       this is the primer function
+     * @return {callback}
      */
-    isObject (value) {
-        return value && typeof value === 'object' && value.constructor === Object;
-    }
-
     sortBy(field, reverse, primer) {
         var key = primer ? 
             function(x) {return primer(x[field])} : 
@@ -33,7 +37,7 @@ class FlyJson {
     set(obj) {
         this.data1 = obj;
         return this;
-    }
+    };
 
     insert(obj) {
         this.data1.push(obj);
@@ -86,7 +90,6 @@ class FlyJson {
     }
 
     where(...args) {
-        var self = this;
         if (args.length > 2) {
             var mid = args[1];
             var a = args[0];
@@ -97,7 +100,7 @@ class FlyJson {
             var b = args[1];
         }
         var search = {[a]:b};
-        var data = self.data1.filter(function (o) {
+        var data = this.data1.filter(function (o) {
             return Object.keys(search).every(function (k) {
                 switch(mid) {
                     case '!==':
@@ -121,10 +124,10 @@ class FlyJson {
                 }
             });
         });
-        if (self.scope == 'query') {
-            self.result = data;
+        if (this.scope == 'query') {
+            this.result = data;
         } else {
-            self.data1 = data;
+            this.data1 = data;
         }
         return this;
     }
@@ -172,63 +175,52 @@ class FlyJson {
     }
 
     merge(a,b) {
-        var self = this;
-        return new Promise(function(resolve, reject) {
-            try{
-                if(self.scope == 'join') {
-                    const indexB = self.data2.reduce((result,item) => { 
-                        result[item[b]] = item; 
-                        return result;
-                    }, {});
-                    self.scope = '';
-                    resolve(self.data1.map(item => Object.assign(item,indexB[item[a]])));
-                } else {
-                    throw new Error('You should join first before doing merge.');
-                }
-            } catch (err) {
-                reject(err);
-            }
-        });
+        if(this.scope == 'join') {
+            const indexB = this.data2.reduce((result,item) => { 
+                result[item[b]] = item; 
+                return result;
+            }, {});
+            this.scope = '';
+            this.data1 = this.data1.map(item => Object.assign(item,indexB[item[a]]));
+        } else {
+            throw new Error('You should join first before doing merge.');
+        }
+        return this;
     }
 
     on(a,b) {
         var self = this;
-        return new Promise(function(resolve, reject) {
-            try {
-                if(self.scope == 'join') {
-                    const indexB = self.data2.reduce((result,item) => { 
-                        result[item[b]] = item;
-                        return result;
-                    }, {});
-        
-                    var result = [];
-                    self.data1.map(function(value,index){
-                        var newdata = {};
-                        var arr = Object.keys(self.data1[index]);
-                        var l = arr.length;
-                        for(var i=0;i<l;i++) {
-                            if(arr[i] == a) {
-                                if(self.name == arr[i]) {
-                                    newdata[arr[i]] = indexB[self.data1[index][arr[i]]];
-                                } else {
-                                    newdata[self.name] = indexB[self.data1[index][arr[i]]];
-                                    newdata[arr[i]] = value[arr[i]];
-                                }
-                            } else {
-                                newdata[arr[i]] = value[arr[i]];
-                            }
+        if(self.scope == 'join') {
+            const indexB = self.data2.reduce((result,item) => { 
+                result[item[b]] = item;
+                return result;
+            }, {});
+
+            var result = [];
+            self.data1.map(function(value,index){
+                var newdata = {};
+                var arr = Object.keys(self.data1[index]);
+                var l = arr.length;
+                for(var i=0;i<l;i++) {
+                    if(arr[i] == a) {
+                        if(self.name == arr[i]) {
+                            newdata[arr[i]] = indexB[self.data1[index][arr[i]]];
+                        } else {
+                            newdata[self.name] = indexB[self.data1[index][arr[i]]];
+                            newdata[arr[i]] = value[arr[i]];
                         }
-                        result.push(newdata);
-                    });
-                    self.scope = '';
-                    resolve(result);
-                } else {
-                    throw new Error('You should join first before doing merge.');
+                    } else {
+                        newdata[arr[i]] = value[arr[i]];
+                    }
                 }
-            } catch (err) {
-                reject(err);
-            }
-        });
+                result.push(newdata);
+            });
+            self.scope = '';
+            self.data1 = result;
+        } else {
+            throw new Error('You should join first before doing join on.');
+        }
+        return this;
     }
 
     orderBy(name,desc=false) {
@@ -259,7 +251,21 @@ class FlyJson {
         return this;
     }
 
-    make() {
+    /**
+     * Make asynchronous process
+     * @param {*} fn
+     * @return {this} 
+     */
+    async(fn) {
+        fn.call(this,this);
+        return this;
+    }
+
+    /**
+     * Output data
+     * @return {array}
+     */
+    exec() {
         return this.data1;
     }
 
