@@ -444,7 +444,7 @@ class FlyJson extends Helper {
     }
 
     /**
-     * Output data
+     * Return output data table
      * @return {array}
      */
     exec() {
