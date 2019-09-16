@@ -31,7 +31,7 @@ class FlyJson extends Helper {
         reverse = !reverse ? 1 : -1;
         return function (a, b) {
             return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
-        } 
+        }
     }
 
     /**
@@ -56,6 +56,8 @@ class FlyJson extends Helper {
     insert(obj) {
         if(this.isObject(obj) && !this.isEmptyObject(obj)) {
             this.data1.push(obj);
+        } else {
+            throw new Error('New value must be an object and not empty');
         }
         return this;
     }
@@ -118,15 +120,16 @@ class FlyJson extends Helper {
      * @return {this} 
      */
     delete(key,value) {
-        if(this.isEmpty(key) && this.isEmpty(value)) {
-            throw new Error('Key and Value must be defined and unique');
-        }
-        var l = this.data1.length;
-        for(var i = 0; i < l; i++) { 
-            if ( this.data1[i][key] === value) {
-                this.data1.splice(i, 1); 
-                break;
+        if(!this.isEmpty(key) && !this.isEmpty(value)) {
+            var l = this.data1.length;
+            for(var i = 0; i < l; i++) { 
+                if ( this.data1[i][key] === value) {
+                    this.data1.splice(i, 1); 
+                    break;
+                }
             }
+        } else {
+            throw new Error('Key and Value must be defined also remember that Value must be unique.');
         }
         return this;
     }
@@ -361,13 +364,14 @@ class FlyJson extends Helper {
 
     /**
      * Sort data ascending or descending by key name
-     * @param {string} name 
-     * @param {bool} desc
+     * @param {string} name     this is the name key
+     * @param {bool} desc       this is the sort order
+     * @param {primer} primer   this is the primer function
      * @return {this} 
      */
-    orderBy(name,desc=false) {
+    orderBy(name,desc=false,primer) {
         if(!this.isEmpty(name) && this.isString(name) && this.isBoolean(desc)) {
-            this.data1.sort(this.sortBy(name,desc));
+            this.data1.sort(this.sortBy(name,desc,primer));
         }
         return this;
     }
@@ -379,7 +383,7 @@ class FlyJson extends Helper {
      */
     skip(size) {
         if(!this.isEmpty(size) && this.isInteger(size)) {
-            this.data1.slice(size);
+            this.data1 = this.data1.slice(size);
         }
         return this;
     }
