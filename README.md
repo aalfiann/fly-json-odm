@@ -59,7 +59,7 @@ var data3 = [
 
 #### A. Synchronous
 `fly-json-odm` is synchronous as default.  
-Worry about blocking event loop? Please see [B. Asynchronous](#B.).
+Worry about blocking event loop? Please see [B. Asynchronous](#b-asynchronous).
 
 ##### Insert
 ```javascript
