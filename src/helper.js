@@ -81,6 +81,17 @@ class Helper {
     }
 
     /**
+     * Blocking test for asynchronous
+     * @return {int}
+     */
+    blockingTest() {
+        var start = Date.now();
+        var time = start + 1000;
+        while (Date.now() < time) {};
+        return start;
+    }
+
+    /**
      * Safe JSON.stringify to avoid type error converting circular structure to json
      * @param {object} value        this is the json object 
      * @param {*} space 
