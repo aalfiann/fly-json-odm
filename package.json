@@ -1,7 +1,7 @@
 {
-  "name": "fly-json-orm",
+  "name": "fly-json-odm",
   "version": "1.0.0",
-  "description": "ORM for handle json on the fly",
+  "description": "An Object Document Mapper to handle JSON on the fly for NodeJS",
   "main": "src/flyjson.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha",
@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aalfiann/fly-json-orm.git"
+    "url": "git+https://github.com/aalfiann/fly-json-odm.git"
   },
   "keywords": [
     "json",
-    "json-orm",
+    "json-odm",
     "json-fly",
     "json-memory",
     "json-nosql"
@@ -21,9 +21,9 @@
   "author": "M ABD AZIZ ALFIAN",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aalfiann/fly-json-orm/issues"
+    "url": "https://github.com/aalfiann/fly-json-odm/issues"
   },
-  "homepage": "https://github.com/aalfiann/fly-json-orm#readme",
+  "homepage": "https://github.com/aalfiann/fly-json-odm#readme",
   "devDependencies": {
     "coveralls": "^3.0.6",
     "mocha": "^6.2.0",
