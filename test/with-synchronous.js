@@ -23,7 +23,46 @@ var data3 = [
     {id:5,bio:'I was born in surabaya',phone:'i@j.com'}
 ];
 
-describe('query test', function(){
+describe('normal / synchronous CRUD test', function() {
+    
+    this.timeout(10000);
+
+    it('insert data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2).insert({id:6,address:'madiun',email:'i@j.com'}).exec();
+        assert.equal(data.length,6);
+        assert.equal(data[5].id,6);
+        assert.equal(data[5].address,'madiun');
+        assert.equal(data[5].email,'i@j.com');
+    });
+
+    it('update data', function() {
+        var db = new FlyJson();
+        var data = db.set(data2)
+            .update('id',5,{address:'ponorogo',email:'xxx@gmail.com'})
+            .exec();
+            assert.equal(data.length,5);
+            assert.equal(data[4].id,5);
+            assert.equal(data[4].address,'ponorogo');
+            assert.equal(data[4].email,'xxx@gmail.com'); 
+    });
+
+    it('modify data', function() {
+        var db = new FlyJson();
+        var data = db.set(data2)
+            .modify('id',5,{address:'ponorogo',email:'xxx@gmail.com',about:'Just ordinary programmer'})
+            .exec();
+            assert.equal(data.length,5);
+            assert.equal(data[4].id,5);
+            assert.equal(data[4].address,'ponorogo');
+            assert.equal(data[4].email,'xxx@gmail.com');
+    });
+
+});
+
+describe('normal / synchronous Query test', function() {
+    
+    this.timeout(10000);
 
     it('select data', function () {
         var nosql = new FlyJson();
@@ -155,7 +194,6 @@ describe('query test', function(){
         var data = nosql.set(data1).join('profile',data2).on('user_id','id').exec();
         assert.equal(data[0].profile.id,1);
         assert.equal(data[0].user_id,1);
-        assert.equal(data[0].id,1);
     });
 
     it('Join multiple table', function(){
@@ -163,8 +201,8 @@ describe('query test', function(){
         var profile = nosql.set(data1).join('profile',data2).on('user_id','id').exec();
         var data = nosql.set(profile).join('bio',data3).on('user_id','id').exec();
         assert.equal(data[0].profile.id,1);
+        assert.equal(data[0].bio.id,1);
         assert.equal(data[0].user_id,1);
-        assert.equal(data[0].id,1);
     });
 
     it('Join multiple nested table', function(){
@@ -174,7 +212,6 @@ describe('query test', function(){
         assert.equal(data[0].data.bio.id,1);
         assert.equal(data[0].data.id,1);
         assert.equal(data[0].user_id,1);
-        assert.equal(data[0].id,1);
     });
 
 });

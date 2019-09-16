@@ -23,11 +23,64 @@ var data3 = [
     {id:5,bio:'I was born in surabaya',phone:'i@j.com'}
 ];
 
-describe('query async test', function(){
+describe('promisify / asynchronous crud test', function() {
+
+
+    
+});
+
+describe('promisify / asynchronous query test', function() {
+    this.timeout(10000);
+    it('promisify is not blocking', function (done) {
+        // Just uncomment the console.log to see detail time execution process
+        var nosql = new FlyJson();
+        var outside = '';
+        nosql.promisify((builder) => {return builder}).then(function(table){
+            var time = table.blockingTest();
+            // console.log('Blocking start at: '+time);
+            // console.log('Blocking ended at: '+Date.now());
+            assert.equal(outside,time);
+            done();
+        });
+        var start = Date.now();
+        outside = start;
+        // console.log('Last started at: '+outside);
+    });
+
+    it('promisify chain is not blocking', function (done) {
+        // Just uncomment the console.log to see detail time execution process
+        var nosql = new FlyJson();
+        var outside = '';
+        var time1 = '';
+        var time2 = '';
+        var end1 = '';
+        var end2 = '';
+        nosql.promisify((builder) => {return builder})
+            .then(function(table){
+                time1 = table.blockingTest();
+                end1 = Date.now();
+                // console.log('1. Blocking start at: '+time1);
+                // console.log('1. Blocking ended at: '+end1);
+                return table;
+            })
+            .then(function(table){
+                time2 = table.blockingTest();
+                end2 = Date.now();
+                // console.log('2. Blocking start at: '+time2);
+                // console.log('2. Blocking ended at: '+end2);
+                return table;
+            })
+            .then(function(){
+                done();
+            });
+        var start = Date.now();
+        outside = start;
+        // console.log('Last started at: '+outside);
+    });
 
     it('select data', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table) {
+        nosql.promisify((builder) => {return builder}).then(function(table) {
             var data = table.set(data2).select(['id','bio']).exec();
             assert.equal(data[0].id,1);
             assert.equal(data[1].id,2);
@@ -40,7 +93,7 @@ describe('query async test', function(){
 
     it('select + where', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2)
             .select(['id','address'])
             .where('address','jakarta')
@@ -53,7 +106,7 @@ describe('query async test', function(){
 
     it('select + where + and', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2)
             .select(['id','address'])
             .where('address','like','a')
@@ -71,7 +124,7 @@ describe('query async test', function(){
 
     it('select + where + or + where', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2)
                 .select(['id','address'])
                 .begin()
@@ -92,7 +145,7 @@ describe('query async test', function(){
 
     it('select + where + or + where + orderby', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2)
                 .select(['id','address'])
                 .begin()
@@ -114,7 +167,7 @@ describe('query async test', function(){
 
     it('select + where + or + where + orderby + take', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2)
                 .select(['id','address'])
                 .begin()
@@ -135,7 +188,7 @@ describe('query async test', function(){
 
     it('select + where + or + where + orderby + take + pagination', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2)
                 .select(['id','address'])
                 .begin()
@@ -155,7 +208,7 @@ describe('query async test', function(){
 
     it('Merge two data table', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data1).join('profile',data2)
                 .merge('user_id','id').exec();
             assert.equal(data[0].user_id,1);
@@ -166,7 +219,7 @@ describe('query async test', function(){
 
     it('Merge multiple data table', function (done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var profile = table.set(data1).join('profile',data2).merge('user_id','id').exec();
             var data = table.set(profile).join('bio',data3).merge('user_id','id').exec();
             assert.equal(data[0].user_id,1);
@@ -177,36 +230,33 @@ describe('query async test', function(){
 
     it('Join two table', function(done) {
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data1).join('profile',data2).on('user_id','id').exec();
             assert.equal(data[0].profile.id,1);
             assert.equal(data[0].user_id,1);
-            assert.equal(data[0].id,1);
             done();
         });
     });
 
     it('Join multiple table', function(done){
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var profile = table.set(data1).join('profile',data2).on('user_id','id').exec();
             var data = table.set(profile).join('bio',data3).on('user_id','id').exec();
             assert.equal(data[0].profile.id,1);
             assert.equal(data[0].user_id,1);
-            assert.equal(data[0].id,1);
             done();
         });
     });
 
     it('Join multiple nested table', function(done){
         var nosql = new FlyJson();
-        nosql.async(function(table){
+        nosql.promisify((builder) => {return builder}).then(function(table){
             var bio = table.set(data2).join('bio',data3).on('id','id').exec();
             var data = table.set(data1).join('data',bio).on('user_id','id').exec();
             assert.equal(data[0].data.bio.id,1);
             assert.equal(data[0].data.id,1);
             assert.equal(data[0].user_id,1);
-            assert.equal(data[0].id,1);
             done();
         });
     });
