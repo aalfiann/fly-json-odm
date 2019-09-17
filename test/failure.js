@@ -201,4 +201,24 @@ describe('intentional failure condition test', function() {
         assert.throws(function(){nosql.set(right_table).delete('id')},Error);
     });
 
+    it('groupBy with no any parameter', function(){
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).groupBy()},Error);
+    });
+
+    it('groupBy with wrong sumField parameter', function(){
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).groupBy('name',{})},Error);
+    });
+
+    it('groupDetail with no any parameter', function(){
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).groupDetail()},Error);
+    });
+
+    it('groupBy with wrong groupName parameter', function(){
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).groupDetail('name',{})},Error);
+    });
+
 });

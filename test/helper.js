@@ -115,5 +115,13 @@ describe('helper function test', function(){
         o.o = o;
         assert.equal(true,(!nosql.isEmpty(o) && nosql.isObject(o)));
     });
+
+    it('deep clone array is not reflect to original',function(){
+        var array1 = [1,2,3];
+        var array2 = [6,7,8];
+        array2 = nosql.deepClone(array1);
+        array2[0] = 10;
+        assert.equal(array1[0],1);
+    });
     
 });

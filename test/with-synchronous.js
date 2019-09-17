@@ -23,6 +23,14 @@ var data3 = [
     {id:5,bio:'I was born in surabaya',phone:'i@j.com'}
 ];
 
+var data4 = [
+    {brand:'Audi',color:'black',stock:32},
+    {brand:'Audi',color:'white',stock:76},
+    {brand:'Ferarri',color:'red',stock:8},
+    {brand:'Ford',color:'white',stock:49},
+    {brand:'Peugot',color:'white',stock:23}
+];
+
 describe('normal / synchronous CRUD test', function() {
     
     this.timeout(10000);
@@ -359,6 +367,36 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].data.bio.id,1);
         assert.equal(data[0].data.id,1);
         assert.equal(data[0].user_id,1);
+    });
+
+    it('Group by data', function(){
+        var nosql = new FlyJson();
+        var data = nosql.set(data4).groupBy('brand').exec();
+        assert.equal(data.length,4);
+    });
+
+    it('Group by data with sum', function(){
+        var nosql = new FlyJson();
+        var data = nosql.set(data4).groupBy('brand',['stock']).select(['brand','stock','item_count','average_stock']).exec();
+        assert.equal(data.length,4);
+        for(var i=0;i<data.length;i++) {
+            assert.notEqual(data[i].item_count,undefined);
+            assert.notEqual(data[i].average_stock,undefined);
+        }
+    });
+    
+    it('Group detail data', function(){
+        var nosql = new FlyJson();
+        var data = nosql.set(data4).groupDetail('brand').exec();
+        assert.equal(data.length,1);
+        assert.notEqual(data[0].brand,undefined);
+    });
+
+    it('Group detail data with custom group name', function(){
+        var nosql = new FlyJson();
+        var data = nosql.set(data4).groupDetail('brand','group_by_name').exec();
+        assert.equal(data.length,1);
+        assert.notEqual(data[0].group_by_name,undefined);
     });
 
     it('cleanup',function(){

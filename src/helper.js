@@ -124,6 +124,15 @@ class Helper {
     
         return output;
     }
+
+    /**
+     * Very safe deep clone an array
+     * @param {array} array 
+     * @return {array}
+     */
+    deepClone(array) {
+        return JSON.parse(JSON.stringify(array));
+    }
 }
 
 module.exports = Helper;

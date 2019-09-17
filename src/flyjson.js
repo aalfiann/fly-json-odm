@@ -1,4 +1,5 @@
 const Helper = require('./helper.js');
+const _sortBy = Symbol('_sortBy');
 
 /**
  * FlyJson class
@@ -22,9 +23,9 @@ class FlyJson extends Helper {
      * @param {string} field    this is the key name
      * @param {bool} reverse    reverse means sort descending
      * @param {fn} primer       this is the primer function
-     * @return {callback}
+     * @return {fn}
      */
-    sortBy(field, reverse, primer) {
+    [_sortBy](field, reverse, primer) {
         var key = primer ? 
             function(x) {return primer(x[field])} : 
             function(x) {return x[field]};
@@ -41,7 +42,7 @@ class FlyJson extends Helper {
      */
     set(data) {
         if(this.isArray(data)) {
-            this.data1 = JSON.parse(JSON.stringify(data));
+            this.data1 = this.deepClone(data);
         } else {
             throw new Error('Set data must be an array contains object.')
         }
@@ -273,7 +274,7 @@ class FlyJson extends Helper {
     join(name,data) {
         if(!this.isEmpty(name) && this.isString(name)) {
             if(this.isArray(data)) {
-                this.data2 = JSON.parse(JSON.stringify(data));
+                this.data2 = this.deepClone(data);
                 this.name = name;
                 this.scope = 'join';
             } else {
@@ -371,8 +372,70 @@ class FlyJson extends Helper {
      */
     orderBy(name,desc=false,primer) {
         if(!this.isEmpty(name) && this.isString(name) && this.isBoolean(desc)) {
-            this.data1.sort(this.sortBy(name,desc,primer));
+            this.data1.sort(this[_sortBy](name,desc,primer));
         }
+        return this;
+    }
+
+    /**
+     * Group detail data by key name
+     * @param {string} name 
+     * @param {string} groupName
+     * @return {this} 
+     */
+    groupDetail(name,groupName='') {
+        if(this.isEmpty(name) && !this.isString(name)) {
+            throw new Error('name is required and must be string.');
+        }
+        if(!this.isString(groupName)) {
+            throw new Error('group name must be string.');
+        }
+        var data = this.data1.reduce((objectsByKeyValue, obj) => {
+            const value = obj[name];
+            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+            return objectsByKeyValue;
+        }, {});
+        var group = [];
+        if(groupName) {
+            group.push({[groupName]:data})
+        } else {
+            group.push({[name]:data})
+        }
+        this.data1 = group;
+        return this;
+    }
+
+    /**
+     * Group data by name or with sum by field name
+     * @param {string} name 
+     * @param {array} sumField
+     * @return {this} 
+     */
+    groupBy(name,sumField=[]) {
+        if(this.isEmpty(name) && !this.isString(name)) {
+            throw new Error('name is required and must be string.');
+        }
+        if(!this.isArray(sumField)) {
+            throw new Error('field name for sum must be array.');
+        }
+        var l = sumField.length;
+        var data = this.data1.reduce(function(res, obj) {
+            obj.item_count = 1;
+            if (!(obj[name] in res)) {
+                res.__array.push(res[obj[name]] = obj);
+            } else {
+                for(var i=0;i<l;i++) {
+                    res[obj[name]][sumField[i]] += obj[sumField[i]];
+                }
+                res[obj[name]]['item_count'] += 1;
+            }
+            // average
+            for(var i=0;i<l;i++) {
+                res[obj[name]]['average_'+sumField[i]] = (res[obj[name]][sumField[i]]/res[obj[name]]['item_count']);
+            }
+            return res;
+        }, {__array:[]});
+        this.data1 = data.__array;
         return this;
     }
 

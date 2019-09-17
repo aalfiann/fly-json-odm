@@ -14,7 +14,7 @@ An Object Document Mapper to handle JSON on the fly for NodeJS
 `fly-json-odm` is the ODM library to handle JSON on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM does for `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join` and `Query`. When you are develop in `microservices` architecture, you will face up that everything should be handle from rest json via each services, because you can not access directly into the database.  
 
 ### Limitation
-This library was built for handle JSON for modification or manipulation only and any data will be processed and saved in memory for temporary (`On-The-Fly`). Not support for any database server also we don't provide feature how to read JSON from `file`, `stream` or something like that.
+This library was built to handle JSON for modification or manipulation only and any data will be processed and saved in memory for temporary (`On-The-Fly`). Not support for any database server also we don't provide feature how to read JSON from `file`, `stream` or something like that.
 
 ## Install using NPM
 ```bash
@@ -23,7 +23,7 @@ $ npm install fly-json-odm
 
 ### Usage
 ```javascript
-const FlyJson = require('fly-json-odm);
+const FlyJson = require('fly-json-odm');
 
 var nosql = new FlyJson();
 ```
@@ -51,6 +51,14 @@ var data3 = [
     {id:3,bio:'I was born in solo',phone:'e@f.com'},
     {id:4,bio:'I was born in semarang',phone:'g@h.com'},
     {id:5,bio:'I was born in surabaya',phone:'i@j.com'}
+];
+
+var data4 = [
+    {brand:'Audi',color:'black',stock:32},
+    {brand:'Audi',color:'white',stock:76},
+    {brand:'Ferarri',color:'red',stock:8},
+    {brand:'Ford',color:'white',stock:49},
+    {brand:'Peugot',color:'white',stock:23}
 ];
 ```
 
@@ -102,8 +110,9 @@ var data = nosql.set(data2)
   .delete('id',5).exec();
 console.log(data);
 ```
-
+---
 ##### Query
+Below here is the example how you can use logic as similar when you create `SQLQuery` with `fly-json-odm`.
 
 ###### - Basic
 
@@ -207,6 +216,37 @@ var data = nosql.set(data2)
   .exec();
 console.log(data);
 ```
+---
+###### - Group By or with SUM
+- SELECT * FROM data4 GROUPBY brand ORDERBY brand ASC;
+```javascript
+var data = nosql.set(data4)
+  .groupBy('brand')
+  .orderBy('brand')
+  .exec();
+console.log(data);
+```
+
+- SELECT brand, sum(stock) AS 'stock', item_count, average_stock FROM data4 GROUPBY brand ORDERBY brand ASC;
+```javascript
+var data = nosql.set(data4)
+  .groupBy('brand',['stock'])
+  .orderBy('brand')
+  .select(['brand','stock','item_count','average_stock'])
+  .exec();
+console.log(data);
+```
+**Note:** 
+- You are able to put `select()` method on tail before `exec()`.
+- `item_count` and `average_stock` is added automatically when you are using `groupBy` with `sumField`.
+---
+###### - GroupDetail
+This is for grouping data but the data detail will show as nested. This feature is not exists at mostly relation database engine, so I can not show you how the query is.
+```javascript
+var data = nosql.set(data4).groupDetail('brand').exec();
+console.log(data);
+```
+---
 
 ###### - Join Merge
 - Merge two data table
@@ -223,7 +263,7 @@ var table = nosql.set(data1).join('profile',data2).merge('user_id','id').exec();
 var data = nosql.set(table).join('bio',data3).merge('user_id','id').exec();
 console.log(data);
 ```
-
+---
 ###### - Join On
 - Join on two data table
 ```javascript
@@ -274,6 +314,8 @@ nosql.promisify((builder) => {return builder}).then(function(table){
 - `.merge(a,b)` - Merge two data table.
 - `.on(a,b)` - Set indentifier to joining two data table.
 - `.orderBy(name,desc=false,primer)` - Sort data ascending or descending by key name (support primer function).
+- `.groupBy(name,sumField=[])` - Grouping data or with sum field.
+- `.groupDetail(name,groupName='')` - Grouping data with detail nested.
 - `.skip(size)` - Skip data by size.
 - `.take(size)` - Take data by size.
 - `.paginate(page,page_size)` - Paginate data by page and page_size.
@@ -290,12 +332,11 @@ nosql.promisify((builder) => {return builder}).then(function(table){
 - `.isEmptyArray(value)` - Determine value is empty and array.
 - `.isEmptyObject(value)` - Determine object value is empty.
 - `.blockingTest()` - Blocking test for asynchronous.
-- `.safeStringify()` - Safe JSON.stringify to avoid type error converting circular structure to json.
+- `.safeStringify(value,[space])` - Safe JSON.stringify to avoid type error converting circular structure to json.
+- `.deepClone(array)` - Very safe deep clone an array.
 
 ### Unit Test
 If you want more example, you can play around with unit test.
 ```bash
 $ npm test
 ```
-
-
