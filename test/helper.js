@@ -71,26 +71,26 @@ describe('helper function test', function(){
         assert.equal(nosql.isEmptyArray(undefined),true);
         assert.equal(nosql.isEmptyArray(null),true);
         assert.equal(nosql.isEmptyArray([]),true);
-        assert.equal(nosql.isEmptyArray({}),true);
-        assert.equal(nosql.isEmptyArray({id:1}),true);
-        assert.equal(nosql.isEmptyArray('1'),true);
-        assert.equal(nosql.isEmptyArray(1),true);
+        assert.equal(nosql.isEmptyArray({}),false);
+        assert.equal(nosql.isEmptyArray({id:1}),false);
+        assert.equal(nosql.isEmptyArray('1'),false);
+        assert.equal(nosql.isEmptyArray(1),false);
         assert.equal(nosql.isEmptyArray([1,2,3]),false);
     });
 
-    it('is empty object also can be use to check empty array', function() {
+    it('is empty object', function() {
         assert.equal(nosql.isEmptyObject(undefined),true);
         assert.equal(nosql.isEmptyObject(null),true);
-        assert.equal(nosql.isEmptyObject([]),true);
         assert.equal(nosql.isEmptyObject({}),true);
-        assert.equal(nosql.isEmptyObject(1),true);
+        assert.equal(nosql.isEmptyObject([]),false);
+        assert.equal(nosql.isEmptyObject(1),false);
         assert.equal(nosql.isEmptyObject({id:1}),false);
         assert.equal(nosql.isEmptyObject('1'),false);
         assert.equal(nosql.isEmptyObject([1,2,3]),false);
     });
 
     it('is empty object parameter value must hasOwnProperty',function(){
-        const obj = Object.create({name: 'inherited'})
+        const obj = Object.create({name: 'inherited'});
         assert.equal(true,nosql.isEmptyObject(obj));
     });
 

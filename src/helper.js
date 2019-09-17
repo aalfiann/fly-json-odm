@@ -64,7 +64,7 @@ class Helper {
      * @return {bool}
      */
     isEmptyArray(value) {
-        return (!Array.isArray(value) || !value.length);
+        return (value === undefined || value === null || value.length == 0);
     }
 
     /**
@@ -73,11 +73,7 @@ class Helper {
      * @return {bool}
      */
     isEmptyObject(value) {
-        for(var key in value) {
-            if(value.hasOwnProperty(key))
-                return false;
-        }
-        return true;
+        return (value === undefined || value === null || (Object.keys(value).length === 0 && value.constructor === Object));
     }
 
     /**
