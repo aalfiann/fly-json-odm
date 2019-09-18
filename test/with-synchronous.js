@@ -105,6 +105,60 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].address,'jakarta');
     });
 
+    it('select + where (case insensitive)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','==','audi',false)
+            .exec();
+        assert.equal(data[0].brand,'Audi');
+        assert.equal(data[1].brand,'Audi');
+    });
+
+    it('select + where + =', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','=','Audi')
+            .exec();
+        assert.equal(data[0].brand,'Audi');
+        assert.equal(data[1].brand,'Audi');
+    });
+
+    it('select + where (not)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','NOT','audi',false)
+            .exec();
+        assert.equal(data[0].brand,'Ferarri');
+        assert.equal(data[1].brand,'Ford');
+        assert.equal(data[2].brand,'Peugot');
+    });
+
+    it('select + where (not like)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','NOT LIKE','audi',false)
+            .exec();
+        assert.equal(data[0].brand,'Ferarri');
+        assert.equal(data[1].brand,'Ford');
+        assert.equal(data[2].brand,'Peugot');
+    });
+
+    it('select + where (regex)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','regex',/[A-F]/)
+            .exec();
+        assert.equal(data[0].brand,'Audi');
+        assert.equal(data[1].brand,'Audi');
+        assert.equal(data[2].brand,'Ferarri');
+        assert.equal(data[3].brand,'Ford');
+    });
+
     it('select + where + <=', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data1)

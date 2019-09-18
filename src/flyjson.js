@@ -170,33 +170,52 @@ class FlyJson extends Helper {
                 var mid = args[1];
                 var a = args[0];
                 var b = args[2];
+                var c = args[3];
             } else {
                 var mid = '===';
                 var a = args[0];
                 var b = args[1];
+                var c = true;
             }
+            mid = mid.toString().toLowerCase();
             var search = {[a]:b};
+            var v = undefined;
+            var s = undefined;
             var data = this.data1.filter(function (o) {
                 return Object.keys(search).every(function (k) {
+                    v = o[k];
+                    s = search[k];
+                    if(c == false && mid != 'regex') {
+                        s = search[k].toString().toLowerCase();
+                        v = o[k].toString().toLowerCase();
+                    }
                     switch(mid) {
+                        case '=':
+                            return v == s;
                         case '!==':
-                            return o[k] !== search[k];
+                            return v !== s;
                         case '==':
-                            return o[k] == search[k];
+                            return v == s;
                         case '!=':
-                            return o[k] != search[k];
+                            return v != s;
                         case '>':
-                            return o[k] > search[k];
+                            return v > s;
                         case '>=':
-                            return o[k] >= search[k];
+                            return v >= s;
                         case '<':
-                            return o[k] < search[k];
+                            return v < s;
                         case '<=':
-                            return o[k] <= search[k];
+                            return v <= s;
+                        case 'not':
+                            return v != s;
                         case 'like':
-                            return (o[k].indexOf(search[k]) !=-1)
+                            return (v.indexOf(s) !=-1);
+                        case 'not like':
+                            return (v.indexOf(s) ==-1);
+                        case 'regex':
+                            return (s.test(v));
                         default:
-                            return o[k] === search[k];
+                            return v === s;
                     }
                 });
             });

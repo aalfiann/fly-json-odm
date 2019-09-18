@@ -11,10 +11,10 @@ An Object Document Mapper to handle JSON on the fly for NodeJS
 
 
 ### Background
-`fly-json-odm` is the ODM library to handle JSON on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM does for `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join` and `Query`. When you are develop in `microservices` architecture, you will face up that everything should be handle from rest json via each services, because you can not access directly into the database.  
+`fly-json-odm` is the ODM library to handle JSON on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM. For example is to do `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join` and `Query`. When you are develop in `microservices` architecture, you will face up that everything should be handle from rest json via each services, because you can not access directly into the database.  
 
 ### Limitation
-This library was built to handle JSON for modification or manipulation only and any data will be processed and saved in memory for temporary (`On-The-Fly`). Not support for any database server also we don't provide feature how to read JSON from `file`, `stream` or something like that.
+This library was created to handle JSON for `modification`/`manipulation` only and any data will be processed and saved in memory for temporary (`On-The-Fly`). Not support for to use with any database server also we don't provide feature how to read JSON from `file`, `stream` or something like that.
 
 ## Install using NPM
 ```bash
@@ -112,7 +112,7 @@ console.log(data);
 ```
 ---
 ##### Query
-Below here is the example how you can use logic as similar when you create `SQLQuery` with `fly-json-odm`.
+Below here is the example how you can use your logic as similar when you created `SQL Query` with `fly-json-odm`.
 
 ###### - Basic
 
@@ -305,7 +305,7 @@ nosql.promisify((builder) => {return builder}).then(function(table){
 - `.modify(id,value,obj)` - Modify or Add new key for single data object in data table.
 - `.delete(id,value)` - Delete single data object in data table.
 - `.select(key)` - Filter data by select name key.
-- `.where(...args)` - Filter data by where.
+- `.where(...args)` - Filter data by where. Please see [comparison-operators](#comparison-operators).
 - `.begin()` - Beginning to build query with condition OR.
 - `.or()` - Add new OR condition.
 - `.end()` -  Ending of build query with condition OR.
@@ -334,6 +334,29 @@ nosql.promisify((builder) => {return builder}).then(function(table){
 - `.blockingTest()` - Blocking test for asynchronous.
 - `.safeStringify(value,[space])` - Safe JSON.stringify to avoid type error converting circular structure to json.
 - `.deepClone(array)` - Very safe deep clone an array.
+
+### Comparison Operators
+Here is the comparison operator to use with `.where(...args)`.  
+Example:  
+- `.where('address','jakarta')` - Default is `===`; Case Sensitive.
+- `.where('address','!=','jakarta')` - Case Sensitive
+- `.where('address','like','Jakarta',false)` - Case Insensitive.
+- `.where('address','regex',/[a-j/)` - Support Regex.
+
+|Name				|Details|
+|---				  |---|
+|`=` or `==`  |Equality|
+|`===`        |Strict Equality|
+|`!=`         |Not Equals|
+|`!==`        |Strict Not Equals|
+|`>`          |Greater than|
+|`>=`         |Greater than or equal|
+|`<`          |Less than|
+|`<=`         |Less than or equal|
+|`NOT`        |Not Equals (same as `!=`)|
+|`LIKE`       |case-insensitive regex expression search|
+|`NOT LIKE`   |case-insensitive regex expression search (opposite)|
+|`REGEX`      |Regex search|
 
 ### Unit Test
 If you want more example, you can play around with unit test.
