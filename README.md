@@ -331,9 +331,10 @@ nosql.promisify((builder) => {return builder}).then(function(table){
 - `.isEmpty(value)` - Determine value is empty.
 - `.isEmptyArray(value)` - Determine value is empty and array.
 - `.isEmptyObject(value)` - Determine object value is empty.
-- `.blockingTest()` - Blocking test for asynchronous.
+- `.blockingTest(ms=1000)` - Blocking execution of code for asynchronous test.
 - `.safeStringify(value,[space])` - Safe JSON.stringify to avoid type error converting circular structure to json.
 - `.deepClone(array)` - Very safe deep clone an array.
+- `.jsonTransform(data, map)` - For restructuring and performing operations on JSON. Please see [how to use jsonTransform](https://github.com/aalfiann/fly-json-odm/wiki/jsonTransform).
 
 ### Comparison Operators
 Here is the comparison operator to use with `.where(...args)`.  
