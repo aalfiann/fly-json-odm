@@ -143,7 +143,10 @@ class Helper {
             foreach(data,callback) {
                 if(this.isObject(data)) {
                     var keys = Object.keys(data);
-                    var values = Object.values(data);
+                    var values = Object.keys(data).map(function(e) {
+                        return data[e]
+                    });
+                      
                     var i =0;
                     var l = keys.length;
                     for(i;i<l;i++){
