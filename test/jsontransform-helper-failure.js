@@ -69,6 +69,11 @@ var mapOnNull = {
 };
 
 describe('json transform intentional failure test', function(){
+
+	it("transform data with undefined data", function() {
+
+		assert.deepEqual(nosql.jsonTransform(undefined, map).make(),[]);
+	});
     
     it("transform data foreach with non array / object", function() {
 

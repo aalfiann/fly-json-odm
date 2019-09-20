@@ -174,7 +174,11 @@ class Helper {
     
             getValue : function(obj, key, newKey) {
     
-                if(typeof obj === 'undefined' || key == undefined || key == null || key == '') {
+                if(typeof obj === 'undefined') {
+                    return;
+                }
+
+                if(key == undefined || key == null || key == '') {
                     return obj;
                 }
     
