@@ -144,9 +144,8 @@ class Helper {
                 if(this.isObject(data)) {
                     var keys = Object.keys(data);
                     var values = Object.keys(data).map(function(e) {
-                        return data[e]
+                        return data[e];
                     });
-                      
                     var i =0;
                     var l = keys.length;
                     for(i;i<l;i++){
@@ -154,9 +153,11 @@ class Helper {
                     }
                 } else {
                     if(Array.isArray(data)) {
-                        data.forEach(function(value,key){
-                            callback(value,key);
-                        });
+                        var i = 0;
+                        var l = data.length
+                        for (i;i<l;i++) {
+                            callback(data[i],i);
+                        }
                     } else {
                         throw new Error('Failed to iteration. Data is not an array or object.');
                     }
@@ -257,9 +258,11 @@ class Helper {
             },
     
             remove: function(item){
-                map.remove.forEach(function (key) {
-                    delete item[key];
-                });
+                var i = 0;
+			    var l = map.remove.length;
+    			for (i;i<l;i++) {
+	    			delete item[map.remove[i]];
+		    	}
                 return item;
             },
     
