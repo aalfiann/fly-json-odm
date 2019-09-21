@@ -77,6 +77,35 @@ class Helper {
     }
 
     /**
+     * Foreach for an array or object 
+     * @param {array|object} data 
+     * @param {callback} callback 
+     */
+    foreach(data,callback) {
+        if(this.isObject(data)) {
+            var keys = Object.keys(data);
+            var values = Object.keys(data).map(function(e) {
+                return data[e];
+            });
+            var i =0;
+            var l = keys.length;
+            for(i;i<l;i++){
+                callback(values[i],keys[i]);
+            }
+        } else {
+            if(Array.isArray(data)) {
+                var i = 0;
+                var l = data.length
+                for (i;i<l;i++) {
+                    callback(data[i],i);
+                }
+            } else {
+                throw new Error('Failed to iteration. Data is not an array or object.');
+            }
+        }
+    }
+
+    /**
      * Blocking test for asynchronous
      * @param {integer} ms      this is miliseconds value for event block
      * @return {int}
@@ -138,39 +167,8 @@ class Helper {
      * @return {array}
      */
     jsonTransform(data, map) {
+        var helper = new Helper();
         return {
-
-            foreach(data,callback) {
-                if(this.isObject(data)) {
-                    var keys = Object.keys(data);
-                    var values = Object.keys(data).map(function(e) {
-                        return data[e];
-                    });
-                    var i =0;
-                    var l = keys.length;
-                    for(i;i<l;i++){
-                        callback(values[i],keys[i]);
-                    }
-                } else {
-                    if(Array.isArray(data)) {
-                        var i = 0;
-                        var l = data.length
-                        for (i;i<l;i++) {
-                            callback(data[i],i);
-                        }
-                    } else {
-                        throw new Error('Failed to iteration. Data is not an array or object.');
-                    }
-                }
-            },
-    
-            isObject (value) {
-                return value && typeof value === 'object' && value.constructor === Object;
-            },
-    
-            isEmptyObject: function(value) {
-                return (value === undefined || value === null || (Object.keys(value).length === 0 && value.constructor === Object));
-            },
     
             defaultOrNull: function(key) {
                 return key && map.defaults ? map.defaults[key] : null;
@@ -238,7 +236,7 @@ class Helper {
                 var value = this.getValue(data, map.list);
                 var normalized = [];
     
-                if(!this.isEmptyObject(value)) {
+                if(!helper.isEmptyObject(value)) {
                     var list = this.getList();
                     normalized = map.item ? list.map(this.iterator.bind(this, map.item)) : list;
                     normalized = this.operate.bind(this, normalized)(context);
@@ -252,7 +250,7 @@ class Helper {
     
             removeAll: function(data){
                 if (Array.isArray(map.remove)) {
-                    this.foreach(data, this.remove);
+                    helper.foreach(data, this.remove);
                 }
                 return data;
             },
@@ -269,7 +267,7 @@ class Helper {
             operate: function(data, context) {
     
                 if(map.operate) {
-                    this.foreach(map.operate,function(method){
+                    helper.foreach(map.operate,function(method){
                         data = data.map(function(item){
                             var fn;
                             if( 'string' === typeof method.run ) {
@@ -304,7 +302,7 @@ class Helper {
                     return this.getValue(item, map);
                 }
                 
-                this.foreach(map, function(oldkey, newkey) {
+                helper.foreach(map, function(oldkey, newkey) {
                     if(typeof oldkey === 'string' && oldkey.length > 0) {
                         obj[newkey] = this.getValue(item, oldkey, newkey);
                     } else if( Array.isArray(oldkey) ) {

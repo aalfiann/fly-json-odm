@@ -31,6 +31,18 @@ var data4 = [
     {brand:'Peugot',color:'white',stock:23}
 ];
 
+var data5 = [
+    {id:1,title:'this is my first post',tags:['News','nodejs','tech']},
+    {id:2,title:'this is my second post',tags:['tutorial','linux','tech']},
+    {id:3,title:'this is my third post',tags:['News','info','tech']}
+];
+
+var data6 = [
+    {id:1,title:'this is my first post',category:{id:1,name:'news'}},
+    {id:2,title:'this is my second post',category:{id:4,name:'Tutorial'}},
+    {id:3,title:'this is my third post',category:{id:2,name:'tech'}}
+];
+
 describe('normal / synchronous CRUD test', function() {
     
     this.timeout(10000);
@@ -123,6 +135,52 @@ describe('normal / synchronous Query test', function() {
             .exec();
         assert.equal(data[0].brand,'Audi');
         assert.equal(data[1].brand,'Audi');
+    });
+
+    it('select + where (in array)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data5)
+            .select(['id','title','tags'])
+            .where('tags','IN','News')
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].tags[0],'News');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].tags[0],'News');
+    });
+
+    it('select + where (in array case insensitive)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data5)
+            .select(['id','title','tags'])
+            .where('tags','IN','news',false)
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].tags[0],'News');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].tags[0],'News');
+    });
+
+    it('select + where (in object)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data6)
+            .select(['id','title','category'])
+            .where('category','IN','Tutorial')
+            .exec();
+        assert.equal(data[0].id,2);
+        assert.equal(data[0].category.id,4);
+        assert.equal(data[0].category.name,'Tutorial');
+    });
+
+    it('select + where (in object case insensitive)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data6)
+            .select(['id','title','category'])
+            .where('category','IN','tutorial',false)
+            .exec();
+        assert.equal(data[0].id,2);
+        assert.equal(data[0].category.id,4);
+        assert.equal(data[0].category.name,'Tutorial');
     });
 
     it('select + where (not)', function () {

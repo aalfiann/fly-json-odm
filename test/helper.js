@@ -123,5 +123,30 @@ describe('helper function test', function(){
         array2[0] = 10;
         assert.equal(array1[0],1);
     });
+
+    it('foreach an array', function(){
+        var array1 = [1,2,3];
+        var result = [];
+        nosql.foreach(array1,function(value){
+            result.push(value);
+        });
+        assert.deepEqual(result,[1,2,3]);
+    });
+
+    it('foreach an object', function(){
+        var obj = {id:1,name:'john',age:20};
+        var result = [];
+        nosql.foreach(obj,function(value){
+            result.push(value);
+        });
+        assert.deepEqual(result,['1','john','20']);
+    });
+
+    it('foreach except an array or object will throw Error', function(){
+        var name = 'my name is john';
+        assert.throws(() => {nosql.foreach(name,function(value){
+            console.log(value);
+        })},Error);
+    });
     
 });

@@ -166,29 +166,34 @@ class FlyJson extends Helper {
      */
     where(...args) {
         if(!this.isEmpty(args[0]) && this.isString(args[0]) && (args[1] != undefined)) {
+            var c = true;
             if (args.length > 2) {
                 var mid = args[1];
                 var a = args[0];
                 var b = args[2];
-                var c = args[3];
+                if(!this.isEmpty(args[3])) c = args[3];
             } else {
                 var mid = '===';
                 var a = args[0];
                 var b = args[1];
-                var c = true;
+                c = true;
             }
             mid = mid.toString().toLowerCase();
             var search = {[a]:b};
             var v = undefined;
             var s = undefined;
+            var self = this;
             var data = this.data1.filter(function (o) {
                 return Object.keys(search).every(function (k) {
                     v = o[k];
                     s = search[k];
                     if(c == false && mid != 'regex') {
+                        if(!self.isObject(o[k])) {
+                            v = o[k].toString().toLowerCase();
+                        }
                         s = search[k].toString().toLowerCase();
-                        v = o[k].toString().toLowerCase();
                     }
+                    
                     switch(mid) {
                         case '=':
                             return v == s;
@@ -206,6 +211,26 @@ class FlyJson extends Helper {
                             return v < s;
                         case '<=':
                             return v <= s;
+                        case 'in':
+                            if(self.isString(v)) {
+                                return (v.indexOf(s) !=-1);
+                            } 
+                            var result = [];
+                            self.foreach(v,function(value){
+                                if(c) {
+                                    if(value == s) {
+                                        result.push(value);
+                                    }
+                                } else {
+                                    if(self.isString(value)) {
+                                        value = value.toLowerCase();    
+                                    }
+                                    if(value == s) {
+                                        result.push(value);
+                                    }
+                                }
+                            });
+                            return (result.length > 0);
                         case 'not':
                             return v != s;
                         case 'like':

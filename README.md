@@ -344,7 +344,7 @@ Example:
 - `.where('address','like','Jakarta',false)` - Case Insensitive.
 - `.where('address','regex',/[a-j/)` - Support Regex.
 
-|Name				|Details|
+|Name				  |Details|
 |---				  |---|
 |`=` or `==`  |Equality|
 |`===`        |Strict Equality|
@@ -354,9 +354,10 @@ Example:
 |`>=`         |Greater than or equal|
 |`<`          |Less than|
 |`<=`         |Less than or equal|
+|`IN`         |Checks if the value is within an array or object|
 |`NOT`        |Not Equals (same as `!=`)|
-|`LIKE`       |case-insensitive regex expression search|
-|`NOT LIKE`   |case-insensitive regex expression search (opposite)|
+|`LIKE`       |Search the value|
+|`NOT LIKE`   |Search the value (opposite)|
 |`REGEX`      |Regex search|
 
 ### Unit Test
