@@ -137,7 +137,8 @@ console.log(result);
 ---
 ##### Transform
 Sometimes instead of updating or modifying whole data json, it's better to restructuring again the json itself.  
-Please see [how to use jsonTransform](https://github.com/aalfiann/fly-json-odm/wiki/jsonTransform).
+Please see [how to use jsonTransform](https://github.com/aalfiann/fly-json-odm/wiki/jsonTransform).  
+
 ---
 ##### Query
 Below here is the example how you can use your logic as similar when you created `SQL Query` with `fly-json-odm`.
