@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/aalfiann/fly-json-odm.svg?branch=master)](https://travis-ci.org/aalfiann/fly-json-odm)
 [![Coverage Status](https://coveralls.io/repos/github/aalfiann/fly-json-odm/badge.svg?branch=master)](https://coveralls.io/github/aalfiann/fly-json-odm?branch=master)
 [![Known Vulnerabilities](https://snyk.io//test/github/aalfiann/fly-json-odm/badge.svg?targetFile=package.json)](https://snyk.io//test/github/aalfiann/fly-json-odm?targetFile=package.json)
+[![dependencies Status](https://david-dm.org/aalfiann/fly-json-odm/status.svg)](https://david-dm.org/aalfiann/fly-json-odm)
+![License](https://img.shields.io/npm/l/fly-json-odm)
 ![NPM download/month](https://img.shields.io/npm/dm/fly-json-odm.svg)
 ![NPM download total](https://img.shields.io/npm/dt/fly-json-odm.svg)  
 An Object Document Mapper to handle JSON on the fly for NodeJS
@@ -110,13 +112,39 @@ var data = nosql.set(data2)
   .delete('id',5).exec();
 console.log(data);
 ```
+**Note**  
+`insert`, `update`, `modify` and `delete` operations above is for single row data.  
+If you want multiple you can just **loop** or **chain** it.  
+  
+Example chain insert
+```javascript
+var data = nosql.set(data2)
+  .insert({id:6,address:'madiun',email:'i@j.com'})
+  .insert({id:7,address:'madiun',email:'i@j.com'})
+  .insert({id:8,address:'madiun',email:'i@j.com'})
+  .exec()
+console.log(data);
+```
+Example loop insert
+```javascript
+var data = nosql.set(data2);
+for(var i=6;i<9;i++) {
+  data.insert({id:i,address:'madiun',email:'i@j.com'});
+}
+var result = data.exec();
+console.log(result);
+```
+---
+##### Transform
+Sometimes instead of updating or modifying whole data json, it's better to restructuring again the json itself.  
+Please see [how to use jsonTransform](https://github.com/aalfiann/fly-json-odm/wiki/jsonTransform).
 ---
 ##### Query
 Below here is the example how you can use your logic as similar when you created `SQL Query` with `fly-json-odm`.
 
 ###### - Basic
 
-- SELECT id, address FROM data2 WHERE address = 'jakarta';
+- **Select + Where**
 ```javascript
 var data = nosql.set(data2)
   .select(['id','address'])
@@ -124,8 +152,14 @@ var data = nosql.set(data2)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT id, address 
+FROM data2 
+WHERE address = 'jakarta';
+```
 
-- SELECT user_id, name, age FROM data1 WHERE age BETWEEN '10' AND '30';
+- **Select + Where Between**
 ```javascript
 var data = nosql.set(data1)
   .select(['user_id','name','age'])
@@ -134,8 +168,14 @@ var data = nosql.set(data1)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT user_id, name, age 
+FROM data1 
+WHERE age BETWEEN '10' AND '30';
+```
 
-- SELECT id, address FROM data2 WHERE address LIKE '%a%' AND address LIKE '%ba%';
+- **Select + Where + And**
 ```javascript
 var data = nosql.set(data2)
   .select(['id','address'])
@@ -144,8 +184,15 @@ var data = nosql.set(data2)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT id, address 
+FROM data2 
+WHERE address LIKE '%a%' 
+AND address LIKE '%ba%';
+```
 
-- SELECT id, address FROM data2 WHERE address LIKE '%u%' OR address = 'solo';
+- **Select + Where + Or**
 ```javascript
 var data = nosql.set(data2)
   .select(['id','address'])
@@ -157,8 +204,15 @@ var data = nosql.set(data2)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT id, address 
+FROM data2 
+WHERE address LIKE '%u%' 
+OR address = 'solo';
+```
 
-- SELECT id, address FROM data2 WHERE address LIKE '%u%' OR address = 'solo' ORDERBY 'id' ASC;
+- **Select + Where + Or + Order By**
 ```javascript
 var data = nosql.set(data2)
   .select(['id','address'])
@@ -171,8 +225,16 @@ var data = nosql.set(data2)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT id, address 
+FROM data2 
+WHERE address LIKE '%u%' 
+OR address = 'solo' 
+ORDER BY 'id' ASC;
+```
 
-- SELECT id, address FROM data2 WHERE address LIKE '%u%' OR address = 'solo' ORDERBY 'id' ASC LIMIT 2;
+- **Select + Where + Or + Order By + Limit**
 ```javascript
 var data = nosql.set(data2)
   .select(['id','address'])
@@ -186,8 +248,17 @@ var data = nosql.set(data2)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT id, address 
+FROM data2 
+WHERE address LIKE '%u%' 
+OR address = 'solo' 
+ORDER BY 'id' ASC 
+LIMIT 2;
+```
 
-- SELECT id, address FROM data2 WHERE address LIKE '%u%' OR address = 'solo' ORDERBY 'id' ASC LIMIT 1,2;
+- **Select + Where + Or + Order By + Limit + Offset**
 ```javascript
 var data = nosql.set(data2)
   .select(['id','address'])
@@ -201,6 +272,15 @@ var data = nosql.set(data2)
   .take(2)
   .exec();
 console.log(data);
+```
+similar in SQL Query
+```sql
+SELECT id, address 
+FROM data2 
+WHERE address LIKE '%u%' 
+OR address = 'solo' 
+ORDER BY 'id' ASC 
+LIMIT 1,2;
 ```
 Limit and Offset mostly use for pagination, but we have more simpler way to make a pagination
 ```javascript
@@ -218,7 +298,7 @@ console.log(data);
 ```
 ---
 ###### - Group By or with SUM
-- SELECT * FROM data4 GROUPBY brand ORDERBY brand ASC;
+At example above we are always use `select()`, but you are able to query without `select()` like this
 ```javascript
 var data = nosql.set(data4)
   .groupBy('brand')
@@ -226,8 +306,14 @@ var data = nosql.set(data4)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT * FROM data4 
+GROUP BY brand 
+ORDER BY brand ASC;
+```
 
-- SELECT brand, sum(stock) AS 'stock', item_count, average_stock FROM data4 GROUPBY brand ORDERBY brand ASC;
+- **Select + Group By + Sum(stock) + Order By**
 ```javascript
 var data = nosql.set(data4)
   .groupBy('brand',['stock'])
@@ -236,8 +322,15 @@ var data = nosql.set(data4)
   .exec();
 console.log(data);
 ```
+similar in SQL Query
+```sql
+SELECT brand, sum(stock) AS 'stock', item_count, average_stock 
+FROM data4 
+GROUP BY brand 
+ORDER BY brand ASC;
+```
 **Note:** 
-- You are able to put `select()` method on tail before `exec()`.
+- `select()` method is optional, so you are able to put `select()` on **first** or **tail** before `exec()`.
 - `item_count` and `average_stock` is added automatically when you are using `groupBy` with `sumField`.
 ---
 ###### - GroupDetail
@@ -284,6 +377,8 @@ var bio = nosql.set(data2).join('bio',data3).on('id','id').exec();
 var data = nosql.set(data1).join('data',bio).on('user_id','id').exec();
 console.log(data);
 ```
+**Note:**
+- JOIN in `fly-json-odm` will act like `LEFT JOIN` in SQL Query
 
 
 #### B. Asynchronous
@@ -314,7 +409,7 @@ nosql.promisify((builder) => {return builder}).then(function(table){
 - `.merge(a,b)` - Merge two data table.
 - `.on(a,b)` - Set indentifier to joining two data table.
 - `.orderBy(name,desc=false,primer)` - Sort data ascending or descending by key name (support primer function).
-- `.groupBy(name,sumField=[])` - Grouping data or with sum field.
+- `.groupBy(name,sumField=[])` - Grouping data or with sum field (sumfield is column name).
 - `.groupDetail(name,groupName='')` - Grouping data with detail nested.
 - `.skip(size)` - Skip data by size.
 - `.take(size)` - Take data by size.

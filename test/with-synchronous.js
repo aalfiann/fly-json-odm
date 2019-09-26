@@ -56,6 +56,21 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(data[5].email,'i@j.com');
     });
 
+    it('multiple insert data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2);
+        for(var i=6;i<9;i++) {
+            data.insert({id:i,address:'madiun',email:'i@j.com'});
+        }
+        var result = data.exec();
+        assert.equal(result.length,8);
+        for(var x=5,y=6;x<8;x++,y++) {
+            assert.equal(result[x].id,y);
+            assert.equal(result[x].address,'madiun');
+            assert.equal(result[x].email,'i@j.com');
+        }
+    });
+
     it('update data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
@@ -65,6 +80,22 @@ describe('normal / synchronous CRUD test', function() {
             assert.equal(data[4].id,5);
             assert.equal(data[4].address,'ponorogo');
             assert.equal(data[4].email,'xxx@gmail.com'); 
+    });
+
+    it('multiple update data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2);
+        for(var i=0;i<3;i++) {
+            data.update('id',i,{address:'ponorogo',email:'xxx@gmail.com'});
+        }
+        var result= data.exec();
+        assert.equal(result.length,5);
+        assert.equal(result[3].id,1);
+        assert.equal(result[3].address,'ponorogo');
+        assert.equal(result[3].email,'xxx@gmail.com');
+        assert.equal(result[4].id,2);
+        assert.equal(result[4].address,'ponorogo');
+        assert.equal(result[4].email,'xxx@gmail.com');
     });
 
     it('modify data', function() {
@@ -78,6 +109,22 @@ describe('normal / synchronous CRUD test', function() {
             assert.equal(data[4].email,'xxx@gmail.com');
     });
 
+    it('multiple modify data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2);
+        for(var i=0;i<3;i++) {
+            data.modify('id',i,{address:'ponorogo',email:'xxx@gmail.com',about:'Just ordinary programmer'});
+        }
+        var result = data.exec();
+        assert.equal(result.length,5);
+        assert.equal(result[3].id,1);
+        assert.equal(result[3].address,'ponorogo');
+        assert.equal(result[3].email,'xxx@gmail.com');
+        assert.equal(result[4].id,2);
+        assert.equal(result[4].address,'ponorogo');
+        assert.equal(result[4].email,'xxx@gmail.com');
+    });
+
     it('delete data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
@@ -87,6 +134,22 @@ describe('normal / synchronous CRUD test', function() {
             assert.equal(data[3].id,4);
             assert.equal(data[3].address,'solo, balapan');
             assert.equal(data[3].email,'g@h.com'); 
+    });
+
+    it('multiple delete data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2);
+        for(var i=1;i<4;i++) {
+            data.delete('id',i);
+        }   
+        var result = data.exec();
+        assert.equal(result.length,2);
+        assert.equal(result[0].id,4);
+        assert.equal(result[0].address,'solo, balapan');
+        assert.equal(result[0].email,'g@h.com');
+        assert.equal(result[1].id,5);
+        assert.equal(result[1].address,'surabaya');
+        assert.equal(result[1].email,'i@j.com'); 
     });
 
 });
