@@ -15,6 +15,31 @@ var data2 = [
     {id:5,address:'surabaya',email:'i@j.com'}
 ];
 
+var data2insert = [
+    {id:6,address:'madiun',email:'madiun@yahoo.com'},
+    {id:7,address:'malang',email:'malang@gmail.com'}
+];
+
+var data2update = [
+    {id:3,address:'solo',email:'solo@yahoo.com'},
+    {id:4,address:'solo, balapan',email:'balapan@gmail.com'}
+];
+
+var data2updatereverse = [
+    {id:4,address:'solo, balapan',email:'balapan@gmail.com'},
+    {id:3,address:'solo',email:'solo@yahoo.com'}
+];
+
+var data2modify = [
+    {id:3,email:'solo@yahoo.com',about:'I was born in solo'},
+    {id:4,email:'balapan@gmail.com',about:'Balapan city is the best',located:'Central Java'}
+];
+
+var data2modifyreverse = [
+    {id:4,email:'balapan@gmail.com',about:'Balapan city is the best',located:'Central Java'},
+    {id:3,email:'solo@yahoo.com',about:'I was born in solo'}
+];
+
 var data3 = [
     {id:1,bio:'I was born in bandung',phone:'a@b.com'},
     {id:2,bio:'I was born in jakarta',phone:'c@d.com'},
@@ -71,6 +96,19 @@ describe('normal / synchronous CRUD test', function() {
         }
     });
 
+    it('insert many data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2)
+            .insertMany(data2insert).exec();
+        assert.equal(data.length,7);
+        assert.equal(data[5].id,6);
+        assert.equal(data[5].address,'madiun');
+        assert.equal(data[5].email,'madiun@yahoo.com');
+        assert.equal(data[6].id,7);
+        assert.equal(data[6].address,'malang');
+        assert.equal(data[6].email,'malang@gmail.com');
+    });
+
     it('update data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
@@ -96,6 +134,24 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(result[4].id,2);
         assert.equal(result[4].address,'ponorogo');
         assert.equal(result[4].email,'xxx@gmail.com');
+    });
+
+    it('update many data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2)
+            .updateMany('id',data2update).exec();
+        assert.equal(data.length,5);
+        assert.equal(data[2].email,'solo@yahoo.com');
+        assert.equal(data[3].email,'balapan@gmail.com');
+    });
+
+    it('update many data reverse', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2)
+            .updateMany('id',data2updatereverse).exec();
+        assert.equal(data.length,5);
+        assert.equal(data[2].email,'solo@yahoo.com');
+        assert.equal(data[3].email,'balapan@gmail.com');
     });
 
     it('modify data', function() {
@@ -125,6 +181,26 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(result[4].email,'xxx@gmail.com');
     });
 
+    it('modify many data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2)
+            .modifyMany('id',data2modifyreverse).exec();
+        assert.equal(data.length,5);
+        assert.equal(data[2].about,'I was born in solo');
+        assert.equal(data[3].about,'Balapan city is the best');
+        assert.equal(data[3].located,'Central Java');
+    });
+
+    it('modify many data reverse', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2)
+            .modifyMany('id',data2modifyreverse).exec();
+        assert.equal(data.length,5);
+        assert.equal(data[2].about,'I was born in solo');
+        assert.equal(data[3].about,'Balapan city is the best');
+        assert.equal(data[3].located,'Central Java');
+    })
+
     it('delete data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
@@ -150,6 +226,28 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(result[1].id,5);
         assert.equal(result[1].address,'surabaya');
         assert.equal(result[1].email,'i@j.com'); 
+    });
+
+    it('delete many data', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2)
+            .deleteMany('id',[2,5])
+            .exec();
+            assert.equal(data.length,3);
+            assert.equal(data[0].id,1);
+            assert.equal(data[1].id,3);
+            assert.equal(data[2].id,4); 
+    });
+    
+    it('delete many data reverse', function() {
+        var nosql = new FlyJson();
+        var data = nosql.set(data2)
+            .deleteMany('id',[5,2])
+            .exec();
+            assert.equal(data.length,3);
+            assert.equal(data[0].id,1);
+            assert.equal(data[1].id,3);
+            assert.equal(data[2].id,4); 
     });
 
 });

@@ -165,6 +165,16 @@ describe('intentional failure condition test', function() {
         var nosql = new FlyJson();
         assert.throws(function(){nosql.set(right_table).insert()},Error);
     });
+
+    it('insert many data with empty parameter', function() {
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).insertMany()},Error);
+    });
+
+    it('insert many data with wrong array', function() {
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).insertMany([1,2,3])},Error);
+    });
     
     it('update data with no name key', function() {
         var nosql = new FlyJson();
@@ -179,6 +189,16 @@ describe('intentional failure condition test', function() {
     it('update data with no object', function() {
         var nosql = new FlyJson();
         assert.throws(function(){nosql.set(right_table).update('user_id',1)},Error);
+    });
+
+    it('update many data with no name key', function() {
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).updateMany()},Error);
+    });
+    
+    it('update many data with no data object', function() {
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).updateMany('user_id')},Error);
     });
     
     it('modify data with no name key', function() {
@@ -196,9 +216,24 @@ describe('intentional failure condition test', function() {
         assert.throws(function(){nosql.set(right_table).modify('user_id',1)},Error);
     });
 
+    it('modify many data with no name key', function() {
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).modifyMany()},Error);
+    });
+    
+    it('modify many data with no data object', function() {
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).modifyMany('user_id')},Error);
+    });
+
     it('delete data with no value', function() {
         var nosql = new FlyJson();
         assert.throws(function(){nosql.set(right_table).delete('id')},Error);
+    });
+
+    it('delete many data with no value', function() {
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).deleteMany('id')},Error);
     });
 
     it('groupBy with no any parameter', function(){

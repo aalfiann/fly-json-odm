@@ -62,6 +62,21 @@ var data4 = [
     {brand:'Ford',color:'white',stock:49},
     {brand:'Peugot',color:'white',stock:23}
 ];
+
+var data2insert = [
+    {id:6,address:'madiun',email:'madiun@yahoo.com'},
+    {id:7,address:'malang',email:'malang@gmail.com'}
+];
+
+var data2update = [
+    {id:3,address:'solo',email:'solo@yahoo.com'},
+    {id:4,address:'solo, balapan',email:'balapan@gmail.com'}
+];
+
+var data2modify = [
+    {id:3,email:'solo@yahoo.com',about:'I was born in solo'},
+    {id:4,email:'balapan@gmail.com',about:'Balapan city is the best',located:'Central Java'}
+];
 ```
 
 **Note:**
@@ -83,6 +98,14 @@ var data = nosql.set(data2)
 console.log(data);
 ```
 
+##### Insert Multiple
+```javascript
+var data = nosql.set(data2)
+  .insertMany(data2insert)
+  .exec();
+console.log(data);
+```
+
 ##### Update
 ```javascript
 var data = nosql.set(data2)
@@ -90,6 +113,14 @@ var data = nosql.set(data2)
     address:'ponorogo',
     email:'xxx@gmail.com'
   })
+  .exec();
+console.log(data);
+```
+
+##### Update Multiple
+```javascript
+var data = nosql.set(data2)
+  .updateMany('id',data2update)
   .exec();
 console.log(data);
 ```
@@ -106,34 +137,33 @@ var data = nosql.set(data2)
 console.log(data);
 ```
 
+##### Modify Multiple
+```javascript
+var data = nosql.set(data2)
+  .modifyMany('id',data2modify)
+  .exec();
+console.log(data);
+```
+
 ##### Delete
 ```javascript
 var data = nosql.set(data2)
   .delete('id',5).exec();
 console.log(data);
 ```
-**Note**  
-`insert`, `update`, `modify` and `delete` operations above is for single row data.  
-If you want multiple you can just **loop** or **chain** it.  
-  
-Example chain insert
+
+##### Delete Multiple
 ```javascript
 var data = nosql.set(data2)
-  .insert({id:6,address:'madiun',email:'i@j.com'})
-  .insert({id:7,address:'madiun',email:'i@j.com'})
-  .insert({id:8,address:'madiun',email:'i@j.com'})
-  .exec()
+  .deleteMany('id',[5,2])
+  .exec();
 console.log(data);
 ```
-Example loop insert
-```javascript
-var data = nosql.set(data2);
-for(var i=6;i<9;i++) {
-  data.insert({id:i,address:'madiun',email:'i@j.com'});
-}
-var result = data.exec();
-console.log(result);
-```
+
+**Note**  
+- `insert()`, `update()`, `modify()` and `delete()` operations above is for single row data.
+- `update()` and `modify()` will act like `append` so the order will be changed.
+
 ---
 ##### Transform
 Sometimes instead of updating or modifying whole data json, it's better to restructuring again the json itself.  

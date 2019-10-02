@@ -51,7 +51,7 @@ class FlyJson extends Helper {
 
     /**
      * Insert new data into data table
-     * @param {array} obj       this is the object data
+     * @param {object} obj      this is the object data
      * @return {this}
      */
     insert(obj) {
@@ -64,17 +64,38 @@ class FlyJson extends Helper {
     }
 
     /**
+     * Insert many new data into data table
+     * @param {array} data      this is the data array object
+     * @return {this}
+     */
+    insertMany(data) {
+        if(this.isArray(data)) {
+            var l = data.length;
+            for(var i = 0; i < l; i++) {
+                if(this.isObject(data[i]) && !this.isEmptyObject(data[i])) {
+                    this.data1.push(data[i]);
+                } else {
+                    throw new Error('New value must be an object and not empty');
+                }
+            }
+        } else {
+            throw new Error('Data must be an array object');
+        }
+        return this;
+    }
+
+    /**
      * Update single data in data table
      * @param {string} key      this is the key name 
      * @param {*} value         this is the value of key name
-     * @param {*} obj           this is the new value to replace all old data
+     * @param {object} obj      this is the new value to replace all old data
      * @return {this}
      */
     update(key,value,obj) {
-        if(this.isEmpty(key) && this.isEmpty(value)) {
+        if(this.isEmpty(key) || this.isEmpty(value)) {
             throw new Error('Key and Value must be defined and value must be unique');
         }
-        if(!this.isObject(obj) && this.isEmptyObject(obj)) {
+        if(!this.isObject(obj) || this.isEmptyObject(obj)) {
             throw new Error('New value must be an object and not empty');
         }
         var l = this.data1.length;
@@ -89,17 +110,49 @@ class FlyJson extends Helper {
     }
 
     /**
+     * Update many data in data table
+     * @param {string} key      this is the key name
+     * @param {array} data      this is the data array object for update
+     * @return {this}
+     */
+    updateMany(key,data) {
+        if(this.isEmpty(key) || !this.isString(key)) {
+            throw new Error('Key and Value must be defined and value must be unique');
+        }
+        if(this.isEmptyArray(data) || !this.isArray(data)) {
+            throw new Error('Data to update must be an array object and not empty');
+        }
+        var l = this.data1.length;
+        var newdata = [];
+        for(var i = 0; i < l; i++) { 
+            var len = data.length;
+            var result = false;
+            for(var x = 0; x < len; x++) {
+                if (this.data1[i][key] === data[x][key]) {
+                    result = true;
+                    newdata.push(data[x]);
+                }
+            }
+            if(result == false) {
+                newdata.push(this.data1[i]);
+            }
+        }
+        this.data1 = newdata;
+        return this;
+    }
+
+    /**
      * Modify single data in data table
      * @param {string} key      this is the key name 
      * @param {*} value         this is the value of key name
-     * @param {*} obj           this is the new value to add or modify old data
+     * @param {object} obj      this is the new value to add or modify old data
      * @return {this}
      */
     modify(key,value,obj) {
-        if(this.isEmpty(key) && this.isEmpty(value)) {
+        if(this.isEmpty(key) || this.isEmpty(value)) {
             throw new Error('Key and Value must be defined and value must be unique');
         }
-        if(!this.isObject(obj) && this.isEmptyObject(obj)) {
+        if(!this.isObject(obj) || this.isEmptyObject(obj)) {
             throw new Error('New value must be an object and not empty');
         }
         var l = this.data1.length;
@@ -115,6 +168,39 @@ class FlyJson extends Helper {
     }
 
     /**
+     * Modify many data in data table
+     * @param {string} key      this is the key name
+     * @param {array} data      this is the data array object for modify
+     * @return {this}
+     */
+    modifyMany(key,data) {
+        if(this.isEmpty(key) || !this.isString(key)) {
+            throw new Error('Key must be defined');
+        }
+        if(this.isEmptyArray(data) || !this.isArray(data)) {
+            throw new Error('Data to modify must be an array object and not empty');
+        }
+        var l = this.data1.length;
+        var newdata = [];
+        for(var i = 0; i < l; i++) { 
+            var len = data.length;
+            var result = false;
+            for(var x = 0; x < len; x++) {
+                if (this.data1[i][key] === data[x][key]) {
+                    result = true;
+                    var old = this.data1[i];
+                    newdata.push(Object.assign(old,data[x]));
+                }
+            }
+            if(result == false) {
+                newdata.push(this.data1[i]);
+            }
+        }
+        this.data1 = newdata;
+        return this;
+    }
+
+    /**
      * Delete single data in data table
      * @param {string} key      this is the key name
      * @param {*} value         this is the value of key name
@@ -124,13 +210,42 @@ class FlyJson extends Helper {
         if(!this.isEmpty(key) && !this.isEmpty(value)) {
             var l = this.data1.length;
             for(var i = 0; i < l; i++) { 
-                if ( this.data1[i][key] === value) {
+                if (this.data1[i][key] === value) {
                     this.data1.splice(i, 1); 
                     break;
                 }
             }
         } else {
             throw new Error('Key and Value must be defined also remember that Value must be unique.');
+        }
+        return this;
+    }
+
+    /**
+     * Delete many data in data table
+     * @param {string} key      this is the key name
+     * @param {array} data      this is the array of key value to be deleted
+     * @return {this} 
+     */
+    deleteMany(key,data) {
+        if(!this.isEmpty(key) && !this.isEmptyArray(data)) {
+            var l = this.data1.length;
+            var newdata = [];
+            for(var i = 0; i < l; i++) { 
+                var len = data.length;
+                var result = false;
+                for(var x = 0; x < len; x++) {
+                    if (this.data1[i][key] === data[x]) {
+                        result = true;
+                    }
+                }
+                if(result == false) {
+                    newdata.push(this.data1[i]);
+                }
+            }
+            this.data1 = newdata;
+        } else {
+            throw new Error('Key and Data array of key value must be defined.');
         }
         return this;
     }
@@ -428,7 +543,7 @@ class FlyJson extends Helper {
      * @return {this} 
      */
     groupDetail(name,groupName='') {
-        if(this.isEmpty(name) && !this.isString(name)) {
+        if(this.isEmpty(name) || !this.isString(name)) {
             throw new Error('name is required and must be string.');
         }
         if(!this.isString(groupName)) {
@@ -456,7 +571,7 @@ class FlyJson extends Helper {
      * @return {this} 
      */
     groupBy(name,sumField=[]) {
-        if(this.isEmpty(name) && !this.isString(name)) {
+        if(this.isEmpty(name) || !this.isString(name)) {
             throw new Error('name is required and must be string.');
         }
         if(!this.isArray(sumField)) {
