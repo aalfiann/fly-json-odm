@@ -230,29 +230,29 @@ class FlyJson extends Helper {
      * @param {array} data      this is the array of key value to be deleted
      * @return {this} 
      */
-    // deleteMany(key,data) {
-    //     if(!this.isEmpty(key) && !this.isEmptyArray(data)) {
-    //         var l = this.data1.length;
-    //         var len = data.length;
-    //         var newdata = [];
-    //         var result = false;
-    //         for(var i = 0; i < l; i++) { 
-    //             result = false;
-    //             for(var x = 0; x < len; x++) {
-    //                 if (this.data1[i][key] === data[x]) {
-    //                     result = true;
-    //                 }
-    //             }
-    //             if(result === false) {
-    //                 newdata.push(this.data1[i]);
-    //             }
-    //         }
-    //         this.data1 = newdata;
-    //     } else {
-    //         throw new Error('Key and Data array of key value must be defined.');
-    //     }
-    //     return this;
-    // }
+    deleteMany(key,data) {
+        if(!this.isEmpty(key) && !this.isEmptyArray(data)) {
+            var l = this.data1.length;
+            var len = data.length;
+            var newdata = [];
+            var result = false;
+            for(var i = 0; i < l; i++) { 
+                result = false;
+                for(var x = 0; x < len; x++) {
+                    if (this.data1[i][key] === data[x]) {
+                        result = true;
+                    }
+                }
+                if(result === false) {
+                    newdata.push(this.data1[i]);
+                }
+            }
+            this.data1 = newdata;
+        } else {
+            throw new Error('Key and Data array of key value must be defined.');
+        }
+        return this;
+    }
 
     /**
      * Filter data by select name key
