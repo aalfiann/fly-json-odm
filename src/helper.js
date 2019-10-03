@@ -87,15 +87,13 @@ class Helper {
             var values = Object.keys(data).map(function(e) {
                 return data[e];
             });
-            var i =0;
-            var l = keys.length;
+            var i = 0, l = keys.length;
             for(i;i<l;i++){
                 callback(values[i],keys[i]);
             }
         } else {
             if(Array.isArray(data)) {
-                var i = 0;
-                var l = data.length
+                var i = 0, l = data.length;
                 for (i;i<l;i++) {
                     callback(data[i],i);
                 }
@@ -129,7 +127,7 @@ class Helper {
         var output = JSON.stringify(value, function (key, value) {
     
             //filters vue.js internal properties
-            if(key && key.length>0 && (key.charAt(0)=="$" || key.charAt(0)=="_")) {
+            if(key && key.length>0 && (key.charAt(0)==="$" || key.charAt(0)==="_")) {
                 return;
             }
     
@@ -180,7 +178,7 @@ class Helper {
                     return;
                 }
 
-                if(key == undefined || key == null || key == '') {
+                if(key === undefined || key === null || key === '') {
                     return obj;
                 }
     
