@@ -68,21 +68,21 @@ class FlyJson extends Helper {
      * @param {array} data      this is the data array object
      * @return {this}
      */
-    insertMany(data) {
-        if(this.isArray(data)) {
-            var l = data.length;
-            for(var i = 0; i < l; i++) {
-                if(this.isObject(data[i]) && !this.isEmptyObject(data[i])) {
-                    this.data1.push(data[i]);
-                } else {
-                    throw new Error('New value must be an object and not empty');
-                }
-            }
-        } else {
-            throw new Error('Data must be an array object');
-        }
-        return this;
-    }
+    // insertMany(data) {
+    //     if(this.isArray(data)) {
+    //         var l = data.length;
+    //         for(var i = 0; i < l; i++) {
+    //             if(this.isObject(data[i]) && !this.isEmptyObject(data[i])) {
+    //                 this.data1.push(data[i]);
+    //             } else {
+    //                 throw new Error('New value must be an object and not empty');
+    //             }
+    //         }
+    //     } else {
+    //         throw new Error('Data must be an array object');
+    //     }
+    //     return this;
+    // }
 
     /**
      * Update single data in data table
