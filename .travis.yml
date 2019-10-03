@@ -9,7 +9,7 @@ node_js:
 before_install:
   - npm install -g npm@latest
 install:
-  - npm install --dev
+  - npm install --save-dev
 script:
   - npm test
 after_success: npm run coverage
