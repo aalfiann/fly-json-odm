@@ -123,17 +123,18 @@ class FlyJson extends Helper {
             throw new Error('Data to update must be an array object and not empty');
         }
         var l = this.data1.length;
+        var len = data.length;
         var newdata = [];
-        for(var i = 0; i < l; i++) { 
-            var len = data.length;
-            var result = false;
+        var result = undefined;
+        for(var i = 0; i < l; i++) {
+            result = false; 
             for(var x = 0; x < len; x++) {
                 if (this.data1[i][key] === data[x][key]) {
                     result = true;
                     newdata.push(data[x]);
                 }
             }
-            if(result == false) {
+            if(result === false) {
                 newdata.push(this.data1[i]);
             }
         }
@@ -156,9 +157,10 @@ class FlyJson extends Helper {
             throw new Error('New value must be an object and not empty');
         }
         var l = this.data1.length;
+        var data = undefined;
         for( var i = 0; i < l; i++){ 
             if (this.data1[i][key] === value) {
-                var data = this.data1[i];
+                data = this.data1[i];
                 this.data1.splice(i, 1);
                 this.data1.push(Object.assign({[key]:value},data,obj));
                 break;
@@ -181,18 +183,19 @@ class FlyJson extends Helper {
             throw new Error('Data to modify must be an array object and not empty');
         }
         var l = this.data1.length;
+        var len = data.length;
         var newdata = [];
+        var old, result = undefined;
         for(var i = 0; i < l; i++) { 
-            var len = data.length;
-            var result = false;
+            result = false;
             for(var x = 0; x < len; x++) {
                 if (this.data1[i][key] === data[x][key]) {
                     result = true;
-                    var old = this.data1[i];
+                    old = this.data1[i];
                     newdata.push(Object.assign(old,data[x]));
                 }
             }
-            if(result == false) {
+            if(result === false) {
                 newdata.push(this.data1[i]);
             }
         }
@@ -230,16 +233,17 @@ class FlyJson extends Helper {
     deleteMany(key,data) {
         if(!this.isEmpty(key) && !this.isEmptyArray(data)) {
             var l = this.data1.length;
+            var len = data.length;
             var newdata = [];
+            var result = false;
             for(var i = 0; i < l; i++) { 
-                var len = data.length;
-                var result = false;
+                result = false;
                 for(var x = 0; x < len; x++) {
                     if (this.data1[i][key] === data[x]) {
                         result = true;
                     }
                 }
-                if(result == false) {
+                if(result === false) {
                     newdata.push(this.data1[i]);
                 }
             }
@@ -258,10 +262,11 @@ class FlyJson extends Helper {
     select(key) {
         if(!this.isEmpty(key) && this.isArray(key) && !this.isEmptyArray(key)) {
             var newdata = [];
+            var res = undefined;
             var l = this.data1.length;
+            var dl = key.length;
             for(var i=0;i<l;i++) {
-                var res = {}
-                var dl = key.length;
+                res = {};
                 for(var x=0;x<dl;x++) {
                     if(this.data1[i][key[x]] != undefined) {
                         res[key[x]] = this.data1[i][key[x]];
@@ -295,14 +300,13 @@ class FlyJson extends Helper {
             }
             mid = mid.toString().toLowerCase();
             var search = {[a]:b};
-            var v = undefined;
-            var s = undefined;
+            var v, s = undefined;
             var self = this;
             var data = this.data1.filter(function (o) {
                 return Object.keys(search).every(function (k) {
                     v = o[k];
                     s = search[k];
-                    if(c == false && mid != 'regex') {
+                    if(c === false && mid !== 'regex') {
                         if(!self.isObject(o[k])) {
                             v = o[k].toString().toLowerCase();
                         }
@@ -328,30 +332,30 @@ class FlyJson extends Helper {
                             return v <= s;
                         case 'in':
                             if(self.isString(v)) {
-                                return (v.indexOf(s) !=-1);
+                                return (v.indexOf(s) !== -1);
                             } 
                             var result = [];
                             self.foreach(v,function(value){
                                 if(c) {
-                                    if(value == s) {
+                                    if(value === s) {
                                         result.push(value);
                                     }
                                 } else {
                                     if(self.isString(value)) {
                                         value = value.toLowerCase();    
                                     }
-                                    if(value == s) {
+                                    if(value === s) {
                                         result.push(value);
                                     }
                                 }
                             });
                             return (result.length > 0);
                         case 'not':
-                            return v != s;
+                            return v !== s;
                         case 'like':
-                            return (v.indexOf(s) !=-1);
+                            return (v.indexOf(s) !== -1);
                         case 'not like':
-                            return (v.indexOf(s) ==-1);
+                            return (v.indexOf(s) === -1);
                         case 'regex':
                             return (s.test(v));
                         default:
@@ -359,7 +363,7 @@ class FlyJson extends Helper {
                     }
                 });
             });
-            if (this.scope == 'query') {
+            if (this.scope === 'query') {
                 this.result = data;
             } else {
                 this.data1 = data;
@@ -382,7 +386,7 @@ class FlyJson extends Helper {
      * @return {this}
      */
     or() {
-        if(this.scope == 'query') {
+        if(this.scope === 'query') {
             var l = this.result.length;
             for(var i=0;i<l;i++) {
                 this.query.push(this.result[i]);
@@ -396,7 +400,7 @@ class FlyJson extends Helper {
      * @return {this}
      */
     end() {
-        if(this.scope == 'query') {
+        if(this.scope === 'query') {
             var l = this.result.length;
             for(var i=0;i<l;i++) {
                 this.query.push(this.result[i]);
@@ -452,7 +456,7 @@ class FlyJson extends Helper {
      * @return {this}
      */
     merge(a,b) {
-        if(this.scope == 'join') {
+        if(this.scope === 'join') {
             if(!this.isEmpty(a) && this.isString(a)) {
                 if(!this.isEmpty(b) && this.isString(b)) {
                     const indexB = this.data2.reduce((result,item) => { 
@@ -481,7 +485,7 @@ class FlyJson extends Helper {
      */
     on(a,b) {
         var self = this;
-        if(self.scope == 'join') {
+        if(self.scope === 'join') {
             if(!this.isEmpty(a) && this.isString(a)) {
                 if(!this.isEmpty(b) && this.isString(b)) {
                     const indexB = self.data2.reduce((result,item) => { 
@@ -495,8 +499,8 @@ class FlyJson extends Helper {
                         var arr = Object.keys(self.data1[index]);
                         var l = arr.length;
                         for(var i=0;i<l;i++) {
-                            if(arr[i] == a) {
-                                if(self.name == arr[i]) {
+                            if(arr[i] === a) {
+                                if(self.name === arr[i]) {
                                     newdata[arr[i]] = indexB[self.data1[index][arr[i]]];
                                 } else {
                                     newdata[self.name] = indexB[self.data1[index][arr[i]]];
