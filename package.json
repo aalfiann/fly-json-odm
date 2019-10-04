@@ -1,6 +1,6 @@
 {
   "name": "fly-json-odm",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "An Object Document Mapper to handle JSON on the fly for NodeJS",
   "main": "src/flyjson.js",
   "scripts": {

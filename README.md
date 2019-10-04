@@ -38,14 +38,15 @@ var data = [
 
 // Synchronous
 var result = nosql.set(data)
-  .where('id',5)
+  .where('age', '>', 10)
+  .orderBy('age', true)
   .exec();
 console.log(result);
 
 // Asynchronous
 nosql.promisify((builder) => {return builder}).then((table) => {
   var result = table.set(data)
-    .where('id',5)
+    .where('name', '==', 'wawan')
     .exec();
   console.log(result);
 });
@@ -55,7 +56,7 @@ nosql.promisify((builder) => {return builder}).then((table) => {
 - `fly-json-odm` is synchronous as default.
 
 ### Documentation
-Documentation detail about `CRUD`, `Query`, `Join`, `Transform` and for more example is available at [here](https://github.com/aalfiann/fly-json-odm/wiki).
+Documentation detail about `CRUD`, `Query`, `Join`, `Transform` and more examples is available at [here](https://github.com/aalfiann/fly-json-odm/wiki).
 
 ### Unit Test
 If you want more example, you can play around with unit test.
