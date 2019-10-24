@@ -9,7 +9,7 @@
 ![License](https://img.shields.io/npm/l/fly-json-odm)
 ![NPM download/month](https://img.shields.io/npm/dm/fly-json-odm.svg)
 ![NPM download total](https://img.shields.io/npm/dt/fly-json-odm.svg)  
-An Object Document Mapper to handle JSON on the fly for NodeJS
+An Object Document Mapper to handle JSON on the fly for NodeJS or Browser.
 
 
 ### Background
@@ -18,14 +18,19 @@ An Object Document Mapper to handle JSON on the fly for NodeJS
 ### Limitation
 This library was created to handle JSON for `modification`/`manipulation` only and any data will be processed and saved in memory for temporary (`On-The-Fly`). Not support for to use with any database server also we don't provide feature how to read JSON from `file`, `stream` or something like that.
 
-## Install using NPM
+### Install using NPM
 ```bash
 $ npm install fly-json-odm
 ```
 
+**Or simply use in Browser with CDN**
+```html
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.6.0/src/flyjson.min.js"></script>
+```
+
 ### Usage
 ```javascript
-const FlyJson = require('fly-json-odm');
+const FlyJson = require('fly-json-odm'); // in browser doesn't need this line
 
 var nosql = new FlyJson();
 

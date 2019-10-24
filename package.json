@@ -1,7 +1,7 @@
 {
   "name": "fly-json-odm",
-  "version": "1.5.5",
-  "description": "An Object Document Mapper to handle JSON on the fly for NodeJS",
+  "version": "1.6.0",
+  "description": "An Object Document Mapper to handle JSON on the fly for NodeJS or Browser",
   "main": "src/flyjson.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha",
@@ -24,7 +24,8 @@
     "json-memory",
     "json-nosql",
     "json-transform",
-    "json-mapper"
+    "json-mapper",
+    "browser"
   ],
   "author": "M ABD AZIZ ALFIAN",
   "license": "MIT",
