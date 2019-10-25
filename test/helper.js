@@ -116,12 +116,36 @@ describe('helper function test', function(){
         assert.equal(true,(!nosql.isEmpty(o) && nosql.isObject(o)));
     });
 
+    it('shallow clone array is not reflect to original',function(){
+        var array1 = [1,2,3];
+        var array2 = [6,7,8];
+        array2 = nosql.shallowClone(array1);
+        array2[0] = 10;
+        assert.equal(array1[0],1);
+    });
+
+    it('shallow clone with deep array is reflect to original',function(){
+        var array1 = [[1],[2],[3]];
+        var array2 = [[6],[7],[8]];
+        array2 = nosql.shallowClone(array1);
+        array2[0].push(10);
+        assert.deepEqual(array1[0],[1,10]);
+    });
+
     it('deep clone array is not reflect to original',function(){
         var array1 = [1,2,3];
         var array2 = [6,7,8];
         array2 = nosql.deepClone(array1);
         array2[0] = 10;
         assert.equal(array1[0],1);
+    });
+
+    it('deep clone with deep array is not reflect to original',function(){
+        var array1 = [[1],[2],[3]];
+        var array2 = [[6],[7],[8]];
+        array2 = nosql.deepClone(array1);
+        array2[0].push(10);
+        assert.deepEqual(array1[0],[1]);
     });
 
     it('foreach an array', function(){

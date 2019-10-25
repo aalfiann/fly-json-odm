@@ -278,6 +278,16 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].address,'jakarta');
     });
 
+    it('select + where (shallow mode)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .select(['id','address'])
+            .where('address','jakarta')
+            .exec();
+        assert.equal(data[0].id,2);
+        assert.equal(data[0].address,'jakarta');
+    });
+
     it('select + where (case insensitive)', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data4)

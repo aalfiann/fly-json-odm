@@ -158,6 +158,19 @@ describe('promisify / asynchronous query test', function() {
         });
     });
 
+    it('select + where (shallow mode)', function (done) {
+        var nosql = new FlyJson();
+        nosql.promisify((builder) => {return builder}).then(function(table){
+            var data = table.setMode('shallow').set(data2)
+            .select(['id','address'])
+            .where('address','jakarta')
+            .exec();
+            assert.equal(data[0].id,2);
+            assert.equal(data[0].address,'jakarta');
+            done();
+        });
+    });
+
     it('select + where + and', function (done) {
         var nosql = new FlyJson();
         nosql.promisify((builder) => {return builder}).then(function(table){

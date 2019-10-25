@@ -1,7 +1,12 @@
-/**
- * FlyJson class
+/*!
+ * FlyJson v1.7.0
+ * https://github.com/aalfiann/fly-json-odm
+ *
+ * Copyright 2019 M ABD AZIZ ALFIAN
+ * Released under the MIT license
+ * https://github.com/aalfiann/fly-json-odm/blob/master/LICENSE
  */
-'use strict';
+"use strict";
 
 const _sortBy = Symbol('_sortBy');
 
@@ -153,6 +158,15 @@ class Helper {
         cache = null; // Enable garbage collection
     
         return output;
+    }
+
+    /**
+     * Shallow clone an array
+     * @param {array} array 
+     * @return {array}
+     */
+    shallowClone(array) {
+        return [...array];
     }
 
     /**
@@ -330,6 +344,9 @@ class Helper {
 
 }
 
+/**
+ * FlyJson class
+ */
 class FlyJson extends Helper {
 
     /**
@@ -361,16 +378,32 @@ class FlyJson extends Helper {
     }
 
     /**
+     * Set Mode for clone array
+     * Note: Use this before set(data)
+     * 
+     * @param {string} name     Mode name shallow | deep 
+     */
+    setMode(name) {
+        this.mode = name.toString().toLowerCase();
+        return this;
+    }
+
+    /**
      * Set json array as data table
      * @param {array} data      this is json data
      * @return {this} 
      */
     set(data) {
         if(this.isArray(data)) {
-            this.data1 = this.deepClone(data);
+            if(this.mode === 'shallow') {
+                this.data1 = this.shallowClone(data);
+            } else {
+                this.data1 = this.deepClone(data);
+            }
         } else {
             throw new Error('Set data must be an array contains object.')
         }
+        this.mode = '';
         return this;
     };
 
@@ -749,6 +782,7 @@ class FlyJson extends Helper {
         this.result = [];
         this.metadata = {};
         this.scope = '';
+        this.mode = '';
         this.name = '';
         return this;
     }
