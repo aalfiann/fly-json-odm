@@ -25,7 +25,19 @@ $ npm install fly-json-odm
 
 **Or simply use in Browser with CDN**
 ```html
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.7.0/src/flyjson.min.js"></script>
+<!-- Always get the latest version -->
+<!-- Not recommended for production sites! -->
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm/dist/flyjson.min.js"></script>
+
+<!-- Get minor updates and patch fixes within a major version -->
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1/dist/flyjson.min.js"></script>
+
+<!-- Get patch fixes within a minor version -->
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.8/dist/flyjson.min.js"></script>
+
+<!-- Get a specific version -->
+<!-- Recommended for production sites! -->
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.8.0/dist/flyjson.min.js"></script>
 ```
 
 ### Usage

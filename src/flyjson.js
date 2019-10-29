@@ -1,5 +1,5 @@
 /*!
- * FlyJson v1.7.0
+ * FlyJson ES6 v1.8.0 [NodeJS or Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
@@ -38,7 +38,6 @@ class Helper {
      * @return {bool} 
      */
     isBoolean(value) {
-        // return typeof variable === "boolean" || value instanceof Boolean;
         return typeof value === 'boolean' || (typeof value === 'object' && value !== null && typeof value.valueOf() === 'boolean');
     }
 
@@ -1038,6 +1037,6 @@ class FlyJson extends Helper {
 
 }
 
-if (typeof window === 'undefined') {
+if (typeof window === "undefined") {
     module.exports = FlyJson;
 }
