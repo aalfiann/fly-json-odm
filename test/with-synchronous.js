@@ -81,9 +81,33 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(data[5].email,'i@j.com');
     });
 
+    it('insert data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2).insert({id:6,address:'madiun',email:'i@j.com'}).exec();
+        assert.equal(data.length,6);
+        assert.equal(data[5].id,6);
+        assert.equal(data[5].address,'madiun');
+        assert.equal(data[5].email,'i@j.com');
+    });
+
     it('multiple insert data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2);
+        for(var i=6;i<9;i++) {
+            data.insert({id:i,address:'madiun',email:'i@j.com'});
+        }
+        var result = data.exec();
+        assert.equal(result.length,8);
+        for(var x=5,y=6;x<8;x++,y++) {
+            assert.equal(result[x].id,y);
+            assert.equal(result[x].address,'madiun');
+            assert.equal(result[x].email,'i@j.com');
+        }
+    });
+
+    it('multiple insert data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2);
         for(var i=6;i<9;i++) {
             data.insert({id:i,address:'madiun',email:'i@j.com'});
         }
@@ -109,9 +133,33 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(data[6].email,'malang@gmail.com');
     });
 
+    it('insert many data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .insertMany(data2insert).exec();
+        assert.equal(data.length,7);
+        assert.equal(data[5].id,6);
+        assert.equal(data[5].address,'madiun');
+        assert.equal(data[5].email,'madiun@yahoo.com');
+        assert.equal(data[6].id,7);
+        assert.equal(data[6].address,'malang');
+        assert.equal(data[6].email,'malang@gmail.com');
+    });
+
     it('update data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .update('id',5,{address:'ponorogo',email:'xxx@gmail.com'})
+            .exec();
+            assert.equal(data.length,5);
+            assert.equal(data[4].id,5);
+            assert.equal(data[4].address,'ponorogo');
+            assert.equal(data[4].email,'xxx@gmail.com'); 
+    });
+
+    it('update data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .update('id',5,{address:'ponorogo',email:'xxx@gmail.com'})
             .exec();
             assert.equal(data.length,5);
@@ -136,9 +184,34 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(result[4].email,'xxx@gmail.com');
     });
 
+    it('multiple update data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2);
+        for(var i=0;i<3;i++) {
+            data.update('id',i,{address:'ponorogo',email:'xxx@gmail.com'});
+        }
+        var result= data.exec();
+        assert.equal(result.length,5);
+        assert.equal(result[3].id,1);
+        assert.equal(result[3].address,'ponorogo');
+        assert.equal(result[3].email,'xxx@gmail.com');
+        assert.equal(result[4].id,2);
+        assert.equal(result[4].address,'ponorogo');
+        assert.equal(result[4].email,'xxx@gmail.com');
+    });
+
     it('update many data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .updateMany('id',data2update).exec();
+        assert.equal(data.length,5);
+        assert.equal(data[2].email,'solo@yahoo.com');
+        assert.equal(data[3].email,'balapan@gmail.com');
+    });
+
+    it('update many data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .updateMany('id',data2update).exec();
         assert.equal(data.length,5);
         assert.equal(data[2].email,'solo@yahoo.com');
@@ -154,9 +227,29 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(data[3].email,'balapan@gmail.com');
     });
 
+    it('update many data reverse [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .updateMany('id',data2updatereverse).exec();
+        assert.equal(data.length,5);
+        assert.equal(data[2].email,'solo@yahoo.com');
+        assert.equal(data[3].email,'balapan@gmail.com');
+    });
+
     it('modify data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .modify('id',5,{address:'ponorogo',email:'xxx@gmail.com',about:'Just ordinary programmer'})
+            .exec();
+            assert.equal(data.length,5);
+            assert.equal(data[4].id,5);
+            assert.equal(data[4].address,'ponorogo');
+            assert.equal(data[4].email,'xxx@gmail.com');
+    });
+
+    it('modify data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .modify('id',5,{address:'ponorogo',email:'xxx@gmail.com',about:'Just ordinary programmer'})
             .exec();
             assert.equal(data.length,5);
@@ -181,6 +274,22 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(result[4].email,'xxx@gmail.com');
     });
 
+    it('multiple modify data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2);
+        for(var i=0;i<3;i++) {
+            data.modify('id',i,{address:'ponorogo',email:'xxx@gmail.com',about:'Just ordinary programmer'});
+        }
+        var result = data.exec();
+        assert.equal(result.length,5);
+        assert.equal(result[3].id,1);
+        assert.equal(result[3].address,'ponorogo');
+        assert.equal(result[3].email,'xxx@gmail.com');
+        assert.equal(result[4].id,2);
+        assert.equal(result[4].address,'ponorogo');
+        assert.equal(result[4].email,'xxx@gmail.com');
+    });
+
     it('modify many data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
@@ -191,6 +300,12 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(data[3].located,'Central Java');
     });
 
+    it('modify many data [shallow is not allowed]', function() {
+        var nosql = new FlyJson();
+        assert.throws(()=>{nosql.setMode('shallow').set(data2)
+            .modifyMany('id',data2modifyreverse).exec()},Error);
+    });
+
     it('modify many data reverse', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
@@ -199,11 +314,28 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(data[2].about,'I was born in solo');
         assert.equal(data[3].about,'Balapan city is the best');
         assert.equal(data[3].located,'Central Java');
-    })
+    });
+
+    it('modify many data reverse [shallow is not allowed]', function() {
+        var nosql = new FlyJson();
+        assert.throws(()=>{nosql.setMode('shallow').set(data2)
+            .modifyMany('id',data2modifyreverse).exec()},Error);
+    });
 
     it('delete data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .delete('id',5)
+            .exec();
+            assert.equal(data.length,4);
+            assert.equal(data[3].id,4);
+            assert.equal(data[3].address,'solo, balapan');
+            assert.equal(data[3].email,'g@h.com'); 
+    });
+
+    it('delete data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .delete('id',5)
             .exec();
             assert.equal(data.length,4);
@@ -228,9 +360,36 @@ describe('normal / synchronous CRUD test', function() {
         assert.equal(result[1].email,'i@j.com'); 
     });
 
+    it('multiple delete data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2);
+        for(var i=1;i<4;i++) {
+            data.delete('id',i);
+        }   
+        var result = data.exec();
+        assert.equal(result.length,2);
+        assert.equal(result[0].id,4);
+        assert.equal(result[0].address,'solo, balapan');
+        assert.equal(result[0].email,'g@h.com');
+        assert.equal(result[1].id,5);
+        assert.equal(result[1].address,'surabaya');
+        assert.equal(result[1].email,'i@j.com'); 
+    });
+
     it('delete many data', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .deleteMany('id',[2,5])
+            .exec();
+            assert.equal(data.length,3);
+            assert.equal(data[0].id,1);
+            assert.equal(data[1].id,3);
+            assert.equal(data[2].id,4); 
+    });
+
+    it('delete many data [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .deleteMany('id',[2,5])
             .exec();
             assert.equal(data.length,3);
@@ -248,6 +407,17 @@ describe('normal / synchronous CRUD test', function() {
             assert.equal(data[0].id,1);
             assert.equal(data[1].id,3);
             assert.equal(data[2].id,4); 
+    });
+
+    it('delete many data reverse [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .deleteMany('id',[5,2])
+            .exec();
+            assert.equal(data.length,3);
+            assert.equal(data[0].id,1);
+            assert.equal(data[1].id,3);
+            assert.equal(data[2].id,4);
     });
 
 });
@@ -268,6 +438,18 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[4].id,5);
     });
 
+    it('select data [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .select(['id','address'])
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[1].id,2);
+        assert.equal(data[2].id,3);
+        assert.equal(data[3].id,4);
+        assert.equal(data[4].id,5);
+    });
+
     it('select + where', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
@@ -278,7 +460,7 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].address,'jakarta');
     });
 
-    it('select + where (shallow mode)', function () {
+    it('select + where [shallow]', function () {
         var nosql = new FlyJson();
         var data = nosql.setMode('shallow').set(data2)
             .select(['id','address'])
@@ -298,6 +480,16 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[1].brand,'Audi');
     });
 
+    it('select + where (case insensitive) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','==','audi',false)
+            .exec();
+        assert.equal(data[0].brand,'Audi');
+        assert.equal(data[1].brand,'Audi');
+    });
+
     it('select + where + =', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data4)
@@ -308,9 +500,31 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[1].brand,'Audi');
     });
 
+    it('select + where + = [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','=','Audi')
+            .exec();
+        assert.equal(data[0].brand,'Audi');
+        assert.equal(data[1].brand,'Audi');
+    });
+
     it('select + where (in array)', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data5)
+            .select(['id','title','tags'])
+            .where('tags','IN','News')
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].tags[0],'News');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].tags[0],'News');
+    });
+
+    it('select + where (in array) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data5)
             .select(['id','title','tags'])
             .where('tags','IN','News')
             .exec();
@@ -332,9 +546,32 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[1].tags[0],'News');
     });
 
+    it('select + where (in array case insensitive) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data5)
+            .select(['id','title','tags'])
+            .where('tags','IN','news',false)
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].tags[0],'News');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].tags[0],'News');
+    });
+
     it('select + where (in object)', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data6)
+            .select(['id','title','category'])
+            .where('category','IN','Tutorial')
+            .exec();
+        assert.equal(data[0].id,2);
+        assert.equal(data[0].category.id,4);
+        assert.equal(data[0].category.name,'Tutorial');
+    });
+
+    it('select + where (in object) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data6)
             .select(['id','title','category'])
             .where('category','IN','Tutorial')
             .exec();
@@ -354,6 +591,17 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].category.name,'Tutorial');
     });
 
+    it('select + where (in object case insensitive) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data6)
+            .select(['id','title','category'])
+            .where('category','IN','tutorial',false)
+            .exec();
+        assert.equal(data[0].id,2);
+        assert.equal(data[0].category.id,4);
+        assert.equal(data[0].category.name,'Tutorial');
+    });
+
     it('select + where (not)', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data4)
@@ -365,9 +613,31 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[2].brand,'Peugot');
     });
 
+    it('select + where (not) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','NOT','audi',false)
+            .exec();
+        assert.equal(data[0].brand,'Ferarri');
+        assert.equal(data[1].brand,'Ford');
+        assert.equal(data[2].brand,'Peugot');
+    });
+
     it('select + where (not like)', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','NOT LIKE','audi',false)
+            .exec();
+        assert.equal(data[0].brand,'Ferarri');
+        assert.equal(data[1].brand,'Ford');
+        assert.equal(data[2].brand,'Peugot');
+    });
+
+    it('select + where (not like) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4)
             .select(['brand','color','stock'])
             .where('brand','NOT LIKE','audi',false)
             .exec();
@@ -388,9 +658,32 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[3].brand,'Ford');
     });
 
+    it('select + where (regex) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4)
+            .select(['brand','color','stock'])
+            .where('brand','regex',/[A-F]/)
+            .exec();
+        assert.equal(data[0].brand,'Audi');
+        assert.equal(data[1].brand,'Audi');
+        assert.equal(data[2].brand,'Ferarri');
+        assert.equal(data[3].brand,'Ford');
+    });
+
     it('select + where + <=', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data1)
+            .select(['user_id','name','age'])
+            .where('age','<=',20)
+            .exec();
+        assert.equal(data[0].age,10);
+        assert.equal(data[1].age,20);
+        assert.equal(data.length,2);
+    });
+
+    it('select + where + <= [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1)
             .select(['user_id','name','age'])
             .where('age','<=',20)
             .exec();
@@ -409,9 +702,30 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data.length,1);
     });
 
+    it('select + where + < [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1)
+            .select(['user_id','name','age'])
+            .where('age','<',20)
+            .exec();
+        assert.equal(data[0].age,10);
+        assert.equal(data.length,1);
+    });
+
     it('select + where + >', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data1)
+            .select(['user_id','name','age'])
+            .where('age','>',10)
+            .exec();
+        assert.equal(data[0].age,20);
+        assert.equal(data[1].age,30);
+        assert.equal(data.length,2);
+    });
+
+    it('select + where + > [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1)
             .select(['user_id','name','age'])
             .where('age','>',10)
             .exec();
@@ -432,9 +746,32 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data.length,3);
     });
 
+    it('select + where + >= [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1)
+            .select(['user_id','name','age'])
+            .where('age','>=',10)
+            .exec();
+        assert.equal(data[0].age,10);
+        assert.equal(data[1].age,20);
+        assert.equal(data[2].age,30);
+        assert.equal(data.length,3);
+    });
+
     it('select + where + !=', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data1)
+            .select(['user_id','name','age'])
+            .where('age','!=',10)
+            .exec();
+        assert.equal(data[0].age,20);
+        assert.equal(data[1].age,30);
+        assert.equal(data.length,2);
+    });
+
+    it('select + where + != [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1)
             .select(['user_id','name','age'])
             .where('age','!=',10)
             .exec();
@@ -453,6 +790,16 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data.length,1);
     });
 
+    it('select + where + == [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1)
+            .select(['user_id','name','age'])
+            .where('age','==',10)
+            .exec();
+        assert.equal(data[0].age,10);
+        assert.equal(data.length,1);
+    });
+
     it('select + where + !==', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data1)
@@ -464,9 +811,35 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data.length,2);
     });
 
+    it('select + where + !== [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1)
+            .select(['user_id','name','age'])
+            .where('age','!==',10)
+            .exec();
+        assert.equal(data[0].age,20);
+        assert.equal(data[1].age,30);
+        assert.equal(data.length,2);
+    });
+
     it('select + where + and', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .select(['id','address'])
+            .where('address','like','a')
+            .where('address','like','ba')
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].address,'bandung');
+        assert.equal(data[1].id,4);
+        assert.equal(data[1].address,'solo, balapan');
+        assert.equal(data[2].id,5);
+        assert.equal(data[2].address,'surabaya');
+    });
+
+    it('select + where + and [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .select(['id','address'])
             .where('address','like','a')
             .where('address','like','ba')
@@ -497,9 +870,46 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[2].address,'solo');
     });
 
+    it('select + where + or + where [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .select(['id','address'])
+            .begin()
+            .where('address','like','u')
+            .or()
+            .where('address','===','solo')
+            .end()
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].address,'bandung');
+        assert.equal(data[1].id,5);
+        assert.equal(data[1].address,'surabaya');
+        assert.equal(data[2].id,3);
+        assert.equal(data[2].address,'solo');
+    });
+
     it('select + where + or + where + orderby ascending', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .select(['id','address'])
+            .begin()
+            .where('address','like','u')
+            .or()
+            .where('address','===','solo')
+            .end()
+            .orderBy('id',false)
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].address,'bandung');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].address,'solo');
+        assert.equal(data[2].id,5);
+        assert.equal(data[2].address,'surabaya');
+    });
+
+    it('select + where + or + where + orderby ascending [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .select(['id','address'])
             .begin()
             .where('address','like','u')
@@ -535,9 +945,47 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[2].address,'bandung');
     });
 
+    it('select + where + or + where + orderby descending [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .select(['id','address'])
+            .begin()
+            .where('address','like','u')
+            .or()
+            .where('address','===','solo')
+            .end()
+            .orderBy('id',true)
+            .exec();
+        assert.equal(data[0].id,5);
+        assert.equal(data[0].address,'surabaya');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].address,'solo');
+        assert.equal(data[2].id,1);
+        assert.equal(data[2].address,'bandung');
+    });
+
     it('select + where + or + where + orderby with primer', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .select(['id','address'])
+            .begin()
+            .where('address','like','u')
+            .or()
+            .where('address','===','solo')
+            .end()
+            .orderBy('id',false,parseInt)
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].address,'bandung');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].address,'solo');
+        assert.equal(data[2].id,5);
+        assert.equal(data[2].address,'surabaya');
+    });
+
+    it('select + where + or + where + orderby with primer [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .select(['id','address'])
             .begin()
             .where('address','like','u')
@@ -572,9 +1020,43 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[1].address,'solo');
     });
 
+    it('select + where + or + where + orderby + take [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .select(['id','address'])
+            .begin()
+            .where('address','like','u')
+            .or()
+            .where('address','===','solo')
+            .end()
+            .orderBy('id',false)
+            .take(2)
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[0].address,'bandung');
+        assert.equal(data[1].id,3);
+        assert.equal(data[1].address,'solo');
+    });
+
     it('select + where + or + where + orderby + skip', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data2)
+            .select(['id','address'])
+            .begin()
+            .where('address','like','u')
+            .or()
+            .where('address','===','solo')
+            .end()
+            .orderBy('id',false)
+            .skip(1)
+            .exec();
+        assert.equal(data[0].id,3);
+        assert.equal(data[0].address,'solo');
+    });
+
+    it('select + where + or + where + orderby + skip [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
             .select(['id','address'])
             .begin()
             .where('address','like','u')
@@ -605,9 +1087,34 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].address,'solo');
     });
 
+    it('select + where + or + where + orderby + take + pagination [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data2)
+            .select(['id','address'])
+            .begin()
+            .where('address','like','u')
+            .or()
+            .where('address','===','solo')
+            .end()
+            .orderBy('id',false)
+            .take(2)
+            .paginate(2,1)
+            .exec();
+        assert.equal(data[0].id,3);
+        assert.equal(data[0].address,'solo');
+    });
+
     it('Merge two data table', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data1).join('profile',data2)
+            .merge('user_id','id').exec();
+        assert.equal(data[0].user_id,1);
+        assert.equal(data[0].id,1);
+    });
+
+    it('Merge two data table [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1).join('profile',data2)
             .merge('user_id','id').exec();
         assert.equal(data[0].user_id,1);
         assert.equal(data[0].id,1);
@@ -621,9 +1128,24 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].id,1);
     });
 
+    it('Merge multiple data table [shallow]', function () {
+        var nosql = new FlyJson();
+        var table = nosql.setMode('shallow').set(data1).join('profile',data2).merge('user_id','id').exec();
+        var data = nosql.set(table).join('bio',data3).merge('user_id','id').exec();
+        assert.equal(data[0].user_id,1);
+        assert.equal(data[0].id,1);
+    });
+
     it('Join two table', function() {
         var nosql = new FlyJson();
         var data = nosql.set(data1).join('profile',data2).on('user_id','id').exec();
+        assert.equal(data[0].profile.id,1);
+        assert.equal(data[0].user_id,1);
+    });
+
+    it('Join two table [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1).join('profile',data2).on('user_id','id').exec();
         assert.equal(data[0].profile.id,1);
         assert.equal(data[0].user_id,1);
     });
@@ -634,10 +1156,25 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].user_id.id,1);
     });
 
+    it('Join two table with same parent id [shallow]', function() {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data1).join('user_id',data2).on('user_id','id').exec();
+        assert.equal(data[0].user_id.id,1);
+    });
+
     it('Join multiple table', function(){
         var nosql = new FlyJson();
         var profile = nosql.set(data1).join('profile',data2).on('user_id','id').exec();
         var data = nosql.set(profile).join('bio',data3).on('user_id','id').exec();
+        assert.equal(data[0].profile.id,1);
+        assert.equal(data[0].bio.id,1);
+        assert.equal(data[0].user_id,1);
+    });
+
+    it('Join multiple table [shallow]', function(){
+        var nosql = new FlyJson();
+        var profile = nosql.setMode('shallow').set(data1).join('profile',data2).on('user_id','id').exec();
+        var data = nosql.setMode('shallow').set(profile).join('bio',data3).on('user_id','id').exec();
         assert.equal(data[0].profile.id,1);
         assert.equal(data[0].bio.id,1);
         assert.equal(data[0].user_id,1);
@@ -652,15 +1189,40 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[0].user_id,1);
     });
 
+    it('Join multiple nested table [shallow]', function(){
+        var nosql = new FlyJson();
+        var bio = nosql.setMode('shallow').set(data2).join('bio',data3).on('id','id').exec();
+        var data = nosql.setMode('shallow').set(data1).join('data',bio).on('user_id','id').exec();
+        assert.equal(data[0].data.bio.id,1);
+        assert.equal(data[0].data.id,1);
+        assert.equal(data[0].user_id,1);
+    });
+
     it('Group by data', function(){
         var nosql = new FlyJson();
         var data = nosql.set(data4).groupBy('brand').exec();
         assert.equal(data.length,4);
     });
 
+    it('Group by data [shallow]', function(){
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4).groupBy('brand').exec();
+        assert.equal(data.length,4);
+    });
+
     it('Group by data with sum', function(){
         var nosql = new FlyJson();
         var data = nosql.set(data4).groupBy('brand',['stock']).select(['brand','stock','item_count','average_stock']).exec();
+        assert.equal(data.length,4);
+        for(var i=0;i<data.length;i++) {
+            assert.notEqual(data[i].item_count,undefined);
+            assert.notEqual(data[i].average_stock,undefined);
+        }
+    });
+
+    it('Group by data with sum [shallow]', function(){
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4).groupBy('brand',['stock']).select(['brand','stock','item_count','average_stock']).exec();
         assert.equal(data.length,4);
         for(var i=0;i<data.length;i++) {
             assert.notEqual(data[i].item_count,undefined);
@@ -675,9 +1237,23 @@ describe('normal / synchronous Query test', function() {
         assert.notEqual(data[0].brand,undefined);
     });
 
+    it('Group detail data [shallow]', function(){
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4).groupDetail('brand').exec();
+        assert.equal(data.length,1);
+        assert.notEqual(data[0].brand,undefined);
+    });
+
     it('Group detail data with custom group name', function(){
         var nosql = new FlyJson();
         var data = nosql.set(data4).groupDetail('brand','group_by_name').exec();
+        assert.equal(data.length,1);
+        assert.notEqual(data[0].group_by_name,undefined);
+    });
+
+    it('Group detail data with custom group name [shallow]', function(){
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data4).groupDetail('brand','group_by_name').exec();
         assert.equal(data.length,1);
         assert.notEqual(data[0].group_by_name,undefined);
     });

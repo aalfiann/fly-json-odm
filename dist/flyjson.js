@@ -1,5 +1,5 @@
 /*!
- * FlyJson ES5 v1.8.0 [Browser]
+ * FlyJson ES5 v1.8.1 [Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
@@ -286,7 +286,6 @@ var FlyJson = function (_Helper) {
       } else {
         throw new Error('Set data must be an array contains object.');
       }
-      this.mode = '';
       return this;
     }
   }, {
@@ -386,6 +385,9 @@ var FlyJson = function (_Helper) {
       }
       if (this.isEmptyArray(data) || !this.isArray(data)) {
         throw new Error('Data to modify must be an array object and not empty');
+      }
+      if (this.mode === "shallow") {
+        throw new Error('Shallow mode is not allowed for modifyMany!');
       }
       var l = this.data1.length;
       var len = data.length;
@@ -599,7 +601,11 @@ var FlyJson = function (_Helper) {
     key: "join", value: function join(name, data) {
       if (!this.isEmpty(name) && this.isString(name)) {
         if (this.isArray(data)) {
-          this.data2 = this.deepClone(data);
+          if (this.mode === 'shallow') {
+            this.data2 = this.shallowClone(data);
+          } else {
+            this.data2 = this.deepClone(data);
+          }
           this.name = name;
           this.scope = 'join';
         } else {
@@ -787,6 +793,7 @@ var FlyJson = function (_Helper) {
     }
   }, {
     key: "exec", value: function exec() {
+      this.mode = '';
       return this.data1;
     }
   }]);
