@@ -11,12 +11,7 @@
 ![NPM download total](https://img.shields.io/npm/dt/fly-json-odm.svg)  
 An Object Document Mapper to handle JSON on the fly for NodeJS or Browser.
 
-
-### Background
-`fly-json-odm` is the ODM library to handle JSON on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM. For example is to do `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join` and `Query`. When you are develop in `microservices` architecture, you will face up that everything should be handle from rest json via each services, because you can not access directly into the database.  
-
-### Limitation
-This library was created to handle JSON for `modification`/`manipulation` only and any data will be processed and saved in memory for temporary (`On-The-Fly`). Not support for to use with any database server also we don't provide feature how to read JSON from `file`, `stream` or something like that.
+`fly-json-odm` is the ODM library to handle JSON on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM. For example is to do `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join`, `Query` and `Transform`.
 
 ### Install using NPM
 ```bash
@@ -37,7 +32,7 @@ $ npm install fly-json-odm
 
 <!-- Get a specific version -->
 <!-- Recommended for production sites! -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.8.1/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.8.2/dist/flyjson.min.js"></script>
 ```
 
 ### Usage
@@ -73,10 +68,10 @@ nosql.promisify((builder) => {return builder}).then((table) => {
 - `fly-json-odm` is synchronous as default.
 
 ### Documentation
-Documentation detail about `CRUD`, `Query`, `Join`, `Transform` and more examples is available at [here](https://github.com/aalfiann/fly-json-odm/wiki).
+Documentation is available in our [Wiki](https://github.com/aalfiann/fly-json-odm/wiki).
 
 ### Unit Test
-If you want more example, you can play around with unit test.
+If you want to play around with unit test.
 ```bash
 $ npm test
 ```

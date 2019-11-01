@@ -1,5 +1,5 @@
 /*!
- * FlyJson ES5 v1.8.1 [Browser]
+ * FlyJson ES5 v1.8.2 [Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
