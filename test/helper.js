@@ -140,6 +140,11 @@ describe('helper function test', function(){
         assert.equal(array1[0],1);
     });
 
+    it('deep clone without hasOwnProperty will not copied',function(){
+        const obj = Object.create({name: 'inherited'});
+        assert.deepEqual(nosql.deepClone(obj),[]);
+    });
+
     it('deep clone with deep array is not reflect to original',function(){
         var array1 = [[1],[2],[3]];
         var array2 = [[6],[7],[8]];

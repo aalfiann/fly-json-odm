@@ -1,5 +1,5 @@
 /*!
- * FlyJson ES6 v1.8.2 [NodeJS or Browser]
+ * FlyJson ES6 v1.8.3 [NodeJS or Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
@@ -174,7 +174,17 @@ class Helper {
      * @return {array}
      */
     deepClone(array) {
-        return JSON.parse(JSON.stringify(array));
+        var clone, i;
+        if (typeof array !== 'object' || !array) return array;
+        if ('[object Array]' === Object.prototype.toString.apply(array)) {
+            clone = [];
+            var len = array.length;
+            for (i = 0; i < len; i++) clone[i] = this.deepClone(array[i]);
+            return clone;
+        }
+        clone = {};
+        for (i in array) if (array.hasOwnProperty(i)) clone[i] = this.deepClone(array[i]);
+        return clone;
     }
 
     /**
