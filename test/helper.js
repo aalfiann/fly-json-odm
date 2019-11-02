@@ -142,7 +142,7 @@ describe('helper function test', function(){
 
     it('deep clone without hasOwnProperty will not copied',function(){
         const obj = Object.create({name: 'inherited'});
-        assert.deepEqual(nosql.deepClone(obj),[]);
+        assert.deepEqual(nosql.deepClone(obj),{});
     });
 
     it('deep clone with deep array is not reflect to original',function(){
