@@ -68,6 +68,16 @@ var data6 = [
     {id:3,title:'this is my third post',category:{id:2,name:'tech'}}
 ];
 
+var data7 = [
+    {id:1,name:'AAA',created:'2019-10-01 00:02:33'},
+    {id:2,name:'BBB',created:'2019-10-02 01:52:53'},
+    {id:3,name:'CCC',created:'2019-10-03 02:42:43'},
+    {id:4,name:'DDD',created:'2019-10-04 03:32:13'},
+    {id:5,name:'EEE',created:'2019-10-05 04:22:13'},
+    {id:6,name:'FFF',created:'2019-10-06 05:12:33'},
+    {id:7,name:'GGG',created:'2019-10-07 06:02:03'}
+];
+
 describe('normal / synchronous CRUD test', function() {
     
     this.timeout(10000);
@@ -668,6 +678,23 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[1].brand,'Audi');
         assert.equal(data[2].brand,'Ferarri');
         assert.equal(data[3].brand,'Ford');
+    });
+
+    it('select + where + function for between date', function () {
+        var startDate = new Date("2019-10-01");
+        var endDate = new Date("2019-10-04");
+        var nosql = new FlyJson();
+        var data = nosql.set(data7)
+            .select(['id','name','created'])
+            .where('created','function',value => {
+                aDate = new Date(value);
+                return aDate >= startDate && aDate <= endDate;
+            })
+            .exec();
+        assert.equal(data[0].id,2);
+        assert.equal(data[1].id,3);
+        assert.equal(data[2].id,4);
+        assert.equal(data.length,3);
     });
 
     it('select + where + <=', function () {

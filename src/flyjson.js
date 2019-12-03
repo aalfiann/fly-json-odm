@@ -1,5 +1,5 @@
 /*!
- * FlyJson ES6 v1.8.4 [NodeJS or Browser]
+ * FlyJson ES6 v1.9.0 [NodeJS or Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
@@ -61,7 +61,7 @@ class Helper {
 
     /**
      * Determine value is empty
-     * @param {var} value
+     * @param {*} value
      * @return {bool} 
      */
     isEmpty(value) {
@@ -727,6 +727,8 @@ class FlyJson extends Helper {
                             return (v.indexOf(s) === -1);
                         case 'regex':
                             return (s.test(v));
+                        case 'function':
+                            return s(v);
                         default:
                             return v === s;
                     }

@@ -1,5 +1,5 @@
 /*!
- * FlyJson ES5 v1.8.4 [Browser]
+ * FlyJson ES5 v1.9.0 [Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
@@ -557,6 +557,8 @@ var FlyJson = function (_Helper) {
                 return v.indexOf(s) === -1;
               case 'regex':
                 return s.test(v);
+              case 'function':
+                return s(v);
               default:
                 return v === s;
             }
