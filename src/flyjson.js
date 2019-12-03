@@ -1,5 +1,5 @@
 /*!
- * FlyJson ES6 v1.9.0 [NodeJS or Browser]
+ * FlyJson ES6 v1.9.1 [NodeJS or Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
