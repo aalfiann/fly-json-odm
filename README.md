@@ -5,7 +5,6 @@
 [![Build Status](https://travis-ci.org/aalfiann/fly-json-odm.svg?branch=master)](https://travis-ci.org/aalfiann/fly-json-odm)
 [![Coverage Status](https://coveralls.io/repos/github/aalfiann/fly-json-odm/badge.svg?branch=master)](https://coveralls.io/github/aalfiann/fly-json-odm?branch=master)
 [![Known Vulnerabilities](https://snyk.io//test/github/aalfiann/fly-json-odm/badge.svg?targetFile=package.json)](https://snyk.io//test/github/aalfiann/fly-json-odm?targetFile=package.json)
-[![dependencies Status](https://david-dm.org/aalfiann/fly-json-odm/status.svg)](https://david-dm.org/aalfiann/fly-json-odm)
 ![License](https://img.shields.io/npm/l/fly-json-odm)
 ![NPM download/month](https://img.shields.io/npm/dm/fly-json-odm.svg)
 ![NPM download total](https://img.shields.io/npm/dt/fly-json-odm.svg)  
