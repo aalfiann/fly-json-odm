@@ -48,7 +48,10 @@ class Helper {
      * @return {bool}
      */
     isArray (value) {
-        return value && typeof value === 'object' && value.constructor === Array;
+        if (value===undefined || value === '') {
+            return false;
+        }
+        return value && value !== '' && typeof value === 'object' && value.constructor === Array;
     }
 
     /**
@@ -57,6 +60,9 @@ class Helper {
      * @return {bool}
      */
     isObject (value) {
+        if (value===undefined || value === '') {
+            return false;
+        }
         return value && typeof value === 'object' && value.constructor === Object;
     }
 
