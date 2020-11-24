@@ -71,7 +71,7 @@ describe("json transform multiTransformSpec test", function() {
 
 	it("should copy arrays", function() {
 
-		assert.deepEqual(nosql.jsonTransform(data, baseMap).make(),expected);
+		assert.deepStrictEqual(nosql.jsonTransform(data, baseMap).make(),expected);
 
 	});
 

@@ -17,8 +17,8 @@ describe('intentional failure condition test', function() {
 
     it('table must be an object array', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.isArray(right_table),true);
-        assert.equal(nosql.isArray(wrong_table),false);
+        assert.strictEqual(nosql.isArray(right_table),true);
+        assert.strictEqual(nosql.isArray(wrong_table),false);
         assert.throws(function(){nosql.set(wrong_table)},Error);
     });
 
@@ -33,7 +33,7 @@ describe('intentional failure condition test', function() {
             .select(['user_id','name'])
             .where()
             .exec();
-        assert.equal(data.length,3);
+        assert.strictEqual(data.length,3);
     });
 
     it('select + where + or + where without begin then or will filtered as and', function () {
@@ -45,7 +45,7 @@ describe('intentional failure condition test', function() {
             .where('name','===','tono')
             .end()
             .exec();
-        assert.equal(data.length,0);
+        assert.strictEqual(data.length,0);
     });
 
     it('select + where + or + where without begin and end then or will filtered as and', function () {
@@ -56,7 +56,7 @@ describe('intentional failure condition test', function() {
             .or()
             .where('name','===','tono')
             .exec();
-        assert.equal(data.length,0);
+        assert.strictEqual(data.length,0);
     });
     
     it('select + where + or + where without end will not filtered', function () {
@@ -68,42 +68,42 @@ describe('intentional failure condition test', function() {
             .or()
             .where('name','===','budi')
             .exec();
-        assert.equal(data.length,3);
+        assert.strictEqual(data.length,3);
     });
 
     it('set table with empty parameter in orderby will not filtered', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.set(right_table).orderBy().exec().length,3);
+        assert.strictEqual(nosql.set(right_table).orderBy().exec().length,3);
     });
     
     it('set table with empty parameter in skip will not filtered', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.set(right_table).skip().exec().length,3);
+        assert.strictEqual(nosql.set(right_table).skip().exec().length,3);
     });
 
     it('select with empty parameter in skip will not filtered', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.set(right_table).skip(true,false).exec().length,3);
+        assert.strictEqual(nosql.set(right_table).skip(true,false).exec().length,3);
     });
     
     it('set table with empty parameter in take will not filtered', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.set(right_table).take().exec().length,3);
+        assert.strictEqual(nosql.set(right_table).take().exec().length,3);
     });
 
     it('select with empty parameter in take will not filtered', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.set(right_table).take(true,false).exec().length,3);
+        assert.strictEqual(nosql.set(right_table).take(true,false).exec().length,3);
     });
     
     it('set table with empty parameter in pagination will not filtered', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.set(right_table).paginate().exec().length,3);
+        assert.strictEqual(nosql.set(right_table).paginate().exec().length,3);
     });
 
     it('select with empty parameter in pagination will not filtered', function(){
         var nosql = new FlyJson();
-        assert.equal(nosql.set(right_table).paginate(true,false).exec().length,3);
+        assert.strictEqual(nosql.set(right_table).paginate(true,false).exec().length,3);
     });
 
     it('join with wrong name parameter', function() {
@@ -158,7 +158,7 @@ describe('intentional failure condition test', function() {
     it('select with empty array', function(){
         var nosql = new FlyJson();
         var data = nosql.set(right_table).select([]).exec();
-        assert.deepEqual(right_table,data);
+        assert.deepStrictEqual(right_table,data);
     });
 
     it('select + distinct with wrong fieldname type (not string)', function(){

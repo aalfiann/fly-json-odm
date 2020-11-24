@@ -51,7 +51,7 @@ describe("json transform Spec test", function() {
 
 		var dataTransform = nosql.jsonTransform(nosql.deepClone(data), map);
 
-        assert.deepEqual(dataTransform.getValue(data, "posts.0.description"),"description1");
+        assert.deepStrictEqual(dataTransform.getValue(data, "posts.0.description"),"description1");
 
 	});
 
@@ -59,7 +59,7 @@ describe("json transform Spec test", function() {
 
 		var dataTransform = nosql.jsonTransform(nosql.deepClone(data), map);
 
-		assert.deepEqual(dataTransform.make(),[{
+		assert.deepStrictEqual(dataTransform.make(),[{
 			name: "TITLE1",
 			info: "description1",
 			text: "This is a blog.",
@@ -76,7 +76,7 @@ describe("json transform Spec test", function() {
 			table.blockingTest(3000);
 			var dataTransform = table.jsonTransform(table.deepClone(data), map);
 			var result = dataTransform.make();
-			assert.deepEqual(result,[{
+			assert.deepStrictEqual(result,[{
 				name: "TITLE1",
 				info: "description1",
 				text: "This is a blog.",
@@ -98,7 +98,7 @@ describe("json transform Spec test", function() {
 
 		var dataTransform = nosql.jsonTransform(nosql.deepClone(data), newMap);
 
-		assert.deepEqual(dataTransform.make(),[{
+		assert.deepStrictEqual(dataTransform.make(),[{
 			name: "TITLE1",
 			info: "description1",
 			text: "This is a blog.",
@@ -119,7 +119,7 @@ describe("json transform Spec test", function() {
 
 		var dataTransform = nosql.jsonTransform(nosql.deepClone(data), newMap);
 
-		assert.deepEqual(dataTransform.make(),[{
+		assert.deepStrictEqual(dataTransform.make(),[{
 			name: "TITLE1",
 			text: "This is a blog.",
 			date: Date.parse('11/4/2013'),
@@ -142,7 +142,7 @@ describe("json transform Spec test", function() {
 
 		var dataTransform = nosql.jsonTransform(nosql.deepClone(data), newMap);
 
-		assert.deepEqual(dataTransform.make(),[{
+		assert.deepStrictEqual(dataTransform.make(),[{
 			fieldGroup: [
 				"title1",
 				"description1",
@@ -182,7 +182,7 @@ describe("json transform Spec test", function() {
 
 		var dataTransform = nosql.jsonTransform(nosql.deepClone(data), newMap);
 
-		assert.deepEqual(dataTransform.make(),[{
+		assert.deepStrictEqual(dataTransform.make(),[{
 			fieldGroup: [
 				"title1",
 				"description1",
@@ -207,7 +207,7 @@ describe("json transform Spec test", function() {
 		var dataTransform = nosql.jsonTransform(data, newMap);
 
 		var result = dataTransform.make();
-		assert.deepEqual(result,[{ 
+		assert.deepStrictEqual(result,[{ 
 			name: 'title1',
 		    info: 'mike more info',
 		    text: 'This is a blog.',
@@ -237,7 +237,7 @@ describe("json transform Spec test", function() {
 		var dataTransform = nosql.jsonTransform(data, newMap);
 
 		var result = dataTransform.make();
-		assert.deepEqual(result,[{ 
+		assert.deepStrictEqual(result,[{ 
 			name: 'title1',
 		    info: 'mike more info',
 		    text: 'This is a blog. more text',
@@ -268,7 +268,7 @@ describe("json transform Spec test", function() {
 		var dataTransform = nosql.jsonTransform(data, map);
 
 		var result = dataTransform.make();
-		assert.deepEqual(result,[
+		assert.deepStrictEqual(result,[
 			{name: "peter", iterated: true},
 			{name: "paul", iterated: true},
 			{name: "marry", iterated: true}
@@ -300,7 +300,7 @@ describe("json transform Spec test", function() {
 		var dataTransform = nosql.jsonTransform(data, map);
 
 		var result = dataTransform.make();
-		assert.deepEqual(result,[
+		assert.deepStrictEqual(result,[
 			{title: "peter", iterated: true},
 			{title: "paul", iterated: true},
 			{title: "marry", iterated: true}
@@ -327,7 +327,7 @@ describe("json transform Spec test", function() {
 
 		var result = dataTransform.make();
 
-		assert.deepEqual(result,[
+		assert.deepStrictEqual(result,[
 			{name: "peter"},
 			{name: "paul"},
 			{name: "marry"}
@@ -360,7 +360,7 @@ describe("json transform Spec test", function() {
 
 		var result = dataTransform.make();
 
-		assert.deepEqual(result,[
+		assert.deepStrictEqual(result,[
 			{name: "peter", verified:true},
 			{name: "paul", verified:true},
 			{name: "marry", verified:false}
@@ -389,7 +389,7 @@ describe("json transform Spec test", function() {
 
 		var result = dataTransform.make();
 
-		assert.deepEqual(result,[
+		assert.deepStrictEqual(result,[
 			{name: "peter"},
 			{name: "paul"},
 			{name: "marry"}

@@ -22,7 +22,7 @@ describe("json transform mutationSpec test", function() {
 
 		var clone = nosql.deepClone(data);
 		var dataTransform = nosql.jsonTransform(data, map).make();
-        assert.deepEqual(clone,data);
+        assert.deepStrictEqual(clone,data);
 
 	});
 
@@ -30,7 +30,7 @@ describe("json transform mutationSpec test", function() {
 
 		var clone = nosql.deepClone(map);
 		var dataTransform = nosql.jsonTransform(data, map).make();
-        assert.deepEqual(clone,map);
+        assert.deepStrictEqual(clone,map);
 
 	});
 

@@ -72,7 +72,7 @@ describe('json transform intentional failure test', function(){
 
 	it("transform data with undefined data", function() {
 
-		assert.deepEqual(nosql.jsonTransform(undefined, map).make(),[]);
+		assert.deepStrictEqual(nosql.jsonTransform(undefined, map).make(),[]);
 	});
     
     it("transform data foreach with non array / object", function() {
@@ -86,7 +86,7 @@ describe('json transform intentional failure test', function(){
 
 		var dataTransform = nosql.jsonTransform(nosql.deepClone(data), mapOnNull);
         var result = dataTransform.make();
-        assert.deepEqual(result,[ { name: 'TITLE1',
+        assert.deepStrictEqual(result,[ { name: 'TITLE1',
         info: 'mike',
         text: 'This is a blog.',
         date: '11/4/2013',

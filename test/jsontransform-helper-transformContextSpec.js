@@ -43,7 +43,7 @@ describe("json transform ContextSpec test", function() {
 			intro: 'Hi '
 		};
 
-        assert.deepEqual(dataTransform.make(context),[{
+        assert.deepStrictEqual(dataTransform.make(context),[{
 			greeting: "Hi title1"
 		}]);
 
@@ -57,7 +57,7 @@ describe("json transform ContextSpec test", function() {
             intro: 'Hi '
         };
 
-        assert.deepEqual(dataTransform.make(context),[{
+        assert.deepStrictEqual(dataTransform.make(context),[{
             greeting: "Hi title1"
         }]);
 
@@ -66,7 +66,7 @@ describe("json transform ContextSpec test", function() {
 	it("should always return an array", function() {
 
         var dataTransform = nosql.jsonTransform({}, {});
-        assert.deepEqual(Array.isArray(dataTransform.make()),true);
+        assert.deepStrictEqual(Array.isArray(dataTransform.make()),true);
 
 	});
 

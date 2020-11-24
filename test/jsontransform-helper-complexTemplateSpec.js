@@ -96,7 +96,7 @@ describe('json transform complexTemplateSpec test', function(){
 
         var nosql = new FlyJson();
         var result = nosql.jsonTransform(object,map).make();
-        assert.deepEqual(expected,result);
+        assert.deepStrictEqual(expected,result);
 
     });
     

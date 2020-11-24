@@ -31,10 +31,10 @@ describe('promisify / asynchronous crud test', function() {
         var nosql = new FlyJson();
         nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2).insert({id:6,address:'madiun',email:'i@j.com'}).exec();
-            assert.equal(data.length,6);
-            assert.equal(data[5].id,6);
-            assert.equal(data[5].address,'madiun');
-            assert.equal(data[5].email,'i@j.com');
+            assert.strictEqual(data.length,6);
+            assert.strictEqual(data[5].id,6);
+            assert.strictEqual(data[5].address,'madiun');
+            assert.strictEqual(data[5].email,'i@j.com');
             done();
         });
     });
@@ -45,10 +45,10 @@ describe('promisify / asynchronous crud test', function() {
             var data = table.set(data2)
                 .update('id',5,{address:'ponorogo',email:'xxx@gmail.com'})
                 .exec();
-            assert.equal(data.length,5);
-            assert.equal(data[4].id,5);
-            assert.equal(data[4].address,'ponorogo');
-            assert.equal(data[4].email,'xxx@gmail.com'); 
+            assert.strictEqual(data.length,5);
+            assert.strictEqual(data[4].id,5);
+            assert.strictEqual(data[4].address,'ponorogo');
+            assert.strictEqual(data[4].email,'xxx@gmail.com'); 
             done();
         });
     });
@@ -59,10 +59,10 @@ describe('promisify / asynchronous crud test', function() {
             var data = table.set(data2)
                 .modify('id',5,{address:'ponorogo',email:'xxx@gmail.com',about:'Just ordinary programmer'})
                 .exec();
-            assert.equal(data.length,5);
-            assert.equal(data[4].id,5);
-            assert.equal(data[4].address,'ponorogo');
-            assert.equal(data[4].email,'xxx@gmail.com');
+            assert.strictEqual(data.length,5);
+            assert.strictEqual(data[4].id,5);
+            assert.strictEqual(data[4].address,'ponorogo');
+            assert.strictEqual(data[4].email,'xxx@gmail.com');
             done();
         });
     });
@@ -73,10 +73,10 @@ describe('promisify / asynchronous crud test', function() {
             var data = table.set(data2)
                 .delete('id',5)
                 .exec();
-            assert.equal(data.length,4);
-            assert.equal(data[3].id,4);
-            assert.equal(data[3].address,'solo, balapan');
-            assert.equal(data[3].email,'g@h.com'); 
+            assert.strictEqual(data.length,4);
+            assert.strictEqual(data[3].id,4);
+            assert.strictEqual(data[3].address,'solo, balapan');
+            assert.strictEqual(data[3].email,'g@h.com'); 
             done();
         });
     });
@@ -93,7 +93,7 @@ describe('promisify / asynchronous query test', function() {
             var time = table.blockingTest();
             // console.log('Blocking start at: '+time);
             // console.log('Blocking ended at: '+Date.now());
-            // assert.equal(outside,time);
+            // assert.strictEqual(outside,time);
             done();
         });
         var start = Date.now();
@@ -136,11 +136,11 @@ describe('promisify / asynchronous query test', function() {
         var nosql = new FlyJson();
         nosql.promisify((builder) => {return builder}).then(function(table) {
             var data = table.set(data2).select(['id','bio']).exec();
-            assert.equal(data[0].id,1);
-            assert.equal(data[1].id,2);
-            assert.equal(data[2].id,3);
-            assert.equal(data[3].id,4);
-            assert.equal(data[4].id,5);
+            assert.strictEqual(data[0].id,1);
+            assert.strictEqual(data[1].id,2);
+            assert.strictEqual(data[2].id,3);
+            assert.strictEqual(data[3].id,4);
+            assert.strictEqual(data[4].id,5);
             done();
         });
     });
@@ -152,8 +152,8 @@ describe('promisify / asynchronous query test', function() {
             .select(['id','address'])
             .where('address','jakarta')
             .exec();
-            assert.equal(data[0].id,2);
-            assert.equal(data[0].address,'jakarta');
+            assert.strictEqual(data[0].id,2);
+            assert.strictEqual(data[0].address,'jakarta');
             done();
         });
     });
@@ -165,8 +165,8 @@ describe('promisify / asynchronous query test', function() {
             .select(['id','address'])
             .where('address','jakarta')
             .exec();
-            assert.equal(data[0].id,2);
-            assert.equal(data[0].address,'jakarta');
+            assert.strictEqual(data[0].id,2);
+            assert.strictEqual(data[0].address,'jakarta');
             done();
         });
     });
@@ -179,12 +179,12 @@ describe('promisify / asynchronous query test', function() {
             .where('address','like','a')
             .where('address','like','ba')
             .exec();
-            assert.equal(data[0].id,1);
-            assert.equal(data[0].address,'bandung');
-            assert.equal(data[1].id,4);
-            assert.equal(data[1].address,'solo, balapan');
-            assert.equal(data[2].id,5);
-            assert.equal(data[2].address,'surabaya');
+            assert.strictEqual(data[0].id,1);
+            assert.strictEqual(data[0].address,'bandung');
+            assert.strictEqual(data[1].id,4);
+            assert.strictEqual(data[1].address,'solo, balapan');
+            assert.strictEqual(data[2].id,5);
+            assert.strictEqual(data[2].address,'surabaya');
             done();
         })
     });
@@ -200,12 +200,12 @@ describe('promisify / asynchronous query test', function() {
                 .where('address','===','solo')
                 .end()
                 .exec();
-            assert.equal(data[0].id,1);
-            assert.equal(data[0].address,'bandung');
-            assert.equal(data[1].id,5);
-            assert.equal(data[1].address,'surabaya');
-            assert.equal(data[2].id,3);
-            assert.equal(data[2].address,'solo');
+            assert.strictEqual(data[0].id,1);
+            assert.strictEqual(data[0].address,'bandung');
+            assert.strictEqual(data[1].id,5);
+            assert.strictEqual(data[1].address,'surabaya');
+            assert.strictEqual(data[2].id,3);
+            assert.strictEqual(data[2].address,'solo');
             done();
         })
     });
@@ -222,12 +222,12 @@ describe('promisify / asynchronous query test', function() {
                 .end()
                 .orderBy('id',false)
                 .exec();
-            assert.equal(data[0].id,1);
-            assert.equal(data[0].address,'bandung');
-            assert.equal(data[1].id,3);
-            assert.equal(data[1].address,'solo');
-            assert.equal(data[2].id,5);
-            assert.equal(data[2].address,'surabaya');
+            assert.strictEqual(data[0].id,1);
+            assert.strictEqual(data[0].address,'bandung');
+            assert.strictEqual(data[1].id,3);
+            assert.strictEqual(data[1].address,'solo');
+            assert.strictEqual(data[2].id,5);
+            assert.strictEqual(data[2].address,'surabaya');
             done();
         })
     });
@@ -244,12 +244,12 @@ describe('promisify / asynchronous query test', function() {
                 .end()
                 .orderBy('id',true)
                 .exec();
-            assert.equal(data[0].id,5);
-            assert.equal(data[0].address,'surabaya');
-            assert.equal(data[1].id,3);
-            assert.equal(data[1].address,'solo');
-            assert.equal(data[2].id,1);
-            assert.equal(data[2].address,'bandung');
+            assert.strictEqual(data[0].id,5);
+            assert.strictEqual(data[0].address,'surabaya');
+            assert.strictEqual(data[1].id,3);
+            assert.strictEqual(data[1].address,'solo');
+            assert.strictEqual(data[2].id,1);
+            assert.strictEqual(data[2].address,'bandung');
             done();
         })
     });
@@ -266,12 +266,12 @@ describe('promisify / asynchronous query test', function() {
                 .end()
                 .orderBy('id',false,parseInt)
                 .exec();
-            assert.equal(data[0].id,1);
-            assert.equal(data[0].address,'bandung');
-            assert.equal(data[1].id,3);
-            assert.equal(data[1].address,'solo');
-            assert.equal(data[2].id,5);
-            assert.equal(data[2].address,'surabaya');
+            assert.strictEqual(data[0].id,1);
+            assert.strictEqual(data[0].address,'bandung');
+            assert.strictEqual(data[1].id,3);
+            assert.strictEqual(data[1].address,'solo');
+            assert.strictEqual(data[2].id,5);
+            assert.strictEqual(data[2].address,'surabaya');
             done();
         })
     });
@@ -289,10 +289,10 @@ describe('promisify / asynchronous query test', function() {
                 .orderBy('id',false)
                 .take(2)
                 .exec();
-            assert.equal(data[0].id,1);
-            assert.equal(data[0].address,'bandung');
-            assert.equal(data[1].id,3);
-            assert.equal(data[1].address,'solo');
+            assert.strictEqual(data[0].id,1);
+            assert.strictEqual(data[0].address,'bandung');
+            assert.strictEqual(data[1].id,3);
+            assert.strictEqual(data[1].address,'solo');
             done();
         })
     });
@@ -310,8 +310,8 @@ describe('promisify / asynchronous query test', function() {
                 .orderBy('id',false)
                 .skip(1)
                 .exec();
-            assert.equal(data[0].id,3);
-            assert.equal(data[0].address,'solo');
+            assert.strictEqual(data[0].id,3);
+            assert.strictEqual(data[0].address,'solo');
             done();
         })
     });
@@ -330,8 +330,8 @@ describe('promisify / asynchronous query test', function() {
                 .take(2)
                 .paginate(2,1)
                 .exec();
-            assert.equal(data[0].id,3);
-            assert.equal(data[0].address,'solo');
+            assert.strictEqual(data[0].id,3);
+            assert.strictEqual(data[0].address,'solo');
             done();
         })
     });
@@ -341,8 +341,8 @@ describe('promisify / asynchronous query test', function() {
         nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data1).join('profile',data2)
                 .merge('user_id','id').exec();
-            assert.equal(data[0].user_id,1);
-            assert.equal(data[0].id,1);
+            assert.strictEqual(data[0].user_id,1);
+            assert.strictEqual(data[0].id,1);
             done();
         });
     });
@@ -352,8 +352,8 @@ describe('promisify / asynchronous query test', function() {
         nosql.promisify((builder) => {return builder}).then(function(table){
             var profile = table.set(data1).join('profile',data2).merge('user_id','id').exec();
             var data = table.set(profile).join('bio',data3).merge('user_id','id').exec();
-            assert.equal(data[0].user_id,1);
-            assert.equal(data[0].id,1);
+            assert.strictEqual(data[0].user_id,1);
+            assert.strictEqual(data[0].id,1);
             done();
         });
     });
@@ -362,8 +362,8 @@ describe('promisify / asynchronous query test', function() {
         var nosql = new FlyJson();
         nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data1).join('profile',data2).on('user_id','id').exec();
-            assert.equal(data[0].profile.id,1);
-            assert.equal(data[0].user_id,1);
+            assert.strictEqual(data[0].profile.id,1);
+            assert.strictEqual(data[0].user_id,1);
             done();
         });
     });
@@ -372,7 +372,7 @@ describe('promisify / asynchronous query test', function() {
         var nosql = new FlyJson();
         nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data1).join('user_id',data2).on('user_id','id').exec();
-            assert.equal(data[0].user_id.id,1);
+            assert.strictEqual(data[0].user_id.id,1);
             done();
         });
     });
@@ -382,8 +382,8 @@ describe('promisify / asynchronous query test', function() {
         nosql.promisify((builder) => {return builder}).then(function(table){
             var profile = table.set(data1).join('profile',data2).on('user_id','id').exec();
             var data = table.set(profile).join('bio',data3).on('user_id','id').exec();
-            assert.equal(data[0].profile.id,1);
-            assert.equal(data[0].user_id,1);
+            assert.strictEqual(data[0].profile.id,1);
+            assert.strictEqual(data[0].user_id,1);
             done();
         });
     });
@@ -393,9 +393,9 @@ describe('promisify / asynchronous query test', function() {
         nosql.promisify((builder) => {return builder}).then(function(table){
             var bio = table.set(data2).join('bio',data3).on('id','id').exec();
             var data = table.set(data1).join('data',bio).on('user_id','id').exec();
-            assert.equal(data[0].data.bio.id,1);
-            assert.equal(data[0].data.id,1);
-            assert.equal(data[0].user_id,1);
+            assert.strictEqual(data[0].data.bio.id,1);
+            assert.strictEqual(data[0].data.id,1);
+            assert.strictEqual(data[0].user_id,1);
             done();
         });
     });
@@ -404,7 +404,7 @@ describe('promisify / asynchronous query test', function() {
         var nosql = new FlyJson();
         nosql.promisify((builder) => {return builder}).then(function(table){
             var data = table.set(data2).clean().exec();
-            assert.deepEqual(data,[]);
+            assert.deepStrictEqual(data,[]);
             done();
         });
     });
