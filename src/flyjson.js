@@ -1,5 +1,5 @@
 /*!
- * FlyJson ES6 v1.9.1 [NodeJS or Browser]
+ * FlyJson ES6 v1.10.0 [NodeJS or Browser]
  * https://github.com/aalfiann/fly-json-odm
  *
  * Copyright 2019 M ABD AZIZ ALFIAN
@@ -9,6 +9,7 @@
 "use strict";
 
 const _sortBy = Symbol('_sortBy');
+const _findDistinct = Symbol('_findDistinct');
 
 /**
  * Helper class
@@ -766,6 +767,23 @@ class FlyJson extends Helper {
         return this;
     }
 
+    [_findDistinct](source,obj) {
+        var found = false;
+        for (var i=0;i<source.length;i++) {
+          var count = Object.keys(obj).length;
+          var recount = 0;
+          this.foreach(obj, function (v, k) {
+            if(source[i][k] === v) {
+              recount++;
+            }
+          })
+          if (count === recount) {
+            found = true;
+          }
+        }
+        return found;
+      }
+
     /**
      * Ending of build query with condition OR
      * @return {this}
@@ -781,6 +799,36 @@ class FlyJson extends Helper {
             this.result = [];
             this.scope = '';
         }
+        return this;
+    }
+
+    /**
+     * Distinct Data
+     * @param {string} fieldName    [Optional] Finding duplicate data by fieldname
+     * @return {this}
+     */
+    distinct(fieldName) {
+        fieldName = (fieldName===undefined) ? '' : fieldName;
+        if((!this.isEmpty(fieldName) && !this.isString(fieldName)) || this.isArray(fieldName) || this.isObject(fieldName)) {
+            throw new Error('Field name must be string.');
+        }
+        var array = this.data1;
+        var unique = [];
+        var result = [];
+        for (let i = 0; i < array.length; i++) {
+            if(!this.isEmpty(fieldName) && this.isString(fieldName)) {
+                if (array[i][fieldName] !== undefined && !unique[array[i][fieldName]]) {
+                    result.push(array[i]);
+                    unique[array[i][fieldName]] = 1;
+                }
+            } else {
+                if (this[_findDistinct](unique,array[i]) === false) {
+                    result.push(array[i]);
+                    unique.push(array[i]);
+                }
+            }
+        }
+        this.data1 = result;
         return this;
     }
 

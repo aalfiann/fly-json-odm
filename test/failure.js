@@ -161,6 +161,11 @@ describe('intentional failure condition test', function() {
         assert.deepEqual(right_table,data);
     });
 
+    it('select + distinct with wrong fieldname type (not string)', function(){
+        var nosql = new FlyJson();
+        assert.throws(function(){nosql.set(right_table).select([]).distinct(['abc']).exec()},Error);
+    });
+
     it('insert data with empty parameter', function() {
         var nosql = new FlyJson();
         assert.throws(function(){nosql.set(right_table).insert()},Error);

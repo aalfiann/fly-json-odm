@@ -78,6 +78,16 @@ var data7 = [
     {id:7,name:'GGG',created:'2019-10-07 06:02:03'}
 ];
 
+var data8 = [
+    {id:1,name:'AAA',created:'2019-10-01 00:02:33'},
+    {id:1,name:'AAA',created:'2019-10-01 00:02:33'},
+    {id:1,name:'BBB',created:'2019-10-01 00:02:33'},
+    {id:4,name:'DDD',created:'2019-10-04 03:32:13'},
+    {id:4,name:'DDD',created:'2019-10-04 03:32:13'},
+    {id:7,name:'GGG',created:'2019-10-07 06:02:03'},
+    {id:7,name:'GGG',created:'2019-10-07 06:02:03'}
+];
+
 describe('normal / synchronous CRUD test', function() {
     
     this.timeout(10000);
@@ -446,6 +456,38 @@ describe('normal / synchronous Query test', function() {
         assert.equal(data[2].id,3);
         assert.equal(data[3].id,4);
         assert.equal(data[4].id,5);
+    });
+
+    it('select data + distinct', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data8)
+            .select(['id','name','created'])
+            .distinct()
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[1].id,1);
+        assert.equal(data[2].id,4);
+        assert.equal(data[3].id,7);
+    });
+
+    it('select data + distinct by fieldname', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data8)
+            .select(['id','name','created'])
+            .distinct('id')
+            .exec();
+        assert.equal(data[0].id,1);
+        assert.equal(data[1].id,4);
+        assert.equal(data[2].id,7);
+    });
+
+    it('select data + distinct by wrong fieldname', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data8)
+            .select(['id','name','created'])
+            .distinct('omg')
+            .exec();
+        assert.equal(data.length,0);
     });
 
     it('select data [shallow]', function () {
