@@ -4,6 +4,8 @@
   "description": "An Object Document Mapper to handle JSON on the fly for NodeJS or Browser",
   "main": "src/flyjson.js",
   "scripts": {
+    "build": "babel src -d dist",
+    "minify": "uglifyjs dist/flyjson.js --output dist/flyjson.min.js",
     "test": "nyc --reporter=html --reporter=text mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -35,9 +37,13 @@
   },
   "homepage": "https://github.com/aalfiann/fly-json-odm#readme",
   "devDependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.8",
+    "@babel/preset-env": "^7.12.7",
     "coveralls": "^3.0.6",
     "mocha": "^6.2.1",
     "mocha-lcov-reporter": "^1.3.0",
-    "nyc": "^14.1.1"
+    "nyc": "^14.1.1",
+    "uglify-js": "^3.12.0"
   }
 }
