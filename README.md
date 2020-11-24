@@ -7,7 +7,8 @@
 [![Known Vulnerabilities](https://snyk.io//test/github/aalfiann/fly-json-odm/badge.svg?targetFile=package.json)](https://snyk.io//test/github/aalfiann/fly-json-odm?targetFile=package.json)
 ![License](https://img.shields.io/npm/l/fly-json-odm)
 ![NPM download/month](https://img.shields.io/npm/dm/fly-json-odm.svg)
-![NPM download total](https://img.shields.io/npm/dt/fly-json-odm.svg)  
+![NPM download total](https://img.shields.io/npm/dt/fly-json-odm.svg)
+[![](https://data.jsdelivr.com/v1/package/npm/fly-json-odm/badge)](https://www.jsdelivr.com/package/npm/fly-json-odm)  
 An Object Document Mapper to handle JSON on the fly for NodeJS or Browser.
 
 `fly-json-odm` is the ODM library to handle JSON on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM. For example is to do `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join`, `Query` and `Transform`.
