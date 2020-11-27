@@ -1,4 +1,4 @@
-/* FlyJson v1.10.1 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/* FlyJson v1.10.2 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
 
 const _sortBy = Symbol('_sortBy');

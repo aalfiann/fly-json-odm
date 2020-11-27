@@ -1,11 +1,11 @@
 {
   "name": "fly-json-odm",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "An Object Document Mapper to handle JSON on the fly for NodeJS or Browser",
   "main": "src/flyjson.js",
   "scripts": {
     "build": "babel src -d dist",
-    "minify": "uglifyjs dist/flyjson.js -c -m -e -o dist/flyjson.min.js",
+    "minify": "uglifyjs dist/flyjson.js -c -m -o dist/flyjson.min.js",
     "test": "nyc --reporter=html --reporter=text mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
