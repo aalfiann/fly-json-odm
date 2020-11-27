@@ -1,11 +1,4 @@
-/*!
- * FlyJson ES5 v1.10.0 [Browser]
- * https://github.com/aalfiann/fly-json-odm
- *
- * Copyright 2019 M ABD AZIZ ALFIAN
- * Released under the MIT license
- * https://github.com/aalfiann/fly-json-odm/blob/master/LICENSE
- */
+/* FlyJson v1.10.1 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -484,6 +477,34 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
       };
     }
     /**
+     * Find disctint in all objects
+     * @param {array object} source     this is an array objects
+     * @param {object} obj              this is the single current object 
+     * @return {boolean}
+     */
+
+  }, {
+    key: _findDistinct,
+    value: function value(source, obj) {
+      var found = false;
+
+      for (var i = 0; i < source.length; i++) {
+        var count = Object.keys(obj).length;
+        var recount = 0;
+        this.foreach(obj, function (v, k) {
+          if (source[i][k] === v) {
+            recount++;
+          }
+        });
+
+        if (count === recount) {
+          found = true;
+        }
+      }
+
+      return found;
+    }
+    /**
      * Set Mode for clone array
      * Note: Use this before set(data)
      * 
@@ -956,27 +977,6 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
 
       return this;
     }
-  }, {
-    key: _findDistinct,
-    value: function value(source, obj) {
-      var found = false;
-
-      for (var i = 0; i < source.length; i++) {
-        var count = Object.keys(obj).length;
-        var recount = 0;
-        this.foreach(obj, function (v, k) {
-          if (source[i][k] === v) {
-            recount++;
-          }
-        });
-
-        if (count === recount) {
-          found = true;
-        }
-      }
-
-      return found;
-    }
     /**
      * Ending of build query with condition OR
      * @return {this}
@@ -1018,17 +1018,20 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
       var array = this.data1;
       var unique = [];
       var result = [];
+      var li = array.length;
 
-      for (var i = 0; i < array.length; i++) {
-        if (!this.isEmpty(fieldName) && this.isString(fieldName)) {
+      if (!this.isEmpty(fieldName) && this.isString(fieldName)) {
+        for (var i = 0; i < li; i++) {
           if (array[i][fieldName] !== undefined && !unique[array[i][fieldName]]) {
             result.push(array[i]);
             unique[array[i][fieldName]] = 1;
           }
-        } else {
-          if (this[_findDistinct](unique, array[i]) === false) {
-            result.push(array[i]);
-            unique.push(array[i]);
+        }
+      } else {
+        for (var _i = 0; _i < li; _i++) {
+          if (this[_findDistinct](unique, array[_i]) === false) {
+            result.push(array[_i]);
+            unique.push(array[_i]);
           }
         }
       }

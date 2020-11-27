@@ -1,11 +1,4 @@
-/*!
- * FlyJson ES6 v1.10.0 [NodeJS or Browser]
- * https://github.com/aalfiann/fly-json-odm
- *
- * Copyright 2019 M ABD AZIZ ALFIAN
- * Released under the MIT license
- * https://github.com/aalfiann/fly-json-odm/blob/master/LICENSE
- */
+/* FlyJson v1.10.1 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
 
 const _sortBy = Symbol('_sortBy');
@@ -394,6 +387,29 @@ class FlyJson extends Helper {
     }
 
     /**
+     * Find disctint in all objects
+     * @param {array object} source     this is an array objects
+     * @param {object} obj              this is the single current object 
+     * @return {boolean}
+     */
+    [_findDistinct](source,obj) {
+        var found = false;
+        for (var i=0;i<source.length;i++) {
+          var count = Object.keys(obj).length;
+          var recount = 0;
+          this.foreach(obj, function (v, k) {
+            if(source[i][k] === v) {
+              recount++;
+            }
+          })
+          if (count === recount) {
+            found = true;
+          }
+        }
+        return found;
+    }
+
+    /**
      * Set Mode for clone array
      * Note: Use this before set(data)
      * 
@@ -773,23 +789,6 @@ class FlyJson extends Helper {
         return this;
     }
 
-    [_findDistinct](source,obj) {
-        var found = false;
-        for (var i=0;i<source.length;i++) {
-          var count = Object.keys(obj).length;
-          var recount = 0;
-          this.foreach(obj, function (v, k) {
-            if(source[i][k] === v) {
-              recount++;
-            }
-          })
-          if (count === recount) {
-            found = true;
-          }
-        }
-        return found;
-      }
-
     /**
      * Ending of build query with condition OR
      * @return {this}
@@ -821,13 +820,16 @@ class FlyJson extends Helper {
         var array = this.data1;
         var unique = [];
         var result = [];
-        for (let i = 0; i < array.length; i++) {
-            if(!this.isEmpty(fieldName) && this.isString(fieldName)) {
+        var li = array.length;
+        if(!this.isEmpty(fieldName) && this.isString(fieldName)) {
+            for (let i = 0; i < li; i++) {
                 if (array[i][fieldName] !== undefined && !unique[array[i][fieldName]]) {
                     result.push(array[i]);
                     unique[array[i][fieldName]] = 1;
                 }
-            } else {
+            }
+        } else {
+            for (let i = 0; i < li; i++) {
                 if (this[_findDistinct](unique,array[i]) === false) {
                     result.push(array[i]);
                     unique.push(array[i]);
