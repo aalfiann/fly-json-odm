@@ -1,5 +1,8 @@
-/* FlyJson v1.10.2 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/* FlyJson v1.10.3 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
+/**
+ * Helper class
+ */
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -36,14 +39,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var _sortBy = Symbol('_sortBy');
-
-var _findDistinct = Symbol('_findDistinct');
-/**
- * Helper class
- */
-
 
 var Helper = /*#__PURE__*/function () {
   function Helper() {
@@ -464,8 +459,8 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
 
 
   _createClass(FlyJson, [{
-    key: _sortBy,
-    value: function value(field, reverse, primer) {
+    key: "_sortBy",
+    value: function _sortBy(field, reverse, primer) {
       var key = primer ? function (x) {
         return primer(x[field]);
       } : function (x) {
@@ -484,8 +479,8 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
      */
 
   }, {
-    key: _findDistinct,
-    value: function value(source, obj) {
+    key: "_findDistinct",
+    value: function _findDistinct(source, obj) {
       var found = false;
 
       for (var i = 0; i < source.length; i++) {
@@ -1029,7 +1024,7 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
         }
       } else {
         for (var _i = 0; _i < li; _i++) {
-          if (this[_findDistinct](unique, array[_i]) === false) {
+          if (this._findDistinct(unique, array[_i]) === false) {
             result.push(array[_i]);
             unique.push(array[_i]);
           }
@@ -1188,7 +1183,7 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
       var primer = arguments.length > 2 ? arguments[2] : undefined;
 
       if (!this.isEmpty(name) && this.isString(name) && this.isBoolean(desc)) {
-        this.data1.sort(this[_sortBy](name, desc, primer));
+        this.data1.sort(this._sortBy(name, desc, primer));
       }
 
       return this;

@@ -1,8 +1,5 @@
-/* FlyJson v1.10.2 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/* FlyJson v1.10.3 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
-
-const _sortBy = Symbol('_sortBy');
-const _findDistinct = Symbol('_findDistinct');
 
 /**
  * Helper class
@@ -376,7 +373,7 @@ class FlyJson extends Helper {
      * @param {fn} primer       this is the primer function
      * @return {fn}
      */
-    [_sortBy](field, reverse, primer) {
+    _sortBy(field, reverse, primer) {
         var key = primer ? 
             function(x) {return primer(x[field])} : 
             function(x) {return x[field]};
@@ -392,7 +389,7 @@ class FlyJson extends Helper {
      * @param {object} obj              this is the single current object 
      * @return {boolean}
      */
-    [_findDistinct](source,obj) {
+    _findDistinct(source,obj) {
         var found = false;
         for (var i=0;i<source.length;i++) {
           var count = Object.keys(obj).length;
@@ -830,7 +827,7 @@ class FlyJson extends Helper {
             }
         } else {
             for (let i = 0; i < li; i++) {
-                if (this[_findDistinct](unique,array[i]) === false) {
+                if (this._findDistinct(unique,array[i]) === false) {
                     result.push(array[i]);
                     unique.push(array[i]);
                 }
@@ -967,7 +964,7 @@ class FlyJson extends Helper {
      */
     orderBy(name,desc=false,primer) {
         if(!this.isEmpty(name) && this.isString(name) && this.isBoolean(desc)) {
-            this.data1.sort(this[_sortBy](name,desc,primer));
+            this.data1.sort(this._sortBy(name,desc,primer));
         }
         return this;
     }
