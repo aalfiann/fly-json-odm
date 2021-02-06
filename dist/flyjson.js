@@ -1,4 +1,4 @@
-/* FlyJson v1.10.3 | (c) 2020 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/* FlyJson v1.11.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
 /**
  * Helper class
@@ -47,13 +47,13 @@ var Helper = /*#__PURE__*/function () {
 
   _createClass(Helper, [{
     key: "isString",
-
+    value:
     /**
      * Determine value is string
      * @param {*} value
      * @return {bool} 
      */
-    value: function isString(value) {
+    function isString(value) {
       return typeof value === 'string' || value instanceof String;
     }
     /**
@@ -535,13 +535,13 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
     }
   }, {
     key: "insert",
-
+    value:
     /**
      * Insert new data into data table
      * @param {object} obj      this is the object data
      * @return {this}
      */
-    value: function insert(obj) {
+    function insert(obj) {
       if (this.isObject(obj) && !this.isEmptyObject(obj)) {
         this.data1.push(obj);
       } else {
@@ -912,6 +912,39 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
                   }
                 });
                 return result.length > 0;
+
+              case 'notin':
+                if (self.isString(v)) {
+                  return v.indexOf(s) === -1;
+                }
+
+                var result = [];
+
+                if (v.length) {
+                  self.foreach(v, function (value) {
+                    if (value !== s) {
+                      result.push(value);
+                    }
+                  });
+                  return result.length === v.length;
+                } else {
+                  self.foreach(v, function (value) {
+                    if (c) {
+                      if (value !== s) {
+                        result.push(value);
+                      }
+                    } else {
+                      if (self.isString(value)) {
+                        value = value.toLowerCase();
+                      }
+
+                      if (value !== s) {
+                        result.push(value);
+                      }
+                    }
+                  });
+                  return result.length === Object.keys(v).length;
+                }
 
               case 'not':
                 return v !== s;

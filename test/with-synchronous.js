@@ -57,9 +57,9 @@ var data4 = [
 ];
 
 var data5 = [
-    {id:1,title:'this is my first post',tags:['News','nodejs','tech']},
-    {id:2,title:'this is my second post',tags:['tutorial','linux','tech']},
-    {id:3,title:'this is my third post',tags:['News','info','tech']}
+    {id:1,title:'this is my first post',tags:['News','nodejs','tech',224]},
+    {id:2,title:'this is my second post',tags:['tutorial','linux','tech',234]},
+    {id:3,title:'this is my third post',tags:['News','info','tech',244]}
 ];
 
 var data6 = [
@@ -652,6 +652,104 @@ describe('normal / synchronous Query test', function() {
         assert.strictEqual(data[0].id,2);
         assert.strictEqual(data[0].category.id,4);
         assert.strictEqual(data[0].category.name,'Tutorial');
+    });
+
+    it('select + where (notin array)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data5)
+            .select(['id','title','tags'])
+            .where('tags','NOTIN','News')
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data.length,1);
+    });
+
+    it('select + where (notin array) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data5)
+            .select(['id','title','tags'])
+            .where('tags','NOTIN','News')
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data.length,1);
+    });
+
+    it('select + where (notin array case sensitive)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data5)
+            .select(['id','title','tags'])
+            .where('tags','NOTIN','news')
+            .exec();
+        assert.strictEqual(data.length,3);
+    });
+
+    it('select + where (notin array case insensitive)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data5)
+            .select(['id','title','tags'])
+            .where('tags','NOTIN','news',false)
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data.length,1);
+    });
+
+    it('select + where (notin array case insensitive) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data5)
+            .select(['id','title','tags'])
+            .where('tags','NOTIN','news',false)
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data.length,1);
+    });
+
+    it('select + where (notin object)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data6)
+            .select(['id','title','category'])
+            .where('category','NOTIN','Tutorial')
+            .exec();
+        assert.strictEqual(data[0].id,1);
+        assert.strictEqual(data[1].id,3);
+    });
+
+    it('select + where (notin object) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data6)
+            .select(['id','title','category'])
+            .where('category','NOTIN','Tutorial')
+            .exec();
+        assert.strictEqual(data[0].id,1);
+        assert.strictEqual(data[1].id,3);
+    });
+
+    it('select + where (notin object case sensitive)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data6)
+            .select(['id','title','category'])
+            .where('category','NOTIN','tutorial')
+            .exec();
+        assert.strictEqual(data.length,3);
+    });
+
+    it('select + where (notin object case insensitive)', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data6)
+            .select(['id','title','category'])
+            .where('category','NOTIN','tutorial',false)
+            .exec();
+        assert.strictEqual(data[0].id,1);
+        assert.strictEqual(data[1].id,3);
+    });
+
+    it('select + where (notin object case insensitive) [shallow]', function () {
+        var nosql = new FlyJson();
+        var data = nosql.setMode('shallow').set(data6)
+            .select(['id','title','category'])
+            .where('category','NOTIN','tutorial',false)
+            .exec();
+        assert.strictEqual(data[0].id,1);
+        assert.strictEqual(data[1].id,3);
     });
 
     it('select + where (not)', function () {
