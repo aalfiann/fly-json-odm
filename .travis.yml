@@ -6,11 +6,14 @@ node_js:
   - "8"
   - "7"
   - "6"
+env:
+  global:
+    - NODE_ENV=development
 before_install:
   - export TZ=Asia/Jakarta
   - npm install -g npm@latest
 install:
-  - npm install --dev
+  - npm install
 script:
   - npm test
 after_success: npm run coverage
