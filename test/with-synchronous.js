@@ -88,6 +88,18 @@ var data8 = [
     {id:7,name:'GGG',created:'2019-10-07 06:02:03'}
 ];
 
+var data9 = [
+    {id:1,title:'this is my first post',tags:null},
+    {id:2,title:'this is my second post',tags:['tutorial','linux','tech',234]},
+    {id:3,title:'this is my third post',tags:['News','info','tech',244]}
+];
+
+var data10 = [
+    {id:1,title:'this is my first post',category:{id:1,name:null}},
+    {id:2,title:'this is my second post',category:{id:4,name:'Tutorial'}},
+    {id:3,title:'this is my third post',category:{id:2,name:'tech'}}
+];
+
 describe('normal / synchronous CRUD test', function() {
     
     this.timeout(10000);
@@ -574,6 +586,16 @@ describe('normal / synchronous Query test', function() {
         assert.strictEqual(data[1].tags[0],'News');
     });
 
+    it('select + where (in array) with null array', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data9)
+            .select(['id','title','tags'])
+            .where('tags','IN','News')
+            .exec();
+        assert.strictEqual(data[0].id,3);
+        assert.strictEqual(data[0].tags[0],'News');
+    });
+
     it('select + where (in array) [shallow]', function () {
         var nosql = new FlyJson();
         var data = nosql.setMode('shallow').set(data5)
@@ -621,6 +643,17 @@ describe('normal / synchronous Query test', function() {
         assert.strictEqual(data[0].category.name,'Tutorial');
     });
 
+    it('select + where (in object) with null object', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data10)
+            .select(['id','title','category'])
+            .where('category','IN','Tutorial')
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data[0].category.id,4);
+        assert.strictEqual(data[0].category.name,'Tutorial');
+    });
+
     it('select + where (in object) [shallow]', function () {
         var nosql = new FlyJson();
         var data = nosql.setMode('shallow').set(data6)
@@ -657,6 +690,16 @@ describe('normal / synchronous Query test', function() {
     it('select + where (notin array)', function () {
         var nosql = new FlyJson();
         var data = nosql.set(data5)
+            .select(['id','title','tags'])
+            .where('tags','NOTIN','News')
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data.length,1);
+    });
+
+    it('select + where (notin array) with null array', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data9)
             .select(['id','title','tags'])
             .where('tags','NOTIN','News')
             .exec();
