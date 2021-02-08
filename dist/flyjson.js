@@ -1,4 +1,4 @@
-/* FlyJson v1.11.1 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/* FlyJson v1.11.2 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
 /**
  * Helper class
@@ -859,7 +859,7 @@ var FlyJson = /*#__PURE__*/function (_Helper) {
 
             if (c === false && mid !== 'regex') {
               if (!self.isObject(o[k])) {
-                v = o[k].toString().toLowerCase();
+                v = o[k] ? o[k].toString().toLowerCase() : o[k];
               }
 
               s = search[k].toString().toLowerCase();

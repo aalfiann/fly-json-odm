@@ -596,6 +596,16 @@ describe('normal / synchronous Query test', function() {
         assert.strictEqual(data[0].tags[0],'News');
     });
 
+    it('select + where (in array) with null array case insensitive', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data9)
+            .select(['id','title','tags'])
+            .where('tags','IN','News', false)
+            .exec();
+        assert.strictEqual(data[0].id,3);
+        assert.strictEqual(data[0].tags[0],'News');
+    });
+
     it('select + where (in array) [shallow]', function () {
         var nosql = new FlyJson();
         var data = nosql.setMode('shallow').set(data5)
@@ -648,6 +658,17 @@ describe('normal / synchronous Query test', function() {
         var data = nosql.set(data10)
             .select(['id','title','category'])
             .where('category','IN','Tutorial')
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data[0].category.id,4);
+        assert.strictEqual(data[0].category.name,'Tutorial');
+    });
+
+    it('select + where (in object) with null object case insenstive', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data10)
+            .select(['id','title','category'])
+            .where('category','IN','Tutorial', false)
             .exec();
         assert.strictEqual(data[0].id,2);
         assert.strictEqual(data[0].category.id,4);
@@ -707,6 +728,16 @@ describe('normal / synchronous Query test', function() {
         assert.strictEqual(data.length,1);
     });
 
+    it('select + where (notin array) with null array case insensitive', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data9)
+            .select(['id','title','tags'])
+            .where('tags','NOTIN','News', false)
+            .exec();
+        assert.strictEqual(data[0].id,2);
+        assert.strictEqual(data.length,1);
+    });
+
     it('select + where (notin array) [shallow]', function () {
         var nosql = new FlyJson();
         var data = nosql.setMode('shallow').set(data5)
@@ -751,6 +782,26 @@ describe('normal / synchronous Query test', function() {
         var data = nosql.set(data6)
             .select(['id','title','category'])
             .where('category','NOTIN','Tutorial')
+            .exec();
+        assert.strictEqual(data[0].id,1);
+        assert.strictEqual(data[1].id,3);
+    });
+
+    it('select + where (notin object) with null object', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data10)
+            .select(['id','title','category'])
+            .where('category','NOTIN','Tutorial')
+            .exec();
+        assert.strictEqual(data[0].id,1);
+        assert.strictEqual(data[1].id,3);
+    });
+
+    it('select + where (notin object) with null object case insensitive', function () {
+        var nosql = new FlyJson();
+        var data = nosql.set(data10)
+            .select(['id','title','category'])
+            .where('category','NOTIN','Tutorial', false)
             .exec();
         assert.strictEqual(data[0].id,1);
         assert.strictEqual(data[1].id,3);
