@@ -1,4 +1,4 @@
-/* FlyJson v1.11.2 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.12.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 "use strict";
 
 /**
@@ -1143,6 +1143,4 @@ class FlyJson extends Helper {
 
 }
 
-if (typeof window === "undefined") {
-    module.exports = FlyJson;
-}
+module.exports = FlyJson;
