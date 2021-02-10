@@ -1,264 +1,272 @@
+/* global describe it */
 const assert = require('assert');
 const FlyJson = require('../src/flyjson.js');
+const operator = require('../src/operator');
 
-var right_table = [
-    {user_id:1,name:'budi',age:10},
-    {user_id:5,name:'wawan',age:20},
-    {user_id:3,name:'tono',age:30}
+const rightTable = [
+  { user_id: 1, name: 'budi', age: 10 },
+  { user_id: 5, name: 'wawan', age: 20 },
+  { user_id: 3, name: 'tono', age: 30 }
 ];
 
-var wrong_table = {user:[
-    {user_id:1,name:'budi',age:10},
-    {user_id:5,name:'wawan',age:20},
-    {user_id:3,name:'tono',age:30}
-]};
+const wrongTable = {
+  user: [
+    { user_id: 1, name: 'budi', age: 10 },
+    { user_id: 5, name: 'wawan', age: 20 },
+    { user_id: 3, name: 'tono', age: 30 }
+  ]
+};
 
-describe('intentional failure condition test', function() {
+describe('intentional failure condition test', function () {
+  it('table must be an object array', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.isArray(rightTable), true);
+    assert.strictEqual(nosql.isArray(wrongTable), false);
+    assert.throws(function () { nosql.set(wrongTable); }, Error);
+  });
 
-    it('table must be an object array', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.isArray(right_table),true);
-        assert.strictEqual(nosql.isArray(wrong_table),false);
-        assert.throws(function(){nosql.set(wrong_table)},Error);
-    });
+  it('set table with not array object', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(wrongTable); }, Error);
+  });
 
-    it('set table with not array object', function(){
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(wrong_table)},Error);
-    });
+  it('select + empty where will not filtered', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(rightTable)
+      .select(['user_id', 'name'])
+      .where()
+      .exec();
+    assert.strictEqual(data.length, 3);
+  });
 
-    it('select + empty where will not filtered', function () {
-        var nosql = new FlyJson();
-        var data = nosql.set(right_table)
-            .select(['user_id','name'])
-            .where()
-            .exec();
-        assert.strictEqual(data.length,3);
-    });
+  it('select + where + or + where without begin then or will filtered as and', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(rightTable)
+      .select(['user_id', 'name'])
+      .where('name', 'like', 'u')
+      .or()
+      .where('name', '===', 'tono')
+      .end()
+      .exec();
+    assert.strictEqual(data.length, 0);
+  });
 
-    it('select + where + or + where without begin then or will filtered as and', function () {
-        var nosql = new FlyJson();
-        var data = nosql.set(right_table)
-            .select(['user_id','name'])
-            .where('name','like','u')
-            .or()
-            .where('name','===','tono')
-            .end()
-            .exec();
-        assert.strictEqual(data.length,0);
-    });
+  it('select + where + or + where without begin and end then or will filtered as and', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(rightTable)
+      .select(['user_id', 'name'])
+      .where('name', 'like', 'u')
+      .or()
+      .where('name', '===', 'tono')
+      .exec();
+    assert.strictEqual(data.length, 0);
+  });
 
-    it('select + where + or + where without begin and end then or will filtered as and', function () {
-        var nosql = new FlyJson();
-        var data = nosql.set(right_table)
-            .select(['user_id','name'])
-            .where('name','like','u')
-            .or()
-            .where('name','===','tono')
-            .exec();
-        assert.strictEqual(data.length,0);
-    });
-    
-    it('select + where + or + where without end will not filtered', function () {
-        var nosql = new FlyJson();
-        var data = nosql.set(right_table)
-            .select(['user_id','name'])
-            .begin()
-            .where('name','like','u')
-            .or()
-            .where('name','===','budi')
-            .exec();
-        assert.strictEqual(data.length,3);
-    });
+  it('select + where + or + where without end will not filtered', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(rightTable)
+      .select(['user_id', 'name'])
+      .begin()
+      .where('name', 'like', 'u')
+      .or()
+      .where('name', '===', 'budi')
+      .exec();
+    assert.strictEqual(data.length, 3);
+  });
 
-    it('set table with empty parameter in orderby will not filtered', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.set(right_table).orderBy().exec().length,3);
-    });
-    
-    it('set table with empty parameter in skip will not filtered', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.set(right_table).skip().exec().length,3);
-    });
+  it('set table with empty parameter in orderby will not filtered', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.set(rightTable).orderBy().exec().length, 3);
+  });
 
-    it('select with empty parameter in skip will not filtered', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.set(right_table).skip(true,false).exec().length,3);
-    });
-    
-    it('set table with empty parameter in take will not filtered', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.set(right_table).take().exec().length,3);
-    });
+  it('set table with empty parameter in skip will not filtered', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.set(rightTable).skip().exec().length, 3);
+  });
 
-    it('select with empty parameter in take will not filtered', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.set(right_table).take(true,false).exec().length,3);
-    });
-    
-    it('set table with empty parameter in pagination will not filtered', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.set(right_table).paginate().exec().length,3);
-    });
+  it('select with empty parameter in skip will not filtered', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.set(rightTable).skip(true, false).exec().length, 3);
+  });
 
-    it('select with empty parameter in pagination will not filtered', function(){
-        var nosql = new FlyJson();
-        assert.strictEqual(nosql.set(right_table).paginate(true,false).exec().length,3);
-    });
+  it('set table with empty parameter in take will not filtered', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.set(rightTable).take().exec().length, 3);
+  });
 
-    it('join with wrong name parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).join()},Error);
-    });
+  it('select with empty parameter in take will not filtered', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.set(rightTable).take(true, false).exec().length, 3);
+  });
 
-    it('join with wrong table parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).join('data',wrong_table)},Error);
-    });
+  it('set table with empty parameter in pagination will not filtered', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.set(rightTable).paginate().exec().length, 3);
+  });
 
-    it('join on with wrong name in first parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).join('data',right_table).on()},Error);
-    });
+  it('select with empty parameter in pagination will not filtered', function () {
+    const nosql = new FlyJson();
+    assert.strictEqual(nosql.set(rightTable).paginate(true, false).exec().length, 3);
+  });
 
-    it('join on with wrong name in second parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).join('data',right_table).on('id')},Error);
-    });
+  it('join with wrong name parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).join(); }, Error);
+  });
 
-    it('on without join', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).on('id','id')},Error);
-    });
+  it('join with wrong table parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).join('data', wrongTable); }, Error);
+  });
 
-    it('join merge with wrong name in first parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).join('data',right_table).merge()},Error);
-    });
+  it('join on with wrong name in first parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).join('data', rightTable).on(); }, Error);
+  });
 
-    it('join merge with wrong name in second parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).join('data',right_table).merge('id')},Error);
-    });
+  it('join on with wrong name in second parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).join('data', rightTable).on('id'); }, Error);
+  });
 
-    it('merge without join', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).merge('id','id')},Error);
-    });
+  it('on without join', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).on('id', 'id'); }, Error);
+  });
 
-    it('promisify with catch error', function(){
-        var nosql = new FlyJson();
-        nosql.promisify().then(function(table) {
+  it('join merge with wrong name in first parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).join('data', rightTable).merge(); }, Error);
+  });
 
-        },function(err){
-            return err;
-        });
-    });
+  it('join merge with wrong name in second parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).join('data', rightTable).merge('id'); }, Error);
+  });
 
-    it('select with empty array', function(){
-        var nosql = new FlyJson();
-        var data = nosql.set(right_table).select([]).exec();
-        assert.deepStrictEqual(right_table,data);
-    });
+  it('merge without join', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).merge('id', 'id'); }, Error);
+  });
 
-    it('select + distinct with wrong fieldname type (not string)', function(){
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).select([]).distinct(['abc']).exec()},Error);
-    });
+  it('promisify with catch error', function () {
+    const nosql = new FlyJson();
+    nosql.promisify().then(function (table) {
 
-    it('insert data with empty parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).insert()},Error);
+    }, function (err) {
+      return err;
     });
+  });
 
-    it('insert many data with empty parameter', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).insertMany()},Error);
-    });
+  it('select with empty array', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(rightTable).select([]).exec();
+    assert.deepStrictEqual(rightTable, data);
+  });
 
-    it('insert many data with wrong array', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).insertMany([1,2,3])},Error);
-    });
-    
-    it('update data with no name key', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).update()},Error);
-    });
-    
-    it('update data with no value', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).update('user_id')},Error);
-    });
+  it('select + distinct with wrong fieldname type (not string)', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).select([]).distinct(['abc']).exec(); }, Error);
+  });
 
-    it('update data with no object', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).update('user_id',1)},Error);
-    });
+  it('insert data with empty parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).insert(); }, Error);
+  });
 
-    it('update many data with no name key', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).updateMany()},Error);
-    });
-    
-    it('update many data with no data object', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).updateMany('user_id')},Error);
-    });
-    
-    it('modify data with no name key', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).modify()},Error);
-    });
-    
-    it('modify data with no value', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).modify('user_id')},Error);
-    });
+  it('insert many data with empty parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).insertMany(); }, Error);
+  });
 
-    it('modify data with no object', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).modify('user_id',1)},Error);
-    });
+  it('insert many data with wrong array', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).insertMany([1, 2, 3]); }, Error);
+  });
 
-    it('modify many data with no name key', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).modifyMany()},Error);
-    });
-    
-    it('modify many data with no data object', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).modifyMany('user_id')},Error);
-    });
+  it('update data with no name key', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).update(); }, Error);
+  });
 
-    it('delete data with no value', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).delete('id')},Error);
-    });
+  it('update data with no value', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).update('user_id'); }, Error);
+  });
 
-    it('delete many data with no value', function() {
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).deleteMany('id')},Error);
-    });
+  it('update data with no object', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).update('user_id', 1); }, Error);
+  });
 
-    it('groupBy with no any parameter', function(){
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).groupBy()},Error);
-    });
+  it('update many data with no name key', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).updateMany(); }, Error);
+  });
 
-    it('groupBy with wrong sumField parameter', function(){
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).groupBy('name',{})},Error);
-    });
+  it('update many data with no data object', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).updateMany('user_id'); }, Error);
+  });
 
-    it('groupDetail with no any parameter', function(){
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).groupDetail()},Error);
-    });
+  it('modify data with no name key', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).modify(); }, Error);
+  });
 
-    it('groupBy with wrong groupName parameter', function(){
-        var nosql = new FlyJson();
-        assert.throws(function(){nosql.set(right_table).groupDetail('name',{})},Error);
-    });
+  it('modify data with no value', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).modify('user_id'); }, Error);
+  });
 
+  it('modify data with no object', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).modify('user_id', 1); }, Error);
+  });
+
+  it('modify many data with no name key', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).modifyMany(); }, Error);
+  });
+
+  it('modify many data with no data object', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).modifyMany('user_id'); }, Error);
+  });
+
+  it('delete data with no value', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).delete('id'); }, Error);
+  });
+
+  it('delete many data with no value', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).deleteMany('id'); }, Error);
+  });
+
+  it('groupBy with no any parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).groupBy(); }, Error);
+  });
+
+  it('groupBy with wrong sumField parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).groupBy('name', {}); }, Error);
+  });
+
+  it('groupDetail with no any parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).groupDetail(); }, Error);
+  });
+
+  it('groupBy with wrong groupName parameter', function () {
+    const nosql = new FlyJson();
+    assert.throws(function () { nosql.set(rightTable).groupDetail('name', {}); }, Error);
+  });
+
+  it('Comparisons operator not available', function () {
+    assert.throws(function () {
+      operator.unstrict('===', 'abc', 'abc');
+    }, Error);
+  });
 });

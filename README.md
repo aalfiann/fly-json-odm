@@ -1,5 +1,6 @@
 # fly-json-odm
-[![NPM](https://nodei.co/npm/fly-json-odm.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/fly-json-odm/)  
+[![NPM](https://nodei.co/npm/fly-json-odm.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/fly-json-odm/)
+[![js-semistandard-style](https://raw.githubusercontent.com/standard/semistandard/master/badge.svg)](https://github.com/standard/semistandard)  
   
 [![npm version](https://img.shields.io/npm/v/fly-json-odm.svg?style=flat-square)](https://www.npmjs.org/package/fly-json-odm)
 [![Build Status](https://travis-ci.org/aalfiann/fly-json-odm.svg?branch=master)](https://travis-ci.org/aalfiann/fly-json-odm)
@@ -28,11 +29,11 @@ $ npm install fly-json-odm
 <script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1/dist/flyjson.min.js"></script>
 
 <!-- Get patch fixes within a minor version -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.12/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.13/dist/flyjson.min.js"></script>
 
 <!-- Get a specific version -->
 <!-- Recommended for production sites! -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.12.0/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.13.0/dist/flyjson.min.js"></script>
 ```
 
 ### Usage

@@ -1,6 +1,24 @@
 "use strict";
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -15,24 +33,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -92,396 +92,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.12.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
-      "use strict";
-      /**
-       * Helper class
-       */
+      /*! FlyJson v1.13.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      'use strict';
 
-      var Helper = /*#__PURE__*/function () {
-        function Helper() {
-          _classCallCheck(this, Helper);
-        }
+      var Helper = require('./helper');
 
-        _createClass(Helper, [{
-          key: "isString",
-          value:
-          /**
-           * Determine value is string
-           * @param {*} value
-           * @return {bool} 
-           */
-          function isString(value) {
-            return typeof value === 'string' || value instanceof String;
-          }
-          /**
-           * Determine value is integer
-           * @param {*} value
-           * @return {bool} 
-           */
-
-        }, {
-          key: "isInteger",
-          value: function isInteger(value) {
-            return Number.isInteger(value);
-          }
-          /**
-           * Determine value is boolean
-           * @param {*} value
-           * @return {bool} 
-           */
-
-        }, {
-          key: "isBoolean",
-          value: function isBoolean(value) {
-            return typeof value === 'boolean' || _typeof(value) === 'object' && value !== null && typeof value.valueOf() === 'boolean';
-          }
-          /**
-           * Determine value is array
-           * @param {*} value 
-           * @return {bool}
-           */
-
-        }, {
-          key: "isArray",
-          value: function isArray(value) {
-            if (value === undefined || value === '') {
-              return false;
-            }
-
-            return value && value !== '' && _typeof(value) === 'object' && value.constructor === Array;
-          }
-          /**
-           * Determine value is object
-           * @param {*} value 
-           * @return {bool}
-           */
-
-        }, {
-          key: "isObject",
-          value: function isObject(value) {
-            if (value === undefined || value === '') {
-              return false;
-            }
-
-            return value && _typeof(value) === 'object' && value.constructor === Object;
-          }
-          /**
-           * Determine value is empty
-           * @param {*} value
-           * @return {bool} 
-           */
-
-        }, {
-          key: "isEmpty",
-          value: function isEmpty(value) {
-            return value === undefined || value === null || value === '';
-          }
-          /**
-           * Determine value is empty and array
-           * @param {*} value 
-           * @return {bool}
-           */
-
-        }, {
-          key: "isEmptyArray",
-          value: function isEmptyArray(value) {
-            return value === undefined || value === null || value.length == 0;
-          }
-          /**
-           * Determine object value is empty
-           * @param {*} value 
-           * @return {bool}
-           */
-
-        }, {
-          key: "isEmptyObject",
-          value: function isEmptyObject(value) {
-            return value === undefined || value === null || Object.keys(value).length === 0 && value.constructor === Object;
-          }
-          /**
-           * Foreach for an array or object 
-           * @param {array|object} data 
-           * @param {callback} callback 
-           */
-
-        }, {
-          key: "foreach",
-          value: function foreach(data, callback) {
-            if (this.isObject(data)) {
-              var keys = Object.keys(data);
-              var values = Object.keys(data).map(function (e) {
-                return data[e];
-              });
-              var i = 0,
-                  l = keys.length;
-
-              for (i; i < l; i++) {
-                callback(values[i], keys[i]);
-              }
-            } else {
-              if (Array.isArray(data)) {
-                var i = 0,
-                    l = data.length;
-
-                for (i; i < l; i++) {
-                  callback(data[i], i);
-                }
-              } else {
-                throw new Error('Failed to iteration. Data is not an array or object.');
-              }
-            }
-          }
-          /**
-           * Blocking test for asynchronous
-           * @param {integer} ms      this is miliseconds value for event block
-           * @return {int}
-           */
-
-        }, {
-          key: "blockingTest",
-          value: function blockingTest() {
-            var ms = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
-            var start = Date.now();
-            var time = start + ms;
-
-            while (Date.now() < time) {}
-
-            ;
-            return start;
-          }
-          /**
-           * Safe JSON.stringify to avoid type error converting circular structure to json
-           * @param {object} value        this is the json object 
-           * @param {*} space 
-           * @return {string}
-           */
-
-        }, {
-          key: "safeStringify",
-          value: function safeStringify(value, space) {
-            var cache = [];
-            var output = JSON.stringify(value, function (key, value) {
-              //filters vue.js internal properties
-              if (key && key.length > 0 && (key.charAt(0) === "$" || key.charAt(0) === "_")) {
-                return;
-              }
-
-              if (_typeof(value) === 'object' && value !== null) {
-                if (cache.indexOf(value) !== -1) {
-                  // Circular reference found, discard key
-                  return;
-                } // Store value in our collection
-
-
-                cache.push(value);
-              }
-
-              return value;
-            }, space);
-            cache = null; // Enable garbage collection
-
-            return output;
-          }
-          /**
-           * Shallow clone an array
-           * @param {array} array 
-           * @return {array}
-           */
-
-        }, {
-          key: "shallowClone",
-          value: function shallowClone(array) {
-            return _toConsumableArray(array);
-          }
-          /**
-           * Very safe deep clone an array
-           * @param {array} array 
-           * @return {array}
-           */
-
-        }, {
-          key: "deepClone",
-          value: function deepClone(array) {
-            var clone, i;
-            if (_typeof(array) !== 'object' || !array) return array;
-
-            if ('[object Array]' === Object.prototype.toString.apply(array)) {
-              clone = [];
-              var len = array.length;
-
-              for (i = 0; i < len; i++) {
-                clone[i] = this.deepClone(array[i]);
-              }
-
-              return clone;
-            }
-
-            clone = {};
-
-            for (i in array) {
-              if (array.hasOwnProperty(i)) clone[i] = this.deepClone(array[i]);
-            }
-
-            return clone;
-          }
-          /**
-           * jsonTransform for restructuring and performing operations on JSON
-           * @param {object} data 
-           * @param {object} map 
-           * @return {array}
-           */
-
-        }, {
-          key: "jsonTransform",
-          value: function jsonTransform(data, map) {
-            var helper = new Helper();
-            return {
-              defaultOrNull: function defaultOrNull(key) {
-                return key && map.defaults ? map.defaults[key] : null;
-              },
-              getValue: function getValue(obj, key, newKey) {
-                if (typeof obj === 'undefined') {
-                  return;
-                }
-
-                if (key === undefined || key === null || key === '') {
-                  return obj;
-                }
-
-                var value = obj;
-                var keys = null;
-                keys = key.split('.');
-                var i = 0;
-                var l = keys.length;
-
-                for (i; i < l; i++) {
-                  if (typeof value !== "undefined" && keys[i] in value) {
-                    value = value[keys[i]];
-                  } else {
-                    return this.defaultOrNull(newKey);
-                  }
-                }
-
-                return value;
-              },
-              setValue: function setValue(obj, key, newValue) {
-                if (typeof obj === "undefined" || key == '' || key == undefined || key == null) {
-                  return;
-                }
-
-                var keys = key.split('.');
-                var target = obj;
-                var i = 0;
-                var l = keys.length;
-
-                for (i; i < l; i++) {
-                  if (i === keys.length - 1) {
-                    target[keys[i]] = newValue;
-                    return;
-                  }
-
-                  if (keys[i] in target) {
-                    target = target[keys[i]];
-                  } else {
-                    return;
-                  }
-                }
-              },
-              getList: function getList() {
-                return this.getValue(data, map.list);
-              },
-              make: function make(context) {
-                var value = this.getValue(data, map.list);
-                var normalized = [];
-
-                if (!helper.isEmptyObject(value)) {
-                  var list = this.getList();
-                  normalized = map.item ? list.map(this.iterator.bind(this, map.item)) : list;
-                  normalized = this.operate.bind(this, normalized)(context);
-                  normalized = this.each(normalized, context);
-                  normalized = this.removeAll(normalized);
-                }
-
-                return normalized;
-              },
-              removeAll: function removeAll(data) {
-                if (Array.isArray(map.remove)) {
-                  helper.foreach(data, this.remove);
-                }
-
-                return data;
-              },
-              remove: function remove(item) {
-                var i = 0;
-                var l = map.remove.length;
-
-                for (i; i < l; i++) {
-                  delete item[map.remove[i]];
-                }
-
-                return item;
-              },
-              operate: function operate(data, context) {
-                if (map.operate) {
-                  helper.foreach(map.operate, function (method) {
-                    data = data.map(function (item) {
-                      var fn;
-
-                      if ('string' === typeof method.run) {
-                        fn = eval(method.run);
-                      } else {
-                        fn = method.run;
-                      }
-
-                      this.setValue(item, method.on, fn(this.getValue(item, method.on), context));
-                      return item;
-                    }.bind(this));
-                  }.bind(this));
-                }
-
-                return data;
-              },
-              each: function each(data, context) {
-                if (map.each) {
-                  data.forEach(function (value, index, collection) {
-                    return map.each(value, index, collection, context);
-                  });
-                }
-
-                return data;
-              },
-              iterator: function iterator(map, item) {
-                var obj = {}; //to support simple arrays with recursion
-
-                if (typeof map === 'string') {
-                  return this.getValue(item, map);
-                }
-
-                helper.foreach(map, function (oldkey, newkey) {
-                  if (typeof oldkey === 'string' && oldkey.length > 0) {
-                    obj[newkey] = this.getValue(item, oldkey, newkey);
-                  } else if (Array.isArray(oldkey)) {
-                    var array = oldkey.map(function (item, map) {
-                      return this.iterator(map, item);
-                    }.bind(this, item)); //need to swap arguments for bind
-
-                    obj[newkey] = array;
-                  } else if (_typeof(oldkey) === 'object') {
-                    var bound = this.iterator.bind(this, oldkey, item);
-                    obj[newkey] = bound();
-                  } else {
-                    obj[newkey] = "";
-                  }
-                }.bind(this));
-                return obj;
-              }
-            };
-          }
-        }]);
-
-        return Helper;
-      }();
+      var operator = require('./operator');
       /**
        * FlyJson class
        */
@@ -526,25 +142,30 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             };
             reverse = !reverse ? 1 : -1;
             return function (a, b) {
-              return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+              a = key(a);
+              b = key(b);
+              return reverse * ((a > b) - (b > a));
             };
           }
           /**
            * Find disctint in all objects
            * @param {array object} source     this is an array objects
-           * @param {object} obj              this is the single current object 
+           * @param {object} obj              this is the single current object
            * @return {boolean}
            */
 
         }, {
           key: "_findDistinct",
           value: function _findDistinct(source, obj) {
+            var _this2 = this;
+
             var found = false;
 
-            for (var i = 0; i < source.length; i++) {
+            var _loop = function _loop(i) {
               var count = Object.keys(obj).length;
               var recount = 0;
-              this.foreach(obj, function (v, k) {
+
+              _this2.foreach(obj, function (v, k) {
                 if (source[i][k] === v) {
                   recount++;
                 }
@@ -553,6 +174,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               if (count === recount) {
                 found = true;
               }
+            };
+
+            for (var i = 0; i < source.length; i++) {
+              _loop(i);
             }
 
             return found;
@@ -560,8 +185,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           /**
            * Set Mode for clone array
            * Note: Use this before set(data)
-           * 
-           * @param {string} name     Mode name shallow | deep 
+           *
+           * @param {string} name     Mode name shallow | deep
            */
 
         }, {
@@ -573,7 +198,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           /**
            * Set json array as data table
            * @param {array} data      this is json data
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -591,15 +216,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
             return this;
           }
-        }, {
-          key: "insert",
-          value:
           /**
            * Insert new data into data table
            * @param {object} obj      this is the object data
            * @return {this}
            */
-          function insert(obj) {
+
+        }, {
+          key: "insert",
+          value: function insert(obj) {
             if (this.isObject(obj) && !this.isEmptyObject(obj)) {
               this.data1.push(obj);
             } else {
@@ -635,7 +260,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
           /**
            * Update single data in data table
-           * @param {string} key      this is the key name 
+           * @param {string} key      this is the key name
            * @param {*} value         this is the value of key name
            * @param {object} obj      this is the new value to replace all old data
            * @return {this}
@@ -685,7 +310,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             var l = this.data1.length;
             var len = data.length;
             var newdata = [];
-            var result = undefined;
+            var result;
 
             for (var i = 0; i < l; i++) {
               result = false;
@@ -707,7 +332,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
           /**
            * Modify single data in data table
-           * @param {string} key      this is the key name 
+           * @param {string} key      this is the key name
            * @param {*} value         this is the value of key name
            * @param {object} obj      this is the new value to add or modify old data
            * @return {this}
@@ -725,7 +350,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             }
 
             var l = this.data1.length;
-            var data = undefined;
+            var data;
 
             for (var i = 0; i < l; i++) {
               if (this.data1[i][key] === value) {
@@ -756,15 +381,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               throw new Error('Data to modify must be an array object and not empty');
             }
 
-            if (this.mode === "shallow") {
+            if (this.mode === 'shallow') {
               throw new Error('Shallow mode is not allowed for modifyMany!');
             }
 
             var l = this.data1.length;
             var len = data.length;
             var newdata = [];
-            var old,
-                result = undefined;
+            var old;
+            var result;
 
             for (var i = 0; i < l; i++) {
               result = false;
@@ -789,7 +414,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * Delete single data in data table
            * @param {string} key      this is the key name
            * @param {*} value         this is the value of key name
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -814,7 +439,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * Delete many data in data table
            * @param {string} key      this is the key name
            * @param {array} data      this is the array of key value to be deleted
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -849,7 +474,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
           /**
            * Filter data by select name key
-           * @param {array} key 
+           * @param {array} key
            * @return {this}
            */
 
@@ -858,7 +483,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           value: function select(key) {
             if (!this.isEmpty(key) && this.isArray(key) && !this.isEmptyArray(key)) {
               var newdata = [];
-              var res = undefined;
+              var res;
               var l = this.data1.length;
               var dl = key.length;
 
@@ -866,7 +491,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 res = {};
 
                 for (var x = 0; x < dl; x++) {
-                  if (this.data1[i][key[x]] != undefined) {
+                  if (this.data1[i][key[x]] !== undefined) {
                     res[key[x]] = this.data1[i][key[x]];
                   }
                 }
@@ -881,25 +506,30 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
           /**
            * Filter data by where
-           * @param  {*} args 
+           * @param  {*} args
            * @return {this}
            */
 
         }, {
           key: "where",
           value: function where() {
-            if (!this.isEmpty(arguments.length <= 0 ? undefined : arguments[0]) && this.isString(arguments.length <= 0 ? undefined : arguments[0]) && (arguments.length <= 1 ? undefined : arguments[1]) != undefined) {
+            var result = [];
+
+            if (!this.isEmpty(arguments.length <= 0 ? undefined : arguments[0]) && this.isString(arguments.length <= 0 ? undefined : arguments[0]) && (arguments.length <= 1 ? undefined : arguments[1]) !== undefined) {
+              var a;
+              var b;
               var c = true;
+              var mid;
 
               if (arguments.length > 2) {
-                var mid = arguments.length <= 1 ? undefined : arguments[1];
-                var a = arguments.length <= 0 ? undefined : arguments[0];
-                var b = arguments.length <= 2 ? undefined : arguments[2];
+                mid = arguments.length <= 1 ? undefined : arguments[1];
+                a = arguments.length <= 0 ? undefined : arguments[0];
+                b = arguments.length <= 2 ? undefined : arguments[2];
                 if (!this.isEmpty(arguments.length <= 3 ? undefined : arguments[3])) c = arguments.length <= 3 ? undefined : arguments[3];
               } else {
-                var mid = '===';
-                var a = arguments.length <= 0 ? undefined : arguments[0];
-                var b = arguments.length <= 1 ? undefined : arguments[1];
+                mid = '===';
+                a = arguments.length <= 0 ? undefined : arguments[0];
+                b = arguments.length <= 1 ? undefined : arguments[1];
                 c = true;
               }
 
@@ -907,16 +537,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               var search = _defineProperty({}, a, b);
 
-              var v,
-                  s = undefined;
-              var self = this;
+              var v;
+              var s;
+
+              var _self = this;
+
               var data = this.data1.filter(function (o) {
                 return Object.keys(search).every(function (k) {
                   v = o[k];
                   s = search[k];
 
                   if (c === false && mid !== 'regex') {
-                    if (!self.isObject(o[k])) {
+                    if (!_self.isObject(o[k])) {
                       v = o[k] ? o[k].toString().toLowerCase() : o[k];
                     }
 
@@ -925,16 +557,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
                   switch (mid) {
                     case '=':
-                      return v == s;
+                      return operator.unstrict(mid, v, s);
 
                     case '!==':
                       return v !== s;
 
                     case '==':
-                      return v == s;
+                      return operator.unstrict(mid, v, s);
 
                     case '!=':
-                      return v != s;
+                      return operator.unstrict(mid, v, s);
 
                     case '>':
                       return v > s;
@@ -949,20 +581,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                       return v <= s;
 
                     case 'in':
-                      if (self.isString(v)) {
+                      if (_self.isString(v)) {
                         return v.indexOf(s) !== -1;
                       }
 
-                      var result = [];
+                      result = [];
 
                       if (v) {
-                        self.foreach(v, function (value) {
+                        _self.foreach(v, function (value) {
                           if (c) {
                             if (value === s) {
                               result.push(value);
                             }
                           } else {
-                            if (self.isString(value)) {
+                            if (_self.isString(value)) {
                               value = value.toLowerCase();
                             }
 
@@ -976,28 +608,29 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                       return result.length > 0;
 
                     case 'notin':
-                      if (self.isString(v)) {
+                      if (_self.isString(v)) {
                         return v.indexOf(s) === -1;
                       }
 
-                      var result = [];
+                      result = [];
 
                       if (v && v.length) {
-                        self.foreach(v, function (value) {
+                        _self.foreach(v, function (value) {
                           if (value !== s) {
                             result.push(value);
                           }
                         });
+
                         return result.length === v.length;
                       } else {
-                        if (self.isObject(v)) {
-                          self.foreach(v, function (value) {
+                        if (_self.isObject(v)) {
+                          _self.foreach(v, function (value) {
                             if (c) {
                               if (value !== s) {
                                 result.push(value);
                               }
                             } else {
-                              if (self.isString(value)) {
+                              if (_self.isString(value)) {
                                 value = value.toLowerCase();
                               }
 
@@ -1006,6 +639,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                               }
                             }
                           });
+
                           return result.length === Object.keys(v).length;
                         }
 
@@ -1155,7 +789,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * Joining two data table
            * @param {string} name     this is the name key for joined data
            * @param {array} data      this is the array of data table
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -1251,7 +885,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                       }
                     }
 
-                    result.push(newdata);
+                    return result.push(newdata);
                   });
                   self.scope = '';
                   self.data1 = result;
@@ -1272,14 +906,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * @param {string} name     this is the name key
            * @param {bool} desc       this is the sort order
            * @param {primer} primer   this is the primer function
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
           key: "orderBy",
-          value: function orderBy(name) {
-            var desc = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-            var primer = arguments.length > 2 ? arguments[2] : undefined;
+          value: function orderBy(name, desc, primer) {
+            desc = desc === undefined ? false : desc;
 
             if (!this.isEmpty(name) && this.isString(name) && this.isBoolean(desc)) {
               this.data1.sort(this._sortBy(name, desc, primer));
@@ -1289,9 +922,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
           /**
            * Group detail data by key name
-           * @param {string} name 
+           * @param {string} name
            * @param {string} groupName
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -1325,9 +958,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
           /**
            * Group data by name or with sum by field name
-           * @param {string} name 
+           * @param {string} name
            * @param {array} sumField
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -1354,12 +987,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                   res[obj[name]][sumField[i]] += obj[sumField[i]];
                 }
 
-                res[obj[name]]['item_count'] += 1;
+                res[obj[name]].item_count += 1;
               } // average
 
 
-              for (var i = 0; i < l; i++) {
-                res[obj[name]]['average_' + sumField[i]] = res[obj[name]][sumField[i]] / res[obj[name]]['item_count'];
+              for (var _i2 = 0; _i2 < l; _i2++) {
+                res[obj[name]]['average_' + sumField[_i2]] = res[obj[name]][sumField[_i2]] / res[obj[name]].item_count;
               }
 
               return res;
@@ -1372,7 +1005,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           /**
            * Skip data by size
            * @param {string|integer} size
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -1387,7 +1020,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           /**
            * Take data by size
            * @param {string|integer} size
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -1404,27 +1037,27 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             return this;
           }
           /**
-           * Paginate data by page and page_size
+           * Paginate data by page and pageSize
            * @param {string|integer} size
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
           key: "paginate",
-          value: function paginate(page, page_size) {
-            if (!this.isEmpty(page) && !this.isEmpty(page_size)) {
+          value: function paginate(page, pageSize) {
+            if (!this.isEmpty(page) && !this.isEmpty(pageSize)) {
               page = parseInt(page);
-              page_size = parseInt(page_size);
+              pageSize = parseInt(pageSize);
 
-              if (this.isInteger(page) && this.isInteger(page_size)) {
+              if (this.isInteger(page) && this.isInteger(pageSize)) {
                 var count = this.data1.length;
                 --page; // because pages logically start with 1, but technically with 0
 
-                this.data1 = this.data1.slice(page * page_size, (page + 1) * page_size);
+                this.data1 = this.data1.slice(page * pageSize, (page + 1) * pageSize);
                 this.metadata = {
                   page: page + 1,
-                  page_size: page_size,
-                  total_page: Math.ceil(count / page_size),
+                  page_size: pageSize,
+                  total_page: Math.ceil(count / pageSize),
                   total_records: count
                 };
               }
@@ -1435,7 +1068,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           /**
            * Make asynchronous process with Promise
            * @param {*} fn
-           * @return {this} 
+           * @return {this}
            */
 
         }, {
@@ -1467,6 +1100,438 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }(Helper);
 
       module.exports = FlyJson;
+    }, {
+      "./helper": 2,
+      "./operator": 3
+    }],
+    2: [function (require, module, exports) {
+      // The reason we allow eval because for custom function at json transform feature.
+
+      /* eslint no-eval:0 */
+      'use strict';
+      /**
+       * Helper class
+       */
+
+      var Helper = /*#__PURE__*/function () {
+        function Helper() {
+          _classCallCheck(this, Helper);
+        }
+
+        _createClass(Helper, [{
+          key: "isString",
+          value:
+          /**
+           * Determine value is string
+           * @param {*} value
+           * @return {bool}
+           */
+          function isString(value) {
+            return typeof value === 'string' || value instanceof String;
+          }
+          /**
+           * Determine value is integer
+           * @param {*} value
+           * @return {bool}
+           */
+
+        }, {
+          key: "isInteger",
+          value: function isInteger(value) {
+            return Number.isInteger(value);
+          }
+          /**
+           * Determine value is boolean
+           * @param {*} value
+           * @return {bool}
+           */
+
+        }, {
+          key: "isBoolean",
+          value: function isBoolean(value) {
+            return typeof value === 'boolean' || _typeof(value) === 'object' && value !== null && typeof value.valueOf() === 'boolean';
+          }
+          /**
+           * Determine value is array
+           * @param {*} value
+           * @return {bool}
+           */
+
+        }, {
+          key: "isArray",
+          value: function isArray(value) {
+            if (value === undefined || value === '') {
+              return false;
+            }
+
+            return value && value !== '' && _typeof(value) === 'object' && value.constructor === Array;
+          }
+          /**
+           * Determine value is object
+           * @param {*} value
+           * @return {bool}
+           */
+
+        }, {
+          key: "isObject",
+          value: function isObject(value) {
+            if (value === undefined || value === '') {
+              return false;
+            }
+
+            return value && _typeof(value) === 'object' && value.constructor === Object;
+          }
+          /**
+           * Determine value is empty
+           * @param {*} value
+           * @return {bool}
+           */
+
+        }, {
+          key: "isEmpty",
+          value: function isEmpty(value) {
+            return value === undefined || value === null || value === '';
+          }
+          /**
+           * Determine value is empty and array
+           * @param {*} value
+           * @return {bool}
+           */
+
+        }, {
+          key: "isEmptyArray",
+          value: function isEmptyArray(value) {
+            return value === undefined || value === null || value.length === 0;
+          }
+          /**
+           * Determine object value is empty
+           * @param {*} value
+           * @return {bool}
+           */
+
+        }, {
+          key: "isEmptyObject",
+          value: function isEmptyObject(value) {
+            return value === undefined || value === null || Object.keys(value).length === 0 && value.constructor === Object;
+          }
+          /**
+           * Foreach for an array or object
+           * @param {array|object} data
+           * @param {callback} callback
+           */
+
+        }, {
+          key: "foreach",
+          value: function foreach(data, callback) {
+            if (this.isObject(data)) {
+              var keys = Object.keys(data);
+              var values = Object.keys(data).map(function (e) {
+                return data[e];
+              });
+              var i = 0;
+              var l = keys.length;
+
+              for (i; i < l; i++) {
+                callback(values[i], keys[i]);
+              }
+            } else {
+              if (Array.isArray(data)) {
+                var _i3 = 0;
+                var _l = data.length;
+
+                for (_i3; _i3 < _l; _i3++) {
+                  callback(data[_i3], _i3);
+                }
+              } else {
+                throw new Error('Failed to iteration. Data is not an array or object.');
+              }
+            }
+          }
+          /**
+           * Blocking test for asynchronous
+           * @param {integer} ms      this is miliseconds value for event block
+           * @return {int}
+           */
+
+        }, {
+          key: "blockingTest",
+          value: function blockingTest() {
+            var ms = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
+            var start = Date.now();
+            var time = start + ms;
+
+            while (Date.now() < time) {// empty progress
+            }
+
+            return start;
+          }
+          /**
+           * Safe JSON.stringify to avoid type error converting circular structure to json
+           * @param {object} value        this is the json object
+           * @param {*} space
+           * @return {string}
+           */
+
+        }, {
+          key: "safeStringify",
+          value: function safeStringify(value, space) {
+            var cache = [];
+            var output = JSON.stringify(value, function (key, value) {
+              // filters vue.js internal properties
+              if (key && key.length > 0 && (key.charAt(0) === '$' || key.charAt(0) === '_')) {
+                return;
+              }
+
+              if (_typeof(value) === 'object' && value !== null) {
+                if (cache.indexOf(value) !== -1) {
+                  // Circular reference found, discard key
+                  return;
+                } // Store value in our collection
+
+
+                cache.push(value);
+              }
+
+              return value;
+            }, space);
+            cache = null; // Enable garbage collection
+
+            return output;
+          }
+          /**
+           * Shallow clone an array
+           * @param {array} array
+           * @return {array}
+           */
+
+        }, {
+          key: "shallowClone",
+          value: function shallowClone(array) {
+            return _toConsumableArray(array);
+          }
+          /**
+           * Very safe deep clone an array
+           * @param {array} array
+           * @return {array}
+           */
+
+        }, {
+          key: "deepClone",
+          value: function deepClone(array) {
+            var clone, i;
+            if (_typeof(array) !== 'object' || !array) return array;
+
+            if (Object.prototype.toString.apply(array) === '[object Array]') {
+              clone = [];
+              var len = array.length;
+
+              for (i = 0; i < len; i++) {
+                clone[i] = this.deepClone(array[i]);
+              }
+
+              return clone;
+            }
+
+            clone = {};
+
+            for (i in array) {
+              if (Object.prototype.hasOwnProperty.call(array, i)) clone[i] = this.deepClone(array[i]);
+            }
+
+            return clone;
+          }
+          /**
+           * jsonTransform for restructuring and performing operations on JSON
+           * @param {object} data
+           * @param {object} map
+           * @return {array}
+           */
+
+        }, {
+          key: "jsonTransform",
+          value: function jsonTransform(data, map) {
+            var helper = new Helper();
+            return {
+              defaultOrNull: function defaultOrNull(key) {
+                return key && map.defaults ? map.defaults[key] : null;
+              },
+              getValue: function getValue(obj, key, newKey) {
+                if (typeof obj === 'undefined') {
+                  return;
+                }
+
+                if (key === undefined || key === null || key === '') {
+                  return obj;
+                }
+
+                var value = obj;
+                var keys = null;
+                keys = key.split('.');
+                var i = 0;
+                var l = keys.length;
+
+                for (i; i < l; i++) {
+                  if (typeof value !== 'undefined' && keys[i] in value) {
+                    value = value[keys[i]];
+                  } else {
+                    return this.defaultOrNull(newKey);
+                  }
+                }
+
+                return value;
+              },
+              setValue: function setValue(obj, key, newValue) {
+                if (typeof obj === 'undefined' || key === '' || key === undefined || key == null) {
+                  return;
+                }
+
+                var keys = key.split('.');
+                var target = obj;
+                var i = 0;
+                var l = keys.length;
+
+                for (i; i < l; i++) {
+                  if (i === keys.length - 1) {
+                    target[keys[i]] = newValue;
+                    return;
+                  }
+
+                  if (keys[i] in target) {
+                    target = target[keys[i]];
+                  } else {
+                    return;
+                  }
+                }
+              },
+              getList: function getList() {
+                return this.getValue(data, map.list);
+              },
+              make: function make(context) {
+                var value = this.getValue(data, map.list);
+                var normalized = [];
+
+                if (!helper.isEmptyObject(value)) {
+                  var list = this.getList();
+                  normalized = map.item ? list.map(this.iterator.bind(this, map.item)) : list;
+                  normalized = this.operate.bind(this, normalized)(context);
+                  normalized = this.each(normalized, context);
+                  normalized = this.removeAll(normalized);
+                }
+
+                return normalized;
+              },
+              removeAll: function removeAll(data) {
+                if (Array.isArray(map.remove)) {
+                  helper.foreach(data, this.remove);
+                }
+
+                return data;
+              },
+              remove: function remove(item) {
+                var i = 0;
+                var l = map.remove.length;
+
+                for (i; i < l; i++) {
+                  delete item[map.remove[i]];
+                }
+
+                return item;
+              },
+              operate: function operate(data, context) {
+                if (map.operate) {
+                  helper.foreach(map.operate, function (method) {
+                    data = data.map(function (item) {
+                      var fn;
+
+                      if (typeof method.run === 'string') {
+                        fn = eval(method.run);
+                      } else {
+                        fn = method.run;
+                      }
+
+                      this.setValue(item, method.on, fn(this.getValue(item, method.on), context));
+                      return item;
+                    }.bind(this));
+                  }.bind(this));
+                }
+
+                return data;
+              },
+              each: function each(data, context) {
+                if (map.each) {
+                  data.forEach(function (value, index, collection) {
+                    return map.each(value, index, collection, context);
+                  });
+                }
+
+                return data;
+              },
+              iterator: function iterator(map, item) {
+                var obj = {}; // to support simple arrays with recursion
+
+                if (typeof map === 'string') {
+                  return this.getValue(item, map);
+                }
+
+                helper.foreach(map, function (oldkey, newkey) {
+                  if (typeof oldkey === 'string' && oldkey.length > 0) {
+                    obj[newkey] = this.getValue(item, oldkey, newkey);
+                  } else if (Array.isArray(oldkey)) {
+                    var array = oldkey.map(function (item, map) {
+                      return this.iterator(map, item);
+                    }.bind(this, item)); // need to swap arguments for bind
+
+                    obj[newkey] = array;
+                  } else if (_typeof(oldkey) === 'object') {
+                    var bound = this.iterator.bind(this, oldkey, item);
+                    obj[newkey] = bound();
+                  } else {
+                    obj[newkey] = '';
+                  }
+                }.bind(this));
+                return obj;
+              }
+            };
+          }
+        }]);
+
+        return Helper;
+      }();
+
+      module.exports = Helper;
+    }, {}],
+    3: [function (require, module, exports) {
+      // The reason we disable equal strict because we want a no strict for comparisons operator.
+
+      /* eslint eqeqeq:0 */
+      'use strict';
+      /**
+       * Unstrict Operator
+       * @param {string} operator
+       * @param {*} v     this is the property value
+       * @param {*} s     this is the search value
+       * @return {bool}
+       */
+
+      function unstrict(operator, v, s) {
+        switch (operator) {
+          case '=':
+            return v == s;
+
+          case '==':
+            return v == s;
+
+          case '!=':
+            return v != s;
+
+          default:
+            throw new Error('Comparisons operator is not available!');
+        }
+      }
+
+      module.exports = {
+        unstrict: unstrict
+      };
     }, {}]
   }, {}, [1])(1);
 });
