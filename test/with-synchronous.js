@@ -710,139 +710,139 @@ describe('normal / synchronous Query test', function () {
     assert.strictEqual(data[0].category.name, 'Tutorial');
   });
 
-  it('select + where (notin array)', function () {
+  it('select + where (not in array)', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data5)
       .select(['id', 'title', 'tags'])
-      .where('tags', 'NOTIN', 'News')
+      .where('tags', 'NOT IN', 'News')
       .exec();
     assert.strictEqual(data[0].id, 2);
     assert.strictEqual(data.length, 1);
   });
 
-  it('select + where (notin array) with null array', function () {
+  it('select + where (not in array) with null array', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data9)
       .select(['id', 'title', 'tags'])
-      .where('tags', 'NOTIN', 'News')
+      .where('tags', 'NOT IN', 'News')
       .exec();
     assert.strictEqual(data[0].id, 2);
     assert.strictEqual(data.length, 1);
   });
 
-  it('select + where (notin array) with null array case insensitive', function () {
+  it('select + where (not in array) with null array case insensitive', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data9)
       .select(['id', 'title', 'tags'])
-      .where('tags', 'NOTIN', 'News', false)
+      .where('tags', 'NOT IN', 'News', false)
       .exec();
     assert.strictEqual(data[0].id, 2);
     assert.strictEqual(data.length, 1);
   });
 
-  it('select + where (notin array) [shallow]', function () {
+  it('select + where (not in array) [shallow]', function () {
     const nosql = new FlyJson();
     const data = nosql.setMode('shallow').set(data5)
       .select(['id', 'title', 'tags'])
-      .where('tags', 'NOTIN', 'News')
+      .where('tags', 'NOT IN', 'News')
       .exec();
     assert.strictEqual(data[0].id, 2);
     assert.strictEqual(data.length, 1);
   });
 
-  it('select + where (notin array case sensitive)', function () {
+  it('select + where (not in array case sensitive)', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data5)
       .select(['id', 'title', 'tags'])
-      .where('tags', 'NOTIN', 'news')
+      .where('tags', 'NOT IN', 'news')
       .exec();
     assert.strictEqual(data.length, 3);
   });
 
-  it('select + where (notin array case insensitive)', function () {
+  it('select + where (not in array case insensitive)', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data5)
       .select(['id', 'title', 'tags'])
-      .where('tags', 'NOTIN', 'news', false)
+      .where('tags', 'NOT IN', 'news', false)
       .exec();
     assert.strictEqual(data[0].id, 2);
     assert.strictEqual(data.length, 1);
   });
 
-  it('select + where (notin array case insensitive) [shallow]', function () {
+  it('select + where (not in array case insensitive) [shallow]', function () {
     const nosql = new FlyJson();
     const data = nosql.setMode('shallow').set(data5)
       .select(['id', 'title', 'tags'])
-      .where('tags', 'NOTIN', 'news', false)
+      .where('tags', 'NOT IN', 'news', false)
       .exec();
     assert.strictEqual(data[0].id, 2);
     assert.strictEqual(data.length, 1);
   });
 
-  it('select + where (notin object)', function () {
+  it('select + where (not in object)', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data6)
       .select(['id', 'title', 'category'])
-      .where('category', 'NOTIN', 'Tutorial')
+      .where('category', 'NOT IN', 'Tutorial')
       .exec();
     assert.strictEqual(data[0].id, 1);
     assert.strictEqual(data[1].id, 3);
   });
 
-  it('select + where (notin object) with null object', function () {
+  it('select + where (not in object) with null object', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data10)
       .select(['id', 'title', 'category'])
-      .where('category', 'NOTIN', 'Tutorial')
+      .where('category', 'NOT IN', 'Tutorial')
       .exec();
     assert.strictEqual(data[0].id, 1);
     assert.strictEqual(data[1].id, 3);
   });
 
-  it('select + where (notin object) with null object case insensitive', function () {
+  it('select + where (not in object) with null object case insensitive', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data10)
       .select(['id', 'title', 'category'])
-      .where('category', 'NOTIN', 'Tutorial', false)
+      .where('category', 'NOT IN', 'Tutorial', false)
       .exec();
     assert.strictEqual(data[0].id, 1);
     assert.strictEqual(data[1].id, 3);
   });
 
-  it('select + where (notin object) [shallow]', function () {
+  it('select + where (not in object) [shallow]', function () {
     const nosql = new FlyJson();
     const data = nosql.setMode('shallow').set(data6)
       .select(['id', 'title', 'category'])
-      .where('category', 'NOTIN', 'Tutorial')
+      .where('category', 'NOT IN', 'Tutorial')
       .exec();
     assert.strictEqual(data[0].id, 1);
     assert.strictEqual(data[1].id, 3);
   });
 
-  it('select + where (notin object case sensitive)', function () {
+  it('select + where (not in object case sensitive)', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data6)
       .select(['id', 'title', 'category'])
-      .where('category', 'NOTIN', 'tutorial')
+      .where('category', 'NOT IN', 'tutorial')
       .exec();
     assert.strictEqual(data.length, 3);
   });
 
-  it('select + where (notin object case insensitive)', function () {
+  it('select + where (not in object case insensitive)', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data6)
       .select(['id', 'title', 'category'])
-      .where('category', 'NOTIN', 'tutorial', false)
+      .where('category', 'NOT IN', 'tutorial', false)
       .exec();
     assert.strictEqual(data[0].id, 1);
     assert.strictEqual(data[1].id, 3);
   });
 
-  it('select + where (notin object case insensitive) [shallow]', function () {
+  it('select + where (not in object case insensitive) [shallow]', function () {
     const nosql = new FlyJson();
     const data = nosql.setMode('shallow').set(data6)
       .select(['id', 'title', 'category'])
-      .where('category', 'NOTIN', 'tutorial', false)
+      .where('category', 'NOT IN', 'tutorial', false)
       .exec();
     assert.strictEqual(data[0].id, 1);
     assert.strictEqual(data[1].id, 3);

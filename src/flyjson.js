@@ -1,4 +1,4 @@
-/*! FlyJson v1.13.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.14.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
 'use strict';
 
@@ -401,7 +401,7 @@ class FlyJson extends Helper {
                 });
               }
               return (result.length > 0);
-            case 'notin':
+            case 'not in':
               if (self.isString(v)) {
                 return (v.indexOf(s) === -1);
               }

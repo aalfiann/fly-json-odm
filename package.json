@@ -1,6 +1,6 @@
 {
   "name": "fly-json-odm",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "description": "An Object Document Mapper to handle JSON on the fly for NodeJS or Browser",
   "main": "src/flyjson.js",
   "scripts": {
@@ -39,9 +39,9 @@
   },
   "homepage": "https://github.com/aalfiann/fly-json-odm#readme",
   "devDependencies": {
-    "@babel/cli": "^7.12.13",
-    "@babel/core": "^7.12.13",
-    "@babel/preset-env": "^7.12.13",
+    "@babel/cli": "^7.12.16",
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
     "browserify": "^17.0.0",
     "coveralls": "^3.0.6",
     "mocha": "^6.2.1",
