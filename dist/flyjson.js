@@ -80,7 +80,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.14.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      /*! FlyJson v1.16.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
       'use strict';
 
       var Helper = require('./helper');
@@ -804,8 +804,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
           /**
            * Merge two data table
-           * @param {string} a    this is indentifier key name of data table 1
-           * @param {string} b    this is indentifier key name of data table 2
+           * @param {string} a    this is identifier key name of data table 1
+           * @param {string} b    this is identifier key name of data table 2
            * @return {this}
            */
 
@@ -824,10 +824,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                     return Object.assign(item, indexB[item[a]]);
                   });
                 } else {
-                  throw new Error('Unique indentifier key for table 2 is required.');
+                  throw new Error('Unique identifier key for table 2 is required.');
                 }
               } else {
-                throw new Error('Unique indentifier key for table 1 is required.');
+                throw new Error('Unique identifier key for table 1 is required.');
               }
             } else {
               throw new Error('You should join first before doing merge.');
@@ -836,16 +836,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             return this;
           }
           /**
-           * Set indentifier to joining two data table
-           * @param {string} a    this is indentifier key name of data table 1
-           * @param {string} b    this is indentifier key name of data table 2
+           * Set identifier to joining two data table
+           * @param {string} a            this is identifier key name of data table 1
+           * @param {string} b            this is identifier key name of data table 2
+           * @param {bool} nested         this will make the joined data nested or as array
+           * @param {bool} caseSensitive  this will filter the joined data (only work if nested is false)
            * @return {this}
            */
 
         }, {
           key: "on",
-          value: function on(a, b) {
+          value: function on(a, b, nested, caseSensitive) {
             var self = this;
+            nested = nested === undefined ? true : nested;
+            caseSensitive = caseSensitive === undefined ? true : caseSensitive;
 
             if (self.scope === 'join') {
               if (!this.isEmpty(a) && this.isString(a)) {
@@ -860,17 +864,50 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                     var arr = Object.keys(self.data1[index]);
                     var l = arr.length;
 
-                    for (var i = 0; i < l; i++) {
+                    var _loop2 = function _loop2(i) {
                       if (arr[i] === a) {
                         if (self.name === arr[i]) {
-                          newdata[arr[i]] = indexB[self.data1[index][arr[i]]];
+                          if (nested) {
+                            newdata[arr[i]] = indexB[self.data1[index][arr[i]]];
+                          } else {
+                            newdata[arr[i]] = self.data2.filter(function (item) {
+                              if (caseSensitive) {
+                                return item[b] === value[arr[i]];
+                              } else {
+                                if (self.isString(item[b]) && self.isString(value[arr[i]])) {
+                                  return item[b].toLowerCase() === value[arr[i]].toLowerCase();
+                                }
+
+                                return item[b] === value[arr[i]];
+                              }
+                            });
+                          }
                         } else {
-                          newdata[self.name] = indexB[self.data1[index][arr[i]]];
+                          if (nested) {
+                            newdata[self.name] = indexB[self.data1[index][arr[i]]];
+                          } else {
+                            newdata[self.name] = self.data2.filter(function (item) {
+                              if (caseSensitive) {
+                                return item[b] === value[arr[i]];
+                              } else {
+                                if (self.isString(item[b]) && self.isString(value[arr[i]])) {
+                                  return item[b].toLowerCase() === value[arr[i]].toLowerCase();
+                                }
+
+                                return item[b] === value[arr[i]];
+                              }
+                            });
+                          }
+
                           newdata[arr[i]] = value[arr[i]];
                         }
                       } else {
                         newdata[arr[i]] = value[arr[i]];
                       }
+                    };
+
+                    for (var i = 0; i < l; i++) {
+                      _loop2(i);
                     }
 
                     return result.push(newdata);
@@ -878,10 +915,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                   self.scope = '';
                   self.data1 = result;
                 } else {
-                  throw new Error('Unique indentifier key for table 2 is required.');
+                  throw new Error('Unique identifier key for table 2 is required.');
                 }
               } else {
-                throw new Error('Unique indentifier key for table 1 is required.');
+                throw new Error('Unique identifier key for table 1 is required.');
               }
             } else {
               throw new Error('You should join first before doing join on.');

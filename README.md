@@ -29,11 +29,11 @@ $ npm install fly-json-odm
 <script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1/dist/flyjson.min.js"></script>
 
 <!-- Get patch fixes within a minor version -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.15/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.16/dist/flyjson.min.js"></script>
 
 <!-- Get a specific version -->
 <!-- Recommended for production sites! -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.15.0/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.16.0/dist/flyjson.min.js"></script>
 ```
 
 ### Usage

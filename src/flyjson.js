@@ -1,4 +1,4 @@
-/*! FlyJson v1.14.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.16.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
 'use strict';
 
@@ -574,8 +574,8 @@ class FlyJson extends Helper {
 
   /**
    * Merge two data table
-   * @param {string} a    this is indentifier key name of data table 1
-   * @param {string} b    this is indentifier key name of data table 2
+   * @param {string} a    this is identifier key name of data table 1
+   * @param {string} b    this is identifier key name of data table 2
    * @return {this}
    */
   merge (a, b) {
@@ -589,10 +589,10 @@ class FlyJson extends Helper {
           this.scope = '';
           this.data1 = this.data1.map(item => Object.assign(item, indexB[item[a]]));
         } else {
-          throw new Error('Unique indentifier key for table 2 is required.');
+          throw new Error('Unique identifier key for table 2 is required.');
         }
       } else {
-        throw new Error('Unique indentifier key for table 1 is required.');
+        throw new Error('Unique identifier key for table 1 is required.');
       }
     } else {
       throw new Error('You should join first before doing merge.');
@@ -601,13 +601,17 @@ class FlyJson extends Helper {
   }
 
   /**
-   * Set indentifier to joining two data table
-   * @param {string} a    this is indentifier key name of data table 1
-   * @param {string} b    this is indentifier key name of data table 2
+   * Set identifier to joining two data table
+   * @param {string} a            this is identifier key name of data table 1
+   * @param {string} b            this is identifier key name of data table 2
+   * @param {bool} nested         this will make the joined data nested or as array
+   * @param {bool} caseSensitive  this will filter the joined data (only work if nested is false)
    * @return {this}
    */
-  on (a, b) {
+  on (a, b, nested, caseSensitive) {
     const self = this;
+    nested = (nested === undefined ? true : nested);
+    caseSensitive = (caseSensitive === undefined ? true : caseSensitive);
     if (self.scope === 'join') {
       if (!this.isEmpty(a) && this.isString(a)) {
         if (!this.isEmpty(b) && this.isString(b)) {
@@ -624,9 +628,35 @@ class FlyJson extends Helper {
             for (let i = 0; i < l; i++) {
               if (arr[i] === a) {
                 if (self.name === arr[i]) {
-                  newdata[arr[i]] = indexB[self.data1[index][arr[i]]];
+                  if (nested) {
+                    newdata[arr[i]] = indexB[self.data1[index][arr[i]]];
+                  } else {
+                    newdata[arr[i]] = self.data2.filter(function (item) {
+                      if (caseSensitive) {
+                        return item[b] === value[arr[i]];
+                      } else {
+                        if (self.isString(item[b]) && self.isString(value[arr[i]])) {
+                          return item[b].toLowerCase() === value[arr[i]].toLowerCase();
+                        }
+                        return item[b] === value[arr[i]];
+                      }
+                    });
+                  }
                 } else {
-                  newdata[self.name] = indexB[self.data1[index][arr[i]]];
+                  if (nested) {
+                    newdata[self.name] = indexB[self.data1[index][arr[i]]];
+                  } else {
+                    newdata[self.name] = self.data2.filter(function (item) {
+                      if (caseSensitive) {
+                        return item[b] === value[arr[i]];
+                      } else {
+                        if (self.isString(item[b]) && self.isString(value[arr[i]])) {
+                          return item[b].toLowerCase() === value[arr[i]].toLowerCase();
+                        }
+                        return item[b] === value[arr[i]];
+                      }
+                    });
+                  }
                   newdata[arr[i]] = value[arr[i]];
                 }
               } else {
@@ -638,10 +668,10 @@ class FlyJson extends Helper {
           self.scope = '';
           self.data1 = result;
         } else {
-          throw new Error('Unique indentifier key for table 2 is required.');
+          throw new Error('Unique identifier key for table 2 is required.');
         }
       } else {
-        throw new Error('Unique indentifier key for table 1 is required.');
+        throw new Error('Unique identifier key for table 1 is required.');
       }
     } else {
       throw new Error('You should join first before doing join on.');

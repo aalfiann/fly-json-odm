@@ -101,6 +101,42 @@ const data10 = [
   { id: 3, title: 'this is my third post', category: { id: 2, name: 'tech' } }
 ];
 
+const data11 = [
+  { name: 'budi', address: 'jakarta' },
+  { name: 'tono', address: 'solo' }
+];
+
+const data12 = [
+  { state: 'kampung tengah', address: 'jakarta' },
+  { state: 'kramat jati', address: 'jakarta' },
+  { state: 'kampung gedong', address: 'Jakarta' },
+  { state: 'manahan', address: 'solo' }
+];
+
+const data13 = [
+  { name: 'budi', group: 1 },
+  { name: 'tono', group: 2 }
+];
+
+const data14 = [
+  { group: 1, state: 'kampung tengah', address: 'jakarta' },
+  { group: 1, state: 'kramat jati', address: 'jakarta' },
+  { group: '1', state: 'kampung gedong', address: 'Jakarta' },
+  { group: 2, state: 'manahan', address: 'solo' }
+];
+
+const data15 = [
+  { id: 1, level: 'medium', group: [{ category: 'Arcade' }] },
+  { id: 3, level: 'hard', group: [] },
+  { id: 5, level: 'easy', group: [{ category: 'Strategy' }] }
+];
+
+const data16 = [
+  { id: 1, level: 'medium', group: { category: 'Arcade' } },
+  { id: 3, level: 'hard', group: {} },
+  { id: 5, level: 'easy', group: { category: 'Strategy' } }
+];
+
 describe('normal / synchronous CRUD test', function () {
   this.timeout(10000);
 
@@ -596,6 +632,32 @@ describe('normal / synchronous Query test', function () {
       .exec();
     assert.strictEqual(data[0].id, 3);
     assert.strictEqual(data[0].tags[0], 'News');
+  });
+
+  it('select + where + remove any value with empty array', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data15)
+      .select(['id', 'level', 'group'])
+      .where('group', 'FUNCTION', function (value) {
+        return !nosql.isEmptyArray(value);
+      })
+      .exec();
+
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 5);
+  });
+
+  it('select + where + remove any value with empty object', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data16)
+      .select(['id', 'level', 'group'])
+      .where('group', 'FUNCTION', function (value) {
+        return !nosql.isEmptyObject(value);
+      })
+      .exec();
+
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 5);
   });
 
   it('select + where (in array) with null array case insensitive', function () {
@@ -1411,6 +1473,50 @@ describe('normal / synchronous Query test', function () {
     const data = nosql.setMode('shallow').set(data1).join('profile', data2).on('user_id', 'id').exec();
     assert.strictEqual(data[0].profile.id, 1);
     assert.strictEqual(data[0].user_id, 1);
+  });
+
+  it('Join two table as array case sensitive', function () {
+    const nosql = new FlyJson();
+    const data1 = nosql.set(data11).join('address', data12).on('address', 'address', false).exec();
+    const data2 = nosql.set(data13).join('group', data14).on('group', 'group', false).exec();
+
+    assert.strictEqual(data1[0].name, 'budi');
+    assert.strictEqual(data1[0].address.length, 2);
+    assert.strictEqual(data2[0].name, 'budi');
+    assert.strictEqual(data2[0].group.length, 2);
+  });
+
+  it('Join two table as array case insensitive', function () {
+    const nosql = new FlyJson();
+    const data1 = nosql.set(data11).join('address', data12).on('address', 'address', false, false).exec();
+    const data2 = nosql.set(data13).join('group', data14).on('group', 'group', false, false).exec();
+
+    assert.strictEqual(data1[0].name, 'budi');
+    assert.strictEqual(data1[0].address.length, 3);
+    assert.strictEqual(data2[0].name, 'budi');
+    assert.strictEqual(data2[0].group.length, 2);
+  });
+
+  it('Join two table as array case sensitive with different parent id', function () {
+    const nosql = new FlyJson();
+    const data1 = nosql.set(data11).join('location', data12).on('address', 'address', false).exec();
+    const data2 = nosql.set(data13).join('location', data14).on('group', 'group', false).exec();
+
+    assert.strictEqual(data1[0].name, 'budi');
+    assert.strictEqual(data1[0].location.length, 2);
+    assert.strictEqual(data2[0].name, 'budi');
+    assert.strictEqual(data2[0].location.length, 2);
+  });
+
+  it('Join two table as array case insensitive with different parent id', function () {
+    const nosql = new FlyJson();
+    const data1 = nosql.set(data11).join('location', data12).on('address', 'address', false, false).exec();
+    const data2 = nosql.set(data13).join('location', data14).on('group', 'group', false, false).exec();
+
+    assert.strictEqual(data1[0].name, 'budi');
+    assert.strictEqual(data1[0].location.length, 3);
+    assert.strictEqual(data2[0].name, 'budi');
+    assert.strictEqual(data2[0].location.length, 2);
   });
 
   it('Join two table with same parent id', function () {
