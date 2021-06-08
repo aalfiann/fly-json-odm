@@ -4,12 +4,12 @@ node_js:
   - "14"
   - "12"
   - "10"
+  - "8"
 env:
   global:
     - NODE_ENV=development
 before_install:
   - export TZ=Asia/Jakarta
-  - npm install -g npm@latest
 install:
   - npm install
 script:
