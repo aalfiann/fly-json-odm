@@ -9,7 +9,6 @@ env:
     - NODE_ENV=development
 before_install:
   - export TZ=Asia/Jakarta
-  - npm install -g npm@latest
 install:
   - npm install
 script:
