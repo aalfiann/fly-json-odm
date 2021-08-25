@@ -58,9 +58,9 @@ const data4 = [
 ];
 
 const data5 = [
-  { id: 1, title: 'this is my first post', tags: ['News', 'nodejs', 'tech', 224] },
-  { id: 2, title: 'this is my second post', tags: ['tutorial', 'linux', 'tech', 234] },
-  { id: 3, title: 'this is my third post', tags: ['News', 'info', 'tech', 244] }
+  { id: 1, title: 'this is my first post', tags: ['News', 'nodejs', 'tech', 224, null, { type: 'hi' }] },
+  { id: 2, title: 'this is my second post', tags: ['tutorial', 'linux', 'tech', 234, null, { type: 'moderate' }] },
+  { id: 3, title: 'this is my third post', tags: ['News', 'info', 'tech', 244, null, { type: 'low' }] }
 ];
 
 const data6 = [
@@ -91,8 +91,8 @@ const data8 = [
 
 const data9 = [
   { id: 1, title: 'this is my first post', tags: null },
-  { id: 2, title: 'this is my second post', tags: ['tutorial', 'linux', 'tech', 234] },
-  { id: 3, title: 'this is my third post', tags: ['News', 'info', 'tech', 244] }
+  { id: 2, title: 'this is my second post', tags: ['tutorial', 'linux', 'tech', 234, null, { type: 'moderate' }] },
+  { id: 3, title: 'this is my third post', tags: ['News', 'info', 'tech', 244, null, { type: 'low' }] }
 ];
 
 const data10 = [
@@ -135,6 +135,12 @@ const data16 = [
   { id: 1, level: 'medium', group: { category: 'Arcade' } },
   { id: 3, level: 'hard', group: {} },
   { id: 5, level: 'easy', group: { category: 'Strategy' } }
+];
+
+const advancedsearch = [
+  { id: 1, level: 'medium', team: [{ name: 'Giant' }, { name: 'suneo' }, { name: 'nobita' }] },
+  { id: 3, level: 'hard', team: [{ name: 'giant2' }, { name: 'shizuka' }, { name: 'nobita' }] },
+  { id: 5, level: 'easy', team: [{ name: 'nobita' }, { name: '2suneo' }] }
 ];
 
 describe('normal / synchronous CRUD test', function () {
@@ -772,6 +778,118 @@ describe('normal / synchronous Query test', function () {
     assert.strictEqual(data[0].category.name, 'Tutorial');
   });
 
+  it('select + where (in like array) with null array case insensitive', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data9)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'IN like', 'New', false)
+      .exec();
+    assert.strictEqual(data[0].id, 3);
+    assert.strictEqual(data[0].tags[0], 'News');
+  });
+
+  it('select + where (in like array) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'IN LIKE', 'New')
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[0].tags[0], 'News');
+    assert.strictEqual(data[1].id, 3);
+    assert.strictEqual(data[1].tags[0], 'News');
+  });
+
+  it('select + where (in like array case insensitive)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'IN LIKE', 'new', false)
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[0].tags[0], 'News');
+    assert.strictEqual(data[1].id, 3);
+    assert.strictEqual(data[1].tags[0], 'News');
+  });
+
+  it('select + where (in like array case insensitive) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'IN LIKE', 'new', false)
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[0].tags[0], 'News');
+    assert.strictEqual(data[1].id, 3);
+    assert.strictEqual(data[1].tags[0], 'News');
+  });
+
+  it('select + where (in like object)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'IN LIKE', 'Tutor')
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data[0].category.id, 4);
+    assert.strictEqual(data[0].category.name, 'Tutorial');
+  });
+
+  it('select + where (in like object) with null object', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data10)
+      .select(['id', 'title', 'category'])
+      .where('category', 'IN LIKE', 'Tutor')
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data[0].category.id, 4);
+    assert.strictEqual(data[0].category.name, 'Tutorial');
+  });
+
+  it('select + where (in like object) with null object case insenstive', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data10)
+      .select(['id', 'title', 'category'])
+      .where('category', 'IN LIKE', 'tutor', false)
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data[0].category.id, 4);
+    assert.strictEqual(data[0].category.name, 'Tutorial');
+  });
+
+  it('select + where (in like object) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'IN LIKE', 'Tutor')
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data[0].category.id, 4);
+    assert.strictEqual(data[0].category.name, 'Tutorial');
+  });
+
+  it('select + where (in like object case insensitive)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'IN LIKE', 'tutor', false)
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data[0].category.id, 4);
+    assert.strictEqual(data[0].category.name, 'Tutorial');
+  });
+
+  it('select + where (in like object case insensitive) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'IN LIKE', 'tutor', false)
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data[0].category.id, 4);
+    assert.strictEqual(data[0].category.name, 'Tutorial');
+  });
+
   it('select + where (not in array)', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data5)
@@ -908,6 +1026,165 @@ describe('normal / synchronous Query test', function () {
       .exec();
     assert.strictEqual(data[0].id, 1);
     assert.strictEqual(data[1].id, 3);
+  });
+
+  it('select + where (not in like array)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'NOT IN LIKE', 'New')
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data.length, 1);
+  });
+
+  it('select + where (not in like array) with null array', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data9)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'NOT IN LIKE', 'New')
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data.length, 1);
+  });
+
+  it('select + where (not in like array) with null array case insensitive', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data9)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'NOT IN LIKE', 'New', false)
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data.length, 1);
+  });
+
+  it('select + where (not in like array) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'NOT IN LIKE', 'New')
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data.length, 1);
+  });
+
+  it('select + where (not in like array case sensitive)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'NOT IN LIKE', 'new')
+      .exec();
+    assert.strictEqual(data.length, 3);
+  });
+
+  it('select + where (not in like array case insensitive)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'NOT IN LIKE', 'new', false)
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data.length, 1);
+  });
+
+  it('select + where (not in like array case insensitive) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data5)
+      .select(['id', 'title', 'tags'])
+      .where('tags', 'NOT IN LIKE', 'new', false)
+      .exec();
+    assert.strictEqual(data[0].id, 2);
+    assert.strictEqual(data.length, 1);
+  });
+
+  it('select + where (not in like object)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'NOT IN LIKE', 'Tutor')
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 3);
+  });
+
+  it('select + where (not in like object) with null object', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data10)
+      .select(['id', 'title', 'category'])
+      .where('category', 'NOT IN LIKE', 'Tutor')
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 3);
+  });
+
+  it('select + where (not in like object) with null object case insensitive', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data10)
+      .select(['id', 'title', 'category'])
+      .where('category', 'NOT IN LIKE', 'Tutor', false)
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 3);
+  });
+
+  it('select + where (not in like object) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'NOT IN LIKE', 'Tutor')
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 3);
+  });
+
+  it('select + where (not in like object case sensitive)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'NOT IN LIKE', 'tutor')
+      .exec();
+    assert.strictEqual(data.length, 3);
+  });
+
+  it('select + where (not in like object case insensitive)', function () {
+    const nosql = new FlyJson();
+    const data = nosql.set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'NOT IN LIKE', 'tutor', false)
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 3);
+  });
+
+  it('select + where (not in like object case insensitive) [shallow]', function () {
+    const nosql = new FlyJson();
+    const data = nosql.setMode('shallow').set(data6)
+      .select(['id', 'title', 'category'])
+      .where('category', 'NOT IN LIKE', 'tutor', false)
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 3);
+  });
+
+  it('advanced search', function () {
+    const nosql = new FlyJson();
+    const search = 'giant';
+    const data = nosql.set(advancedsearch)
+      .where('team', 'FUNC', function (value) {
+        let found = false;
+        for (let i = 0; i < value.length; i++) {
+          if (value[i].name.toString().toLowerCase().indexOf(search) !== -1) {
+            found = true;
+          }
+        }
+        return found;
+      })
+      .exec();
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[0].level, 'medium');
+    assert.strictEqual(data[1].id, 3);
+    assert.strictEqual(data[1].level, 'hard');
+    assert.strictEqual(data.length, 2);
   });
 
   it('select + where (not)', function () {

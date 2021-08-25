@@ -80,7 +80,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.16.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      /*! FlyJson v1.17.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
       'use strict';
 
       var Helper = require('./helper');
@@ -595,6 +595,35 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
                       return result.length > 0;
 
+                    case 'in like':
+                      if (_self.isString(v)) {
+                        return v.indexOf(s) !== -1;
+                      }
+
+                      result = [];
+
+                      if (v) {
+                        _self.foreach(v, function (value) {
+                          if (c) {
+                            if (_self.isString(value)) {
+                              if (value.toString().indexOf(s) !== -1) {
+                                result.push(value);
+                              }
+                            }
+                          } else {
+                            if (_self.isString(value)) {
+                              value = value.toLowerCase();
+
+                              if (value.indexOf(s) !== -1) {
+                                result.push(value);
+                              }
+                            }
+                          }
+                        });
+                      }
+
+                      return result.length > 0;
+
                     case 'not in':
                       if (_self.isString(v)) {
                         return v.indexOf(s) === -1;
@@ -634,6 +663,73 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                         return false;
                       }
 
+                    case 'not in like':
+                      if (_self.isString(v)) {
+                        return v.indexOf(s) === -1;
+                      }
+
+                      result = [];
+
+                      if (v && v.length) {
+                        _self.foreach(v, function (value) {
+                          if (value !== null && value !== undefined) {
+                            if (!_self.isString(value)) {
+                              value = value.toString();
+                            }
+                          }
+
+                          if (_self.isString(value)) {
+                            if (value.indexOf(s) === -1) {
+                              result.push(value);
+                            }
+                          } else {
+                            result.push(value);
+                          }
+                        });
+
+                        return result.length === v.length;
+                      } else {
+                        if (_self.isObject(v)) {
+                          _self.foreach(v, function (value) {
+                            if (c) {
+                              if (value !== null && value !== undefined) {
+                                if (!_self.isString(value)) {
+                                  value = value.toString();
+                                }
+                              }
+
+                              if (_self.isString(value)) {
+                                if (value.indexOf(s) === -1) {
+                                  result.push(value);
+                                }
+                              } else {
+                                result.push(value);
+                              }
+                            } else {
+                              if (value !== null && value !== undefined) {
+                                if (!_self.isString(value)) {
+                                  value = value.toString();
+                                }
+                              }
+
+                              if (_self.isString(value)) {
+                                value = value.toLowerCase();
+
+                                if (value.indexOf(s) === -1) {
+                                  result.push(value);
+                                }
+                              } else {
+                                result.push(value);
+                              }
+                            }
+                          });
+
+                          return result.length === Object.keys(v).length;
+                        }
+
+                        return false;
+                      }
+
                     case 'not':
                       return v !== s;
 
@@ -645,6 +741,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
                     case 'regex':
                       return s.test(v);
+
+                    case 'func':
+                      return s(v);
 
                     case 'function':
                       return s(v);

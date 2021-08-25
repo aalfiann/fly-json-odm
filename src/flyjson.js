@@ -1,4 +1,4 @@
-/*! FlyJson v1.16.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.17.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
 'use strict';
 
@@ -401,6 +401,30 @@ class FlyJson extends Helper {
                 });
               }
               return (result.length > 0);
+            case 'in like':
+              if (self.isString(v)) {
+                return (v.indexOf(s) !== -1);
+              }
+              result = [];
+              if (v) {
+                self.foreach(v, function (value) {
+                  if (c) {
+                    if (self.isString(value)) {
+                      if (value.toString().indexOf(s) !== -1) {
+                        result.push(value);
+                      }
+                    }
+                  } else {
+                    if (self.isString(value)) {
+                      value = value.toLowerCase();
+                      if (value.indexOf(s) !== -1) {
+                        result.push(value);
+                      }
+                    }
+                  }
+                });
+              }
+              return (result.length > 0);
             case 'not in':
               if (self.isString(v)) {
                 return (v.indexOf(s) === -1);
@@ -433,6 +457,63 @@ class FlyJson extends Helper {
                 }
                 return false;
               }
+            case 'not in like':
+              if (self.isString(v)) {
+                return (v.indexOf(s) === -1);
+              }
+              result = [];
+              if (v && v.length) {
+                self.foreach(v, function (value) {
+                  if (value !== null && value !== undefined) {
+                    if (!self.isString(value)) {
+                      value = value.toString();
+                    }
+                  }
+                  if (self.isString(value)) {
+                    if (value.indexOf(s) === -1) {
+                      result.push(value);
+                    }
+                  } else {
+                    result.push(value);
+                  }
+                });
+                return (result.length === v.length);
+              } else {
+                if (self.isObject(v)) {
+                  self.foreach(v, function (value) {
+                    if (c) {
+                      if (value !== null && value !== undefined) {
+                        if (!self.isString(value)) {
+                          value = value.toString();
+                        }
+                      }
+                      if (self.isString(value)) {
+                        if (value.indexOf(s) === -1) {
+                          result.push(value);
+                        }
+                      } else {
+                        result.push(value);
+                      }
+                    } else {
+                      if (value !== null && value !== undefined) {
+                        if (!self.isString(value)) {
+                          value = value.toString();
+                        }
+                      }
+                      if (self.isString(value)) {
+                        value = value.toLowerCase();
+                        if (value.indexOf(s) === -1) {
+                          result.push(value);
+                        }
+                      } else {
+                        result.push(value);
+                      }
+                    }
+                  });
+                  return (result.length === Object.keys(v).length);
+                }
+                return false;
+              }
             case 'not':
               return v !== s;
             case 'like':
@@ -441,6 +522,8 @@ class FlyJson extends Helper {
               return (v.indexOf(s) === -1);
             case 'regex':
               return (s.test(v));
+            case 'func':
+              return s(v);
             case 'function':
               return s(v);
             default:
