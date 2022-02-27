@@ -1,4 +1,4 @@
-/*! FlyJson v1.17.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.17.1 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
 'use strict';
 
@@ -860,7 +860,9 @@ class FlyJson extends Helper {
     if (!this.isEmpty(size)) {
       size = parseInt(size);
       if (this.isInteger(size)) {
-        this.data1.length = size;
+        if (this.data1.length > size) {
+          this.data1.length = size;
+        }
       }
     }
     return this;

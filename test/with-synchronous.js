@@ -1706,6 +1706,18 @@ describe('normal / synchronous Query test', function () {
     assert.strictEqual(data[0].address, 'solo');
   });
 
+  it('using take when array is smaller and bigger', function () {
+    const nosql = new FlyJson();
+    const result1 = nosql.setMode('shallow').set(data3).take(2).exec();
+    const result2 = nosql.setMode('shallow').set(data3).take(20).exec();
+    const result3 = nosql.set(data3).take(2).exec();
+    const result4 = nosql.set(data3).take(20).exec();
+    assert.strictEqual(result1.length, 2);
+    assert.strictEqual(result2.length, 5);
+    assert.strictEqual(result3.length, 2);
+    assert.strictEqual(result4.length, 5);
+  });
+
   it('Merge two data table', function () {
     const nosql = new FlyJson();
     const data = nosql.set(data1).join('profile', data2)

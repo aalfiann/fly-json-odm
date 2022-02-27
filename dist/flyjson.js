@@ -80,7 +80,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.17.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      /*! FlyJson v1.17.1 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
       'use strict';
 
       var Helper = require('./helper');
@@ -1154,7 +1154,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               size = parseInt(size);
 
               if (this.isInteger(size)) {
-                this.data1.length = size;
+                if (this.data1.length > size) {
+                  this.data1.length = size;
+                }
               }
             }
 
