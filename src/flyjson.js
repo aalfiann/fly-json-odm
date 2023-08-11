@@ -1,4 +1,4 @@
-/*! FlyJson v1.17.1 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.18.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
 'use strict';
 
@@ -687,8 +687,8 @@ class FlyJson extends Helper {
    * Set identifier to joining two data table
    * @param {string} a            this is identifier key name of data table 1
    * @param {string} b            this is identifier key name of data table 2
-   * @param {bool} nested         this will make the joined data nested or as array
-   * @param {bool} caseSensitive  this will filter the joined data (only work if nested is false)
+   * @param {bool} nested         [Optional] this will make the joined data nested or as array
+   * @param {bool} caseSensitive  [Optional] this will filter the joined data (only work if nested is false)
    * @return {this}
    */
   on (a, b, nested, caseSensitive) {
@@ -765,7 +765,7 @@ class FlyJson extends Helper {
   /**
    * Sort data ascending or descending by key name
    * @param {string} name     this is the name key
-   * @param {bool} desc       this is the sort order
+   * @param {bool} desc       [Optional] this is the sort order
    * @param {primer} primer   this is the primer function
    * @return {this}
    */
@@ -779,11 +779,12 @@ class FlyJson extends Helper {
 
   /**
    * Group detail data by key name
-   * @param {string} name
-   * @param {string} groupName
+   * @param {string} name       Column name
+   * @param {string} groupName  [Optional] Set new group name
    * @return {this}
    */
-  groupDetail (name, groupName = '') {
+  groupDetail (name, groupName) {
+    groupName = (groupName === undefined ? '' : groupName);
     if (this.isEmpty(name) || !this.isString(name)) {
       throw new Error('name is required and must be string.');
     }
@@ -807,11 +808,12 @@ class FlyJson extends Helper {
 
   /**
    * Group data by name or with sum by field name
-   * @param {string} name
-   * @param {array} sumField
+   * @param {string} name     Column name
+   * @param {array} sumField  [Optional] column name for SUM
    * @return {this}
    */
-  groupBy (name, sumField = []) {
+  groupBy (name, sumField) {
+    sumField = (sumField === undefined ? [] : sumField);
     if (this.isEmpty(name) || !this.isString(name)) {
       throw new Error('name is required and must be string.');
     }
@@ -870,7 +872,8 @@ class FlyJson extends Helper {
 
   /**
    * Paginate data by page and pageSize
-   * @param {string|integer} size
+   * @param {string|integer} page     Page number
+   * @param {string|integer} pageSize Total size or item or limit per page
    * @return {this}
    */
   paginate (page, pageSize) {

@@ -114,10 +114,11 @@ class Helper {
 
   /**
    * Blocking test for asynchronous
-   * @param {integer} ms      this is miliseconds value for event block
+   * @param {integer} ms      [Optional] this is miliseconds value for event block. Default value is 1000 ms.
    * @return {int}
    */
-  blockingTest (ms = 1000) {
+  blockingTest (ms) {
+    ms = (ms === undefined ? 1000 : ms);
     const start = Date.now();
     const time = start + ms;
     while (Date.now() < time) {
