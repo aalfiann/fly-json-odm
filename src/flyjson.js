@@ -687,8 +687,8 @@ class FlyJson extends Helper {
    * Set identifier to joining two data table
    * @param {string} a            this is identifier key name of data table 1
    * @param {string} b            this is identifier key name of data table 2
-   * @param {bool} nested         [Optional] this will make the joined data nested or as array
-   * @param {bool} caseSensitive  [Optional] this will filter the joined data (only work if nested is false)
+   * @param {bool} nested         [Optional] this will make the joined data nested or as array. Default is true
+   * @param {bool} caseSensitive  [Optional] this will filter the joined data (only work if nested is false). Default is true
    * @return {this}
    */
   on (a, b, nested, caseSensitive) {
@@ -765,7 +765,7 @@ class FlyJson extends Helper {
   /**
    * Sort data ascending or descending by key name
    * @param {string} name     this is the name key
-   * @param {bool} desc       [Optional] this is the sort order
+   * @param {bool} desc       [Optional] this is the sort order. Default is false
    * @param {primer} primer   this is the primer function
    * @return {this}
    */
