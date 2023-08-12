@@ -3,7 +3,7 @@
 [![js-semistandard-style](https://raw.githubusercontent.com/standard/semistandard/master/badge.svg)](https://github.com/standard/semistandard)  
   
 [![npm version](https://img.shields.io/npm/v/fly-json-odm.svg?style=flat-square)](https://www.npmjs.org/package/fly-json-odm)
-[![Build Status](https://app.travis-ci.com/aalfiann/fly-json-odm.svg?branch=master)](https://app.travis-ci.com/aalfiann/fly-json-odm)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/aalfiann/fly-json-odm/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/aalfiann/fly-json-odm/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/aalfiann/fly-json-odm/badge.svg?branch=master)](https://coveralls.io/github/aalfiann/fly-json-odm?branch=master)
 [![Known Vulnerabilities](https://snyk.io//test/github/aalfiann/fly-json-odm/badge.svg?targetFile=package.json)](https://snyk.io//test/github/aalfiann/fly-json-odm?targetFile=package.json)
 ![License](https://img.shields.io/npm/l/fly-json-odm)
