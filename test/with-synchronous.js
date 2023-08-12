@@ -1267,6 +1267,7 @@ describe('normal / synchronous Query test', function () {
         return (aDate >= startDate && aDate <= endDate);
       })
       .exec();
+    console.log(startDate, endDate);
     console.log(data);
     console.log(data[0].id, 2);
     // assert.strictEqual(data[0].id, 2);
