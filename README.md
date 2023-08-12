@@ -4,7 +4,6 @@
   
 [![npm version](https://img.shields.io/npm/v/fly-json-odm.svg?style=flat-square)](https://www.npmjs.org/package/fly-json-odm)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/aalfiann/fly-json-odm/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/aalfiann/fly-json-odm/tree/master)
-[![Coverage Status](https://coveralls.io/repos/github/aalfiann/fly-json-odm/badge.svg?branch=master)](https://coveralls.io/github/aalfiann/fly-json-odm?branch=master)
 [![Known Vulnerabilities](https://snyk.io//test/github/aalfiann/fly-json-odm/badge.svg?targetFile=package.json)](https://snyk.io//test/github/aalfiann/fly-json-odm?targetFile=package.json)
 ![License](https://img.shields.io/npm/l/fly-json-odm)
 ![NPM download/month](https://img.shields.io/npm/dm/fly-json-odm.svg)
@@ -33,7 +32,7 @@ $ npm install fly-json-odm
 
 <!-- Get a specific version -->
 <!-- Recommended for production sites! -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.18.1/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.18.2/dist/flyjson.min.js"></script>
 ```
 
 ### Usage
