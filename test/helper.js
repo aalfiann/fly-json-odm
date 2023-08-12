@@ -2,6 +2,7 @@
 
 // The reason we allow new constructor for boolean is just for test case only
 /* eslint no-new-wrappers:0 */
+'use strict';
 const assert = require('assert');
 const FlyJson = require('../src/flyjson.js');
 

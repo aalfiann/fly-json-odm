@@ -1,4 +1,5 @@
 /* global describe it */
+'use strict';
 const assert = require('assert');
 const FlyJson = require('../src/flyjson.js');
 const operator = require('../src/operator');

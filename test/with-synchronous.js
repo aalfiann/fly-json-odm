@@ -1,4 +1,5 @@
 /* global describe it */
+'use strict';
 const assert = require('assert');
 const FlyJson = require('../src/flyjson.js');
 
@@ -1263,7 +1264,7 @@ describe('normal / synchronous Query test', function () {
       .select(['id', 'name', 'created'])
       .where('created', 'function', value => {
         const aDate = new Date(value);
-        return aDate >= startDate && aDate <= endDate;
+        return (aDate >= startDate && aDate <= endDate);
       })
       .exec();
     assert.strictEqual(data[0].id, 2);

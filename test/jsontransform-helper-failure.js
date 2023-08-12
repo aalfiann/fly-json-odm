@@ -2,6 +2,7 @@
 
 // The reason we allow duplicate keys is for test case only
 /* eslint no-dupe-keys:0 */
+'use strict';
 const assert = require('assert');
 const FlyJson = require('../src/flyjson.js');
 
