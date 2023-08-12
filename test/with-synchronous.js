@@ -1257,22 +1257,20 @@ describe('normal / synchronous Query test', function () {
   });
 
   it('select + where + function for between date', function () {
-    const startDate = new Date('2019-10-01');
-    const endDate = new Date('2019-10-04');
+    // Date should be set in full timestamp, to prevent using local timezone
+    const startDate = new Date('2019-10-01 00:00:00').getTime();
+    const endDate = new Date('2019-10-03 23:59:59').getTime();
     const nosql = new FlyJson();
     const data = nosql.set(data7)
       .select(['id', 'name', 'created'])
       .where('created', 'function', value => {
-        const aDate = new Date(value);
+        const aDate = new Date(value).getTime();
         return (aDate >= startDate && aDate <= endDate);
       })
       .exec();
-    console.log(startDate, endDate);
-    console.log(data);
-    console.log(data[0].id, 2);
-    // assert.strictEqual(data[0].id, 2);
-    // assert.strictEqual(data[1].id, 3);
-    // assert.strictEqual(data[2].id, 4);
+    assert.strictEqual(data[0].id, 1);
+    assert.strictEqual(data[1].id, 2);
+    assert.strictEqual(data[2].id, 3);
     assert.strictEqual(data.length, 3);
   });
 
