@@ -3,12 +3,12 @@
 const assert = require('assert');
 const FlyJson = require('../src/flyjson.js');
 
-describe('Fuzzy Search test', function () {
+describe('Fuzzy Helper test', function () {
   it('should return strings matching "qwe', function () {
     const data = ['test', 'again', 'word', 'something', 'qwerty', 'qwerty keyboard', 'qrandomwanotherrandomething'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('qwe').exec();
+    const result = nosql.fuzzy(data, 'qwe');
     assert.deepStrictEqual(['qwerty', 'qwerty keyboard', 'qrandomwanotherrandomething'], result);
   });
 
@@ -16,88 +16,16 @@ describe('Fuzzy Search test', function () {
     const data = ['x', 'xx', 'xxx', 't', 'f'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('x').exec();
+    const result = nosql.fuzzy(data, 'x');
     assert.deepStrictEqual(['x', 'xx', 'xxx'], result);
-  });
-
-  it('should search in keys', () => {
-    const data = [
-      {
-        name: 'Betania Ivana Besoli Leiten',
-        location: 'El Salvador'
-      },
-      {
-        name: 'Alexandría DCastillo Gayubas',
-        location: 'Bolivia'
-      }
-    ];
-
-    const keys = ['name'];
-
-    const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('als', keys).exec();
-
-    assert.deepStrictEqual([
-      {
-        name: 'Alexandría DCastillo Gayubas',
-        location: 'Bolivia'
-      }
-    ], result);
-  });
-
-  it('should search in array keys', () => {
-    const data = [
-      {
-        name: ['Irene', 'Maseras'],
-        location: 'Colombia'
-      },
-      {
-        name: ['Itziar', 'Julia', 'Pumarola', 'Duenas'],
-        location: 'Chile'
-      }
-    ];
-
-    const keys = ['name'];
-
-    const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('itzi', keys).exec();
-
-    assert.deepStrictEqual([
-      {
-        name: ['Itziar', 'Julia', 'Pumarola', 'Duenas'],
-        location: 'Chile'
-      }
-    ], result);
-  });
-
-  it('should search in array keys containing objects', () => {
-    const data = [
-      {
-        persons: [{ firstname: 'Patricia', lastname: 'Millaruelo' }, { firstname: 'Itziar', lastname: 'Julia' }]
-      },
-      {
-        persons: [{ firstname: 'Alexandría', lastname: 'DCastillo' }, { firstname: 'Gayubas', lastname: 'Pumarola' }]
-      }
-    ];
-
-    const keys = ['persons.firstname'];
-
-    const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('tzia', keys).exec();
-
-    assert.deepStrictEqual([
-      {
-        persons: [{ firstname: 'Patricia', lastname: 'Millaruelo' }, { firstname: 'Itziar', lastname: 'Julia' }]
-      }
-    ], result);
   });
 
   it('should allow to search case sensitive', () => {
     const data = ['Patricia', 'Millaruelo', 'Itziar', 'Julia'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('mill', [], true).exec();
-    const result2 = nosql.set(data).fuzzySearch('Mill', [], true).exec();
+    const result = nosql.fuzzy(data, 'mill', [], true);
+    const result2 = nosql.fuzzy(data, 'Mill', [], true);
 
     assert.deepStrictEqual([], result);
     assert.deepStrictEqual(['Millaruelo'], result2);
@@ -107,7 +35,7 @@ describe('Fuzzy Search test', function () {
     const data = ['Patricia', 'Millaruelo', 'Itziar', 'Julia'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('').exec();
+    const result = nosql.fuzzy(data, '');
 
     assert.deepStrictEqual(data, result);
   });
@@ -116,7 +44,7 @@ describe('Fuzzy Search test', function () {
     const data = ['Patricia', 'Millaruelo', 'Itziar', 'Julia'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch().exec();
+    const result = nosql.fuzzy(data);
 
     assert.deepStrictEqual(data, result);
   });
@@ -125,7 +53,7 @@ describe('Fuzzy Search test', function () {
     const data = ['long string', 'string'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('looooooong string').exec();
+    const result = nosql.fuzzy(data, 'looooooong string');
 
     assert.deepStrictEqual([], result);
   });
@@ -135,8 +63,8 @@ describe('Fuzzy Search test', function () {
     const data2 = ['application/cdfx+xml', 'application/pdf'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('abc', [], false, true).exec();
-    const result2 = nosql.set(data2).fuzzySearch('pdf', [], false, true).exec();
+    const result = nosql.fuzzy(data, 'abc', [], false, true);
+    const result2 = nosql.fuzzy(data2, 'pdf', [], false, true);
 
     assert.deepStrictEqual(['abc', 'a__b__c', 'a______b______c'], result);
     assert.deepStrictEqual(['application/pdf', 'application/cdfx+xml'], result2);
@@ -146,7 +74,7 @@ describe('Fuzzy Search test', function () {
     const data = ['prolog', 'rust', 'r', 'ruby'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('r', [], false, true).exec();
+    const result = nosql.fuzzy(data, 'r', [], false, true);
 
     assert.deepStrictEqual(['r', 'rust', 'ruby', 'prolog'], result);
   });
@@ -155,7 +83,7 @@ describe('Fuzzy Search test', function () {
     const data = ['a'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('a', [], false, true).exec();
+    const result = nosql.fuzzy(data, 'a', [], false, true);
 
     assert.deepStrictEqual(['a'], result);
   });
@@ -164,7 +92,7 @@ describe('Fuzzy Search test', function () {
     const data = ['Alarm Dictionary', 'BO_ALARM_DICTIONARY', 'Dogmatix Board Replacements', 'DOGMATIX_BOARD_REPLACEMENT_V'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('board', [], false, true).exec();
+    const result = nosql.fuzzy(data, 'board', [], false, true);
 
     assert.deepStrictEqual(['Dogmatix Board Replacements', 'DOGMATIX_BOARD_REPLACEMENT_V', 'BO_ALARM_DICTIONARY'], result);
   });
@@ -173,7 +101,7 @@ describe('Fuzzy Search test', function () {
     const data = [1, 2, 11, 12];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch(1).exec();
+    const result = nosql.fuzzy(data, 1);
 
     assert.deepStrictEqual([1, 11, 12], result);
   });
@@ -182,7 +110,7 @@ describe('Fuzzy Search test', function () {
     const data = [12, 11, 1, 2];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch(1, [], false, true).exec();
+    const result = nosql.fuzzy(data, 1, [], false, true);
 
     assert.deepStrictEqual([1, 12, 11], result);
   });
@@ -191,7 +119,7 @@ describe('Fuzzy Search test', function () {
     const data = ['General Preferences Table', 'Group Preferences Table', 'Prefix User Preferences Table', 'User Preferences Table'];
 
     const nosql = new FlyJson();
-    const result = nosql.set(data).fuzzySearch('upt', [], false, true).exec();
+    const result = nosql.fuzzy(data, 'upt', [], false, true);
 
     assert.deepStrictEqual(['User Preferences Table', 'Prefix User Preferences Table', 'Group Preferences Table'], result);
   });

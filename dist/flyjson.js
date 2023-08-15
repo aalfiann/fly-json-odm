@@ -61,7 +61,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.19.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      /*! FlyJson v1.20.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
       'use strict';
 
@@ -751,168 +751,25 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
           /**
            * Fuzzy Search
-           * @param {string|number} query   Text or number to search
-           * @param {array} keys            Keys is required if the list is array string. Default is empty array.
-           * @param {boolean} caseSensitive Search with match case sensitive. Default is false.
-           * @param {boolean} sort          When true it will sort the results by best match. Default is false.
+           * @param {string|number} query   Text or number to search.
+           * @param {array} keys            Keys is the field to match search.
+           * @param {boolean} caseSensitive [Optional] Search with match case sensitive. Default is false.
+           * @param {boolean} sort          [Optional] When true it will sort the results by best match. Default is false.
            * @returns {this}
            */
         }, {
           key: "fuzzySearch",
-          value: function fuzzySearch() {
-            var query = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-            var keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+          value: function fuzzySearch(query, keys) {
             var caseSensitive = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
             var sort = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-            if (query === '') return this;
-            var haystack = this.data1;
-            var results = [];
-            for (var i = 0; i < haystack.length; i++) {
-              var item = haystack[i];
-              if (keys.length === 0) {
-                var score = this._fuzzyIsMatch(item, query, caseSensitive);
-                if (score) {
-                  results.push({
-                    item: item,
-                    score: score
-                  });
-                }
-              } else {
-                for (var y = 0; y < keys.length; y++) {
-                  var propertyValues = this.getDescendantProperty(item, keys[y]);
-                  var found = false;
-                  for (var z = 0; z < propertyValues.length; z++) {
-                    var _score = this._fuzzyIsMatch(propertyValues[z], query, caseSensitive);
-                    if (_score) {
-                      found = true;
-                      results.push({
-                        item: item,
-                        score: _score
-                      });
-                      break;
-                    }
-                  }
-                  if (found) {
-                    break;
-                  }
-                }
-              }
+            if (query === undefined || query === null) {
+              throw new Error('Query is required.');
             }
-            if (sort) {
-              results.sort(function (a, b) {
-                return a.score - b.score;
-              });
+            if (keys === undefined || keys === null || this.isEmptyArray(keys)) {
+              throw new Error('Field keys is required.');
             }
-            this.data1 = results.map(function (result) {
-              return result.item;
-            });
+            this.data1 = this.fuzzy(this.data1, query, keys, caseSensitive, sort);
             return this;
-          }
-
-          /**
-           * Is Match: Giving score depend on best matches.
-           * @param {string|number} item    Value from data list
-           * @param {string|number} query   Value from search
-           * @param {boolean} caseSensitive Search with match case sensitive.
-           * @returns {number}
-           */
-        }, {
-          key: "_fuzzyIsMatch",
-          value: function _fuzzyIsMatch(item, query, caseSensitive) {
-            item = String(item);
-            query = String(query);
-            if (!caseSensitive) {
-              item = item.toLocaleLowerCase();
-              query = query.toLocaleLowerCase();
-            }
-            var indexes = this._fuzzyNearestIndexesFor(item, query);
-            if (!indexes) {
-              return false;
-            }
-            // Exact matches should be first.
-            if (item === query) {
-              return 1;
-            }
-            // If we hit abbreviation it should go before others (except exact match).
-            var abbreviationIndicies = [0];
-            for (var i = 0; i < item.length; i++) {
-              if (item[i] === ' ') abbreviationIndicies.push(i + 1);
-            }
-            if (indexes.reduce(function (accumulator, currentValue) {
-              return abbreviationIndicies.includes(currentValue) && accumulator;
-            }, true)) {
-              return 2 + indexes.reduce(function (accumulator, currentValue, i) {
-                return accumulator + abbreviationIndicies.indexOf(currentValue);
-              }, 0);
-            }
-            // If we have more than 2 letters, matches close to each other should be first.
-            if (indexes.length > 1) {
-              return 3 + (indexes[indexes.length - 1] - indexes[0]);
-            }
-            // Matches closest to the start of the string should be first.
-            return 3 + indexes[0];
-          }
-
-          /**
-           * Nearest Indexed For Value and Search
-           * @param {string} item   Value from data list
-           * @param {string} query  Value from search
-           * @returns {array} number
-           */
-        }, {
-          key: "_fuzzyNearestIndexesFor",
-          value: function _fuzzyNearestIndexesFor(item, query) {
-            var letters = query.split('');
-            var indexes = [];
-            var indexesOfFirstLetter = this._fuzzyIndexesOfFirstLetter(item, query);
-            indexesOfFirstLetter.forEach(function (startingIndex, loopingIndex) {
-              var index = startingIndex + 1;
-              indexes[loopingIndex] = [startingIndex];
-              for (var i = 1; i < letters.length; i++) {
-                var letter = letters[i];
-                index = item.indexOf(letter, index);
-                if (index === -1) {
-                  indexes[loopingIndex] = false;
-                  break;
-                }
-                indexes[loopingIndex].push(index);
-                index++;
-              }
-            });
-            indexes = indexes.filter(function (letterIndexes) {
-              return letterIndexes !== false;
-            });
-            if (!indexes.length) {
-              return false;
-            }
-            return indexes.sort(function (a, b) {
-              if (a.length === 1) {
-                return a[0] - b[0];
-              }
-              a = a[a.length - 1] - a[0];
-              b = b[b.length - 1] - b[0];
-              return a - b;
-            })[0];
-          }
-
-          /**
-           * Indexes Of First Letter
-           * @param {string} item   Value from data list
-           * @param {string} query  Value from search
-           * @returns {array} number
-           */
-        }, {
-          key: "_fuzzyIndexesOfFirstLetter",
-          value: function _fuzzyIndexesOfFirstLetter(item, query) {
-            var match = query[0];
-            return item.split('').map(function (letter, index) {
-              if (letter !== match) {
-                return false;
-              }
-              return index;
-            }).filter(function (index) {
-              return index !== false;
-            });
           }
 
           /**
@@ -1653,6 +1510,171 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               list.push(object);
             }
             return list;
+          }
+
+          /**
+           * Fuzzy
+           * @param {array} haystack        List data array or object.
+           * @param {string|number} query   [Optional] Text or number to search.
+           * @param {array} keys            [Optional] Keys is required if the list is array object. Default is empty array.
+           * @param {boolean} caseSensitive [Optional] Search with match case sensitive. Default is false.
+           * @param {boolean} sort          [Optional] When true it will sort the results by best match. Default is false.
+           * @returns {array}
+           */
+        }, {
+          key: "fuzzy",
+          value: function fuzzy(haystack) {
+            var query = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+            var keys = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+            var caseSensitive = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+            var sort = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+            if (query === '') return haystack;
+            var results = [];
+            for (var i = 0; i < haystack.length; i++) {
+              var item = haystack[i];
+              if (keys.length === 0) {
+                var score = this._fuzzyIsMatch(item, query, caseSensitive);
+                if (score) {
+                  results.push({
+                    item: item,
+                    score: score
+                  });
+                }
+              } else {
+                for (var y = 0; y < keys.length; y++) {
+                  var propertyValues = this.getDescendantProperty(item, keys[y]);
+                  var found = false;
+                  for (var z = 0; z < propertyValues.length; z++) {
+                    var _score = this._fuzzyIsMatch(propertyValues[z], query, caseSensitive);
+                    if (_score) {
+                      found = true;
+                      results.push({
+                        item: item,
+                        score: _score
+                      });
+                      break;
+                    }
+                  }
+                  if (found) {
+                    break;
+                  }
+                }
+              }
+            }
+            if (sort) {
+              results.sort(function (a, b) {
+                return a.score - b.score;
+              });
+            }
+            return results.map(function (result) {
+              return result.item;
+            });
+          }
+
+          /**
+           * Is Match: Giving score depend on best matches.
+           * @param {string|number} item    Value from data list
+           * @param {string|number} query   Value from search
+           * @param {boolean} caseSensitive Search with match case sensitive.
+           * @returns {number}
+           */
+        }, {
+          key: "_fuzzyIsMatch",
+          value: function _fuzzyIsMatch(item, query, caseSensitive) {
+            item = String(item);
+            query = String(query);
+            if (!caseSensitive) {
+              item = item.toLocaleLowerCase();
+              query = query.toLocaleLowerCase();
+            }
+            var indexes = this._fuzzyNearestIndexesFor(item, query);
+            if (!indexes) {
+              return false;
+            }
+            // Exact matches should be first.
+            if (item === query) {
+              return 1;
+            }
+            // If we hit abbreviation it should go before others (except exact match).
+            var abbreviationIndicies = [0];
+            for (var i = 0; i < item.length; i++) {
+              if (item[i] === ' ') abbreviationIndicies.push(i + 1);
+            }
+            if (indexes.reduce(function (accumulator, currentValue) {
+              return abbreviationIndicies.includes(currentValue) && accumulator;
+            }, true)) {
+              return 2 + indexes.reduce(function (accumulator, currentValue, i) {
+                return accumulator + abbreviationIndicies.indexOf(currentValue);
+              }, 0);
+            }
+            // If we have more than 2 letters, matches close to each other should be first.
+            if (indexes.length > 1) {
+              return 3 + (indexes[indexes.length - 1] - indexes[0]);
+            }
+            // Matches closest to the start of the string should be first.
+            return 3 + indexes[0];
+          }
+
+          /**
+           * Nearest Indexed For Value and Search
+           * @param {string} item   Value from data list
+           * @param {string} query  Value from search
+           * @returns {array} number
+           */
+        }, {
+          key: "_fuzzyNearestIndexesFor",
+          value: function _fuzzyNearestIndexesFor(item, query) {
+            var letters = query.split('');
+            var indexes = [];
+            var indexesOfFirstLetter = this._fuzzyIndexesOfFirstLetter(item, query);
+            indexesOfFirstLetter.forEach(function (startingIndex, loopingIndex) {
+              var index = startingIndex + 1;
+              indexes[loopingIndex] = [startingIndex];
+              for (var i = 1; i < letters.length; i++) {
+                var letter = letters[i];
+                index = item.indexOf(letter, index);
+                if (index === -1) {
+                  indexes[loopingIndex] = false;
+                  break;
+                }
+                indexes[loopingIndex].push(index);
+                index++;
+              }
+            });
+            indexes = indexes.filter(function (letterIndexes) {
+              return letterIndexes !== false;
+            });
+            if (!indexes.length) {
+              return false;
+            }
+            return indexes.sort(function (a, b) {
+              if (a.length === 1) {
+                return a[0] - b[0];
+              }
+              a = a[a.length - 1] - a[0];
+              b = b[b.length - 1] - b[0];
+              return a - b;
+            })[0];
+          }
+
+          /**
+           * Indexes Of First Letter
+           * @param {string} item   Value from data list
+           * @param {string} query  Value from search
+           * @returns {array} number
+           */
+        }, {
+          key: "_fuzzyIndexesOfFirstLetter",
+          value: function _fuzzyIndexesOfFirstLetter(item, query) {
+            var match = query[0];
+            return item.split('').map(function (letter, index) {
+              if (letter !== match) {
+                return false;
+              }
+              return index;
+            }).filter(function (index) {
+              return index !== false;
+            });
           }
         }]);
         return Helper;

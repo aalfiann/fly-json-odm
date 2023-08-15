@@ -6,7 +6,7 @@ declare class FlyJson {
   _findDistinct (source: object|Array<string|object|number>, obj: boolean): boolean;
   setMode (name: string): this;
   set (data: Array<object>): this;
-  list (): this;
+  list (): Array<object>;
   insert (obj: object): this;
   insertMany (data: Array<object>): this;
   update (key: string, value: any, obj: object): this;
@@ -48,7 +48,8 @@ declare class FlyJson {
   deepClone (array: Array<string|number|object>): Array<string|number|object>;
   jsonTransform (data: object, map: object): Array<object>;
   getDescendantProperty (object: object, path: string, list?: Array<string|number|object>): Array<string|number|object>;
-  fuzzySearch (query?: string|number, keys?: Array<string>, caseSensitive?: boolean, sort?: boolean): this;
+  fuzzySearch (query: string|number, keys: Array<string>, caseSensitive?: boolean, sort?: boolean): this;
+  fuzzy (haystack:Array<string|number|object>, query?: string|number, keys: Array<string>, caseSensitive?: boolean, sort?: boolean): Array<string|number|object>;
   _fuzzyIsMatch (item: string|number, query: string|number, caseSensitive: boolean): number;
   _fuzzyNearestIndexesFor (item: string, query: string): Array<number>;
   _fuzzyIndexesOfFirstLetter (item: string, query: string): Array<number>;
