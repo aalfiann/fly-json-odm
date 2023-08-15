@@ -1,4 +1,4 @@
-/*! FlyJson v1.18.2 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.19.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
 'use strict';
 
@@ -11,13 +11,24 @@ const operator = require('./operator');
 class FlyJson extends Helper {
   /**
    * Constructor
+   * @param {object} mixins  [Optional] Register your custom function as mixin
    */
-  constructor () {
+  constructor (mixins) {
     super();
     this.data1 = [];
     this.data2 = [];
     this.query = [];
     this.result = [];
+    if (this.isObject(mixins)) {
+      for (const key in mixins) {
+        if (mixins[key] && typeof mixins[key] === 'function') {
+          this[key] = (fn) => {
+            mixins[key](fn);
+            return this;
+          };
+        }
+      }
+    }
   }
 
   /**
@@ -89,6 +100,14 @@ class FlyJson extends Helper {
       throw new Error('Set data must be an array contains object.');
     }
     return this;
+  }
+
+  /**
+   * Show current data list
+   * @returns {array} object
+   */
+  list () {
+    return this.data1;
   }
 
   /**
@@ -612,6 +631,144 @@ class FlyJson extends Helper {
     }
     this.data1 = result;
     return this;
+  }
+
+  /**
+   * Fuzzy Search
+   * @param {string|number} query   Text or number to search
+   * @param {array} keys            Keys is required if the list is array string. Default is empty array.
+   * @param {boolean} caseSensitive Search with match case sensitive. Default is false.
+   * @param {boolean} sort          When true it will sort the results by best match. Default is false.
+   * @returns {this}
+   */
+  fuzzySearch (query = '', keys = [], caseSensitive = false, sort = false) {
+    if (query === '') return this;
+    const haystack = this.data1;
+    const results = [];
+    for (let i = 0; i < haystack.length; i++) {
+      const item = haystack[i];
+      if (keys.length === 0) {
+        const score = this._fuzzyIsMatch(item, query, caseSensitive);
+        if (score) {
+          results.push({ item, score });
+        }
+      } else {
+        for (let y = 0; y < keys.length; y++) {
+          const propertyValues = this.getDescendantProperty(item, keys[y]);
+          let found = false;
+          for (let z = 0; z < propertyValues.length; z++) {
+            const score = this._fuzzyIsMatch(propertyValues[z], query, caseSensitive);
+            if (score) {
+              found = true;
+              results.push({ item, score });
+              break;
+            }
+          }
+          if (found) {
+            break;
+          }
+        }
+      }
+    }
+    if (sort) {
+      results.sort((a, b) => a.score - b.score);
+    }
+    this.data1 = results.map(result => result.item);
+    return this;
+  }
+
+  /**
+   * Is Match: Giving score depend on best matches.
+   * @param {string|number} item    Value from data list
+   * @param {string|number} query   Value from search
+   * @param {boolean} caseSensitive Search with match case sensitive.
+   * @returns {number}
+   */
+  _fuzzyIsMatch (item, query, caseSensitive) {
+    item = String(item);
+    query = String(query);
+    if (!caseSensitive) {
+      item = item.toLocaleLowerCase();
+      query = query.toLocaleLowerCase();
+    }
+    const indexes = this._fuzzyNearestIndexesFor(item, query);
+    if (!indexes) {
+      return false;
+    }
+    // Exact matches should be first.
+    if (item === query) {
+      return 1;
+    }
+    // If we hit abbreviation it should go before others (except exact match).
+    const abbreviationIndicies = [0];
+    for (let i = 0; i < item.length; i++) {
+      if (item[i] === ' ') abbreviationIndicies.push(i + 1);
+    }
+    if (indexes.reduce((accumulator, currentValue) => abbreviationIndicies.includes(currentValue) && accumulator, true)) {
+      return 2 + indexes.reduce((accumulator, currentValue, i) => {
+        return accumulator + abbreviationIndicies.indexOf(currentValue);
+      }, 0);
+    }
+    // If we have more than 2 letters, matches close to each other should be first.
+    if (indexes.length > 1) {
+      return 3 + (indexes[indexes.length - 1] - indexes[0]);
+    }
+    // Matches closest to the start of the string should be first.
+    return 3 + indexes[0];
+  }
+
+  /**
+   * Nearest Indexed For Value and Search
+   * @param {string} item   Value from data list
+   * @param {string} query  Value from search
+   * @returns {array} number
+   */
+  _fuzzyNearestIndexesFor (item, query) {
+    const letters = query.split('');
+    let indexes = [];
+    const indexesOfFirstLetter = this._fuzzyIndexesOfFirstLetter(item, query);
+    indexesOfFirstLetter.forEach((startingIndex, loopingIndex) => {
+      let index = startingIndex + 1;
+      indexes[loopingIndex] = [startingIndex];
+      for (let i = 1; i < letters.length; i++) {
+        const letter = letters[i];
+        index = item.indexOf(letter, index);
+        if (index === -1) {
+          indexes[loopingIndex] = false;
+          break;
+        }
+        indexes[loopingIndex].push(index);
+        index++;
+      }
+    });
+    indexes = indexes.filter(letterIndexes => letterIndexes !== false);
+    if (!indexes.length) {
+      return false;
+    }
+    return indexes.sort((a, b) => {
+      if (a.length === 1) {
+        return a[0] - b[0];
+      }
+      a = a[a.length - 1] - a[0];
+      b = b[b.length - 1] - b[0];
+      return a - b;
+    })[0];
+  }
+
+  /**
+   * Indexes Of First Letter
+   * @param {string} item   Value from data list
+   * @param {string} query  Value from search
+   * @returns {array} number
+   */
+  _fuzzyIndexesOfFirstLetter (item, query) {
+    const match = query[0];
+    return item.split('').map((letter, index) => {
+      if (letter !== match) {
+        return false;
+      }
+      return index;
+    }).filter(index => index !== false);
   }
 
   /**

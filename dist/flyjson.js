@@ -61,7 +61,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.18.2 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      /*! FlyJson v1.19.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
       'use strict';
 
@@ -76,8 +76,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         var _super = _createSuper(FlyJson);
         /**
          * Constructor
+         * @param {object} mixins  [Optional] Register your custom function as mixin
          */
-        function FlyJson() {
+        function FlyJson(mixins) {
           var _this;
           _classCallCheck(this, FlyJson);
           _this = _super.call(this);
@@ -85,6 +86,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           _this.data2 = [];
           _this.query = [];
           _this.result = [];
+          if (_this.isObject(mixins)) {
+            var _loop = function _loop(key) {
+              if (mixins[key] && typeof mixins[key] === 'function') {
+                _this[key] = function (fn) {
+                  mixins[key](fn);
+                  return _assertThisInitialized(_this);
+                };
+              }
+            };
+            for (var key in mixins) {
+              _loop(key);
+            }
+          }
           return _this;
         }
 
@@ -122,7 +136,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           value: function _findDistinct(source, obj) {
             var _this2 = this;
             var found = false;
-            var _loop = function _loop(i) {
+            var _loop2 = function _loop2(i) {
               var count = Object.keys(obj).length;
               var recount = 0;
               _this2.foreach(obj, function (v, k) {
@@ -135,7 +149,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               }
             };
             for (var i = 0; i < source.length; i++) {
-              _loop(i);
+              _loop2(i);
             }
             return found;
           }
@@ -171,6 +185,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               throw new Error('Set data must be an array contains object.');
             }
             return this;
+          }
+
+          /**
+           * Show current data list
+           * @returns {array} object
+           */
+        }, {
+          key: "list",
+          value: function list() {
+            return this.data1;
           }
 
           /**
@@ -726,6 +750,172 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           }
 
           /**
+           * Fuzzy Search
+           * @param {string|number} query   Text or number to search
+           * @param {array} keys            Keys is required if the list is array string. Default is empty array.
+           * @param {boolean} caseSensitive Search with match case sensitive. Default is false.
+           * @param {boolean} sort          When true it will sort the results by best match. Default is false.
+           * @returns {this}
+           */
+        }, {
+          key: "fuzzySearch",
+          value: function fuzzySearch() {
+            var query = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+            var keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+            var caseSensitive = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+            var sort = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+            if (query === '') return this;
+            var haystack = this.data1;
+            var results = [];
+            for (var i = 0; i < haystack.length; i++) {
+              var item = haystack[i];
+              if (keys.length === 0) {
+                var score = this._fuzzyIsMatch(item, query, caseSensitive);
+                if (score) {
+                  results.push({
+                    item: item,
+                    score: score
+                  });
+                }
+              } else {
+                for (var y = 0; y < keys.length; y++) {
+                  var propertyValues = this.getDescendantProperty(item, keys[y]);
+                  var found = false;
+                  for (var z = 0; z < propertyValues.length; z++) {
+                    var _score = this._fuzzyIsMatch(propertyValues[z], query, caseSensitive);
+                    if (_score) {
+                      found = true;
+                      results.push({
+                        item: item,
+                        score: _score
+                      });
+                      break;
+                    }
+                  }
+                  if (found) {
+                    break;
+                  }
+                }
+              }
+            }
+            if (sort) {
+              results.sort(function (a, b) {
+                return a.score - b.score;
+              });
+            }
+            this.data1 = results.map(function (result) {
+              return result.item;
+            });
+            return this;
+          }
+
+          /**
+           * Is Match: Giving score depend on best matches.
+           * @param {string|number} item    Value from data list
+           * @param {string|number} query   Value from search
+           * @param {boolean} caseSensitive Search with match case sensitive.
+           * @returns {number}
+           */
+        }, {
+          key: "_fuzzyIsMatch",
+          value: function _fuzzyIsMatch(item, query, caseSensitive) {
+            item = String(item);
+            query = String(query);
+            if (!caseSensitive) {
+              item = item.toLocaleLowerCase();
+              query = query.toLocaleLowerCase();
+            }
+            var indexes = this._fuzzyNearestIndexesFor(item, query);
+            if (!indexes) {
+              return false;
+            }
+            // Exact matches should be first.
+            if (item === query) {
+              return 1;
+            }
+            // If we hit abbreviation it should go before others (except exact match).
+            var abbreviationIndicies = [0];
+            for (var i = 0; i < item.length; i++) {
+              if (item[i] === ' ') abbreviationIndicies.push(i + 1);
+            }
+            if (indexes.reduce(function (accumulator, currentValue) {
+              return abbreviationIndicies.includes(currentValue) && accumulator;
+            }, true)) {
+              return 2 + indexes.reduce(function (accumulator, currentValue, i) {
+                return accumulator + abbreviationIndicies.indexOf(currentValue);
+              }, 0);
+            }
+            // If we have more than 2 letters, matches close to each other should be first.
+            if (indexes.length > 1) {
+              return 3 + (indexes[indexes.length - 1] - indexes[0]);
+            }
+            // Matches closest to the start of the string should be first.
+            return 3 + indexes[0];
+          }
+
+          /**
+           * Nearest Indexed For Value and Search
+           * @param {string} item   Value from data list
+           * @param {string} query  Value from search
+           * @returns {array} number
+           */
+        }, {
+          key: "_fuzzyNearestIndexesFor",
+          value: function _fuzzyNearestIndexesFor(item, query) {
+            var letters = query.split('');
+            var indexes = [];
+            var indexesOfFirstLetter = this._fuzzyIndexesOfFirstLetter(item, query);
+            indexesOfFirstLetter.forEach(function (startingIndex, loopingIndex) {
+              var index = startingIndex + 1;
+              indexes[loopingIndex] = [startingIndex];
+              for (var i = 1; i < letters.length; i++) {
+                var letter = letters[i];
+                index = item.indexOf(letter, index);
+                if (index === -1) {
+                  indexes[loopingIndex] = false;
+                  break;
+                }
+                indexes[loopingIndex].push(index);
+                index++;
+              }
+            });
+            indexes = indexes.filter(function (letterIndexes) {
+              return letterIndexes !== false;
+            });
+            if (!indexes.length) {
+              return false;
+            }
+            return indexes.sort(function (a, b) {
+              if (a.length === 1) {
+                return a[0] - b[0];
+              }
+              a = a[a.length - 1] - a[0];
+              b = b[b.length - 1] - b[0];
+              return a - b;
+            })[0];
+          }
+
+          /**
+           * Indexes Of First Letter
+           * @param {string} item   Value from data list
+           * @param {string} query  Value from search
+           * @returns {array} number
+           */
+        }, {
+          key: "_fuzzyIndexesOfFirstLetter",
+          value: function _fuzzyIndexesOfFirstLetter(item, query) {
+            var match = query[0];
+            return item.split('').map(function (letter, index) {
+              if (letter !== match) {
+                return false;
+              }
+              return index;
+            }).filter(function (index) {
+              return index !== false;
+            });
+          }
+
+          /**
            * Cleanup all temporary object
            * @return {this}
            */
@@ -828,7 +1018,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
                     var newdata = {};
                     var arr = Object.keys(self.data1[index]);
                     var l = arr.length;
-                    var _loop2 = function _loop2(i) {
+                    var _loop3 = function _loop3(i) {
                       if (arr[i] === a) {
                         if (self.name === arr[i]) {
                           if (nested) {
@@ -867,7 +1057,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
                       }
                     };
                     for (var i = 0; i < l; i++) {
-                      _loop2(i);
+                      _loop3(i);
                     }
                     return result.push(newdata);
                   });
@@ -1420,6 +1610,49 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
                 return obj;
               }
             };
+          }
+
+          /**
+           * Get Descendant Property in json object
+           * @param {array|object} object
+           * @param {string} path
+           * @param {array} list
+           * @returns {array}
+           */
+        }, {
+          key: "getDescendantProperty",
+          value: function getDescendantProperty(object, path) {
+            var list = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+            var firstSegment;
+            var remaining;
+            var dotIndex;
+            var value;
+            var index;
+            var length;
+            if (path) {
+              dotIndex = path.indexOf('.');
+              if (dotIndex === -1) {
+                firstSegment = path;
+              } else {
+                firstSegment = path.slice(0, dotIndex);
+                remaining = path.slice(dotIndex + 1);
+              }
+              value = object[firstSegment];
+              if (value !== null && typeof value !== 'undefined') {
+                if (!remaining && (typeof value === 'string' || typeof value === 'number')) {
+                  list.push(value);
+                } else if (Object.prototype.toString.call(value) === '[object Array]') {
+                  for (index = 0, length = value.length; index < length; index++) {
+                    this.getDescendantProperty(value[index], remaining, list);
+                  }
+                } else if (remaining) {
+                  this.getDescendantProperty(value, remaining, list);
+                }
+              }
+            } else {
+              list.push(object);
+            }
+            return list;
           }
         }]);
         return Helper;

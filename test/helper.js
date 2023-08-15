@@ -187,4 +187,47 @@ describe('helper function test', function () {
       });
     }, Error);
   });
+
+  it('should allow for deep key search', function () {
+    const object = {
+      level1: {
+        level2: [
+          {
+            level3: 'NL'
+          },
+          {
+            level3: 'EN'
+          }
+        ]
+      }
+    };
+    assert.deepStrictEqual(['NL', 'EN'], nosql.getDescendantProperty(object, 'level1.level2.level3'));
+  });
+
+  it('should skip for deep key search if there is remaining child level and parent key is null or undefined', function () {
+    const object = {
+      level1: {
+        level2: [
+          {
+            level3: 'NL'
+          },
+          {
+            level3: 'EN'
+          },
+          {
+            level3: {
+              sub: ['District']
+            }
+          },
+          {
+            null: 'deleted'
+          },
+          {
+            undefined: 'deleted'
+          }
+        ]
+      }
+    };
+    assert.deepStrictEqual(['NL', 'EN'], nosql.getDescendantProperty(object, 'level1.level2.level3'));
+  });
 });

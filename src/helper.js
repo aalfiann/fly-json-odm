@@ -339,6 +339,46 @@ class Helper {
 
     };
   }
+
+  /**
+   * Get Descendant Property in json object
+   * @param {array|object} object
+   * @param {string} path
+   * @param {array} list
+   * @returns {array}
+   */
+  getDescendantProperty (object, path, list = []) {
+    let firstSegment;
+    let remaining;
+    let dotIndex;
+    let value;
+    let index;
+    let length;
+    if (path) {
+      dotIndex = path.indexOf('.');
+      if (dotIndex === -1) {
+        firstSegment = path;
+      } else {
+        firstSegment = path.slice(0, dotIndex);
+        remaining = path.slice(dotIndex + 1);
+      }
+      value = object[firstSegment];
+      if (value !== null && typeof value !== 'undefined') {
+        if (!remaining && (typeof value === 'string' || typeof value === 'number')) {
+          list.push(value);
+        } else if (Object.prototype.toString.call(value) === '[object Array]') {
+          for (index = 0, length = value.length; index < length; index++) {
+            this.getDescendantProperty(value[index], remaining, list);
+          }
+        } else if (remaining) {
+          this.getDescendantProperty(value, remaining, list);
+        }
+      }
+    } else {
+      list.push(object);
+    }
+    return list;
+  }
 }
 
 module.exports = Helper;

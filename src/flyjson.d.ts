@@ -1,11 +1,12 @@
 export = FlyJson;
 
 declare class FlyJson {
-  constructor ();
+  constructor (mixins?: object);
   _sortBy (field: string, reverse: boolean, primer: Function): Function;
   _findDistinct (source: object|Array<string|object|number>, obj: boolean): boolean;
   setMode (name: string): this;
   set (data: Array<object>): this;
+  list (): this;
   insert (obj: object): this;
   insertMany (data: Array<object>): this;
   update (key: string, value: any, obj: object): this;
@@ -46,4 +47,9 @@ declare class FlyJson {
   shallowClone (array: Array<string|number|object>): Array<string|number|object>;
   deepClone (array: Array<string|number|object>): Array<string|number|object>;
   jsonTransform (data: object, map: object): Array<object>;
+  getDescendantProperty (object: object, path: string, list?: Array<string|number|object>): Array<string|number|object>;
+  fuzzySearch (query?: string|number, keys?: Array<string>, caseSensitive?: boolean, sort?: boolean): this;
+  _fuzzyIsMatch (item: string|number, query: string|number, caseSensitive: boolean): number;
+  _fuzzyNearestIndexesFor (item: string, query: string): Array<number>;
+  _fuzzyIndexesOfFirstLetter (item: string, query: string): Array<number>;
 }
