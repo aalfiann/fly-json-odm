@@ -41,6 +41,7 @@ declare class FlyJson {
   isEmpty (value: any): boolean;
   isEmptyArray (value: any): boolean;
   isEmptyObject (value: any): boolean;
+  fastCheckArrayObject (value: any): boolean;
   foreach (data: Array<string|number|object>, callback: Function): void;
   blockingTest (ms: number): void;
   safeStringify (value: object, space: any): string;

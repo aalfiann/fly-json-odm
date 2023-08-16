@@ -18,11 +18,43 @@ const wrongTable = {
   ]
 };
 
+const bigObjectTable = [];
+const bigNumberTable = [];
+const bigStringTable = [];
+
+const start = 1;
+const end = 1000;
+
+for (let i = start; i <= end; i++) {
+  bigObjectTable.push({ id: i });
+  bigNumberTable.push(i);
+  bigStringTable.push('test' + i);
+}
+
+const emptyTable = [];
+const stringTable = ['hello', 'world', 'welcome', 'to', 'my', 'life'];
+const numberTable = [1, 2, 3, 4, 5];
+const brokenTable1 = [{ name: 'budi' }, 1, 'hello'];
+const brokenTable2 = [{ name: 'budi' }, { name: 'wawan' }, 'hello'];
+const brokenTable3 = [{ name: 'budi' }, { name: 'wawan' }, { name: 'wawan' }, 'hello'];
+const brokenTable4 = [{ name: 'budi' }, 1, { name: 'wawan' }, { name: 'wawan' }, { name: 'wawan' }];
+const brokenTable5 = [{ name: 'budi' }, { name: 'wawan' }, { name: 'wawan' }, 1, { name: 'wawan' }];
+
 describe('intentional failure condition test', function () {
-  it('table must be an object array', function () {
+  it('table must be an array', function () {
     const nosql = new FlyJson();
-    assert.strictEqual(nosql.isArray(rightTable), true);
-    assert.strictEqual(nosql.isArray(wrongTable), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(rightTable), true);
+    assert.strictEqual(nosql.fastCheckArrayObject(emptyTable), true);
+    assert.strictEqual(nosql.fastCheckArrayObject(bigObjectTable), true);
+    assert.strictEqual(nosql.fastCheckArrayObject(bigNumberTable), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(bigStringTable), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(stringTable), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(numberTable), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(brokenTable1), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(brokenTable2), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(brokenTable3), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(brokenTable4), false);
+    assert.strictEqual(nosql.fastCheckArrayObject(brokenTable5), false);
     assert.throws(function () { nosql.set(wrongTable); }, Error);
   });
 

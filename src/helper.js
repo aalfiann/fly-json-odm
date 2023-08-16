@@ -47,6 +47,30 @@ class Helper {
   }
 
   /**
+   * Determine value is an array object based 5 part items.
+   * We don't check all items to keep maintain performance.
+   * @param {*} value
+   * @returns {bool}
+   */
+  fastCheckArrayObject (value) {
+    if (!this.isArray(value)) return false;
+    const count = value.length;
+    if (count > 0) {
+      const first = 0;
+      const middle = Math.floor(count / 2);
+      const last = (count - 1);
+      const fquarter = Math.floor(middle / 2);
+      const lquarter = Math.floor((middle + last) / 2);
+      if (typeof value[first] !== 'object') return false;
+      if ((fquarter > first) && typeof value[fquarter] !== 'object') return false;
+      if ((middle > fquarter) && typeof value[middle] !== 'object') return false;
+      if ((lquarter > middle) && typeof value[lquarter] !== 'object') return false;
+      if (typeof value[last] !== 'object') return false;
+    }
+    return true;
+  }
+
+  /**
    * Determine value is object
    * @param {*} value
    * @return {bool}

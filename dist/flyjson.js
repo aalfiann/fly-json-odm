@@ -61,7 +61,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.20.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      /*! FlyJson v1.21.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
       'use strict';
 
@@ -175,7 +175,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         }, {
           key: "set",
           value: function set(data) {
-            if (this.isArray(data)) {
+            if (this.fastCheckArrayObject(data)) {
               if (this.mode === 'shallow') {
                 this.data1 = this.shallowClone(data);
               } else {
@@ -275,7 +275,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
             if (this.isEmpty(key) || !this.isString(key)) {
               throw new Error('Key and Value must be defined and value must be unique');
             }
-            if (this.isEmptyArray(data) || !this.isArray(data)) {
+            if (this.isEmptyArray(data) || !this.fastCheckArrayObject(data)) {
               throw new Error('Data to update must be an array object and not empty');
             }
             var l = this.data1.length;
@@ -339,7 +339,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
             if (this.isEmpty(key) || !this.isString(key)) {
               throw new Error('Key must be defined');
             }
-            if (this.isEmptyArray(data) || !this.isArray(data)) {
+            if (this.isEmptyArray(data) || !this.fastCheckArrayObject(data)) {
               throw new Error('Data to modify must be an array object and not empty');
             }
             if (this.mode === 'shallow') {
@@ -800,7 +800,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           key: "join",
           value: function join(name, data) {
             if (!this.isEmpty(name) && this.isString(name)) {
-              if (this.isArray(data)) {
+              if (this.fastCheckArrayObject(data)) {
                 if (this.mode === 'shallow') {
                   this.data2 = this.shallowClone(data);
                 } else {
@@ -1174,6 +1174,32 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               return false;
             }
             return value && value !== '' && _typeof(value) === 'object' && value.constructor === Array;
+          }
+
+          /**
+           * Determine value is an array object based 5 part items.
+           * We don't check all items to keep maintain performance.
+           * @param {*} value
+           * @returns {bool}
+           */
+        }, {
+          key: "fastCheckArrayObject",
+          value: function fastCheckArrayObject(value) {
+            if (!this.isArray(value)) return false;
+            var count = value.length;
+            if (count > 0) {
+              var first = 0;
+              var middle = Math.floor(count / 2);
+              var last = count - 1;
+              var fquarter = Math.floor(middle / 2);
+              var lquarter = Math.floor((middle + last) / 2);
+              if (_typeof(value[first]) !== 'object') return false;
+              if (fquarter > first && _typeof(value[fquarter]) !== 'object') return false;
+              if (middle > fquarter && _typeof(value[middle]) !== 'object') return false;
+              if (lquarter > middle && _typeof(value[lquarter]) !== 'object') return false;
+              if (_typeof(value[last]) !== 'object') return false;
+            }
+            return true;
           }
 
           /**

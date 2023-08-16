@@ -1,4 +1,4 @@
-/*! FlyJson v1.20.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+/*! FlyJson v1.21.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
 'use strict';
 
@@ -90,7 +90,7 @@ class FlyJson extends Helper {
    * @return {this}
    */
   set (data) {
-    if (this.isArray(data)) {
+    if (this.fastCheckArrayObject(data)) {
       if (this.mode === 'shallow') {
         this.data1 = this.shallowClone(data);
       } else {
@@ -180,7 +180,7 @@ class FlyJson extends Helper {
     if (this.isEmpty(key) || !this.isString(key)) {
       throw new Error('Key and Value must be defined and value must be unique');
     }
-    if (this.isEmptyArray(data) || !this.isArray(data)) {
+    if (this.isEmptyArray(data) || !this.fastCheckArrayObject(data)) {
       throw new Error('Data to update must be an array object and not empty');
     }
     const l = this.data1.length;
@@ -240,7 +240,7 @@ class FlyJson extends Helper {
     if (this.isEmpty(key) || !this.isString(key)) {
       throw new Error('Key must be defined');
     }
-    if (this.isEmptyArray(data) || !this.isArray(data)) {
+    if (this.isEmptyArray(data) || !this.fastCheckArrayObject(data)) {
       throw new Error('Data to modify must be an array object and not empty');
     }
     if (this.mode === 'shallow') {
@@ -676,7 +676,7 @@ class FlyJson extends Helper {
    */
   join (name, data) {
     if (!this.isEmpty(name) && this.isString(name)) {
-      if (this.isArray(data)) {
+      if (this.fastCheckArrayObject(data)) {
         if (this.mode === 'shallow') {
           this.data2 = this.shallowClone(data);
         } else {

@@ -11,7 +11,7 @@
 [![](https://data.jsdelivr.com/v1/package/npm/fly-json-odm/badge)](https://www.jsdelivr.com/package/npm/fly-json-odm)  
 An Object Document Mapper to handle JSON on the fly for NodeJS or Browser.
 
-`fly-json-odm` is the ODM library to handle JSON directly on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM. For example is to do `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join`, `Query` and `Transform`.
+`fly-json-odm` is the ODM library to handle JSON directly on the fly like `NOSQL` does. You are able to make manipulation of JSON like ORM. For example is to do `Insert`, `Read`, `Update`, `Modify`, `Delete`, `Join`, `Query`, `Transform`, `Fuzzy` and `Mixin`.
 
 ### Install using NPM
 ```bash
@@ -28,11 +28,11 @@ $ npm install fly-json-odm
 <script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1/dist/flyjson.min.js"></script>
 
 <!-- Get patch fixes within a minor version -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.20/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.21/dist/flyjson.min.js"></script>
 
 <!-- Get a specific version -->
 <!-- Recommended for production sites! -->
-<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.20.0/dist/flyjson.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fly-json-odm@1.21.0/dist/flyjson.min.js"></script>
 ```
 
 ### Usage
