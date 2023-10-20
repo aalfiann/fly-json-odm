@@ -13,7 +13,7 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          command: 'sudo npm install -g npm@10.2.1'
+          command: 'sudo npm install -g npm@8.19.3'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
