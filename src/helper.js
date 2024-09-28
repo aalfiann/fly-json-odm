@@ -1,5 +1,5 @@
-// The reason we allow eval because for custom function at json transform feature.
-/* eslint no-eval:0 */
+// The reason we allow new function because for custom function at json transform feature.
+/* eslint no-new-func:0 */
 
 'use strict';
 
@@ -315,7 +315,7 @@ class Helper {
             data = data.map(function (item) {
               let fn;
               if (typeof method.run === 'string') {
-                fn = eval(method.run);
+                fn = new Function('return ' + method.run)();
               } else {
                 fn = method.run;
               }

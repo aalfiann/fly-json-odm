@@ -61,7 +61,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return r;
   }()({
     1: [function (require, module, exports) {
-      /*! FlyJson v1.21.1 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
+      /*! FlyJson v1.22.0 | (c) 2021 M ABD AZIZ ALFIAN | MIT License | https://github.com/aalfiann/fly-json-odm */
 
       'use strict';
 
@@ -1116,8 +1116,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "./operator": 3
     }],
     2: [function (require, module, exports) {
-      // The reason we allow eval because for custom function at json transform feature.
-      /* eslint no-eval:0 */
+      // The reason we allow new function because for custom function at json transform feature.
+      /* eslint no-new-func:0 */
 
       'use strict';
 
@@ -1449,7 +1449,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                     data = data.map(function (item) {
                       var fn;
                       if (typeof method.run === 'string') {
-                        fn = eval(method.run);
+                        fn = new Function('return ' + method.run)();
                       } else {
                         fn = method.run;
                       }
